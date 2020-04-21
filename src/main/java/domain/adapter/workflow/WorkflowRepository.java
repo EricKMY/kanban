@@ -23,7 +23,7 @@ public class WorkflowRepository implements Repository {
         return database.connect();
     }
 
-    public void add(Workflow workflow) {
+    public void save(Workflow workflow) {
         map.put(workflow.getWorkflowId(), workflow);
 //        convertFormat(map.get(workflow.getWorkflowId()));
 //        database.save(convertFormat(workflow));
@@ -36,7 +36,7 @@ public class WorkflowRepository implements Repository {
     private String[] convertFormat(Workflow workflow) {
         String attribute[] = new String[2];
         attribute[0] = workflow.getWorkflowId();
-        attribute[1] = workflow.getWorkflowName();
+//        attribute[1] = workflow.getWorkflowName();
 
         return attribute;
     }

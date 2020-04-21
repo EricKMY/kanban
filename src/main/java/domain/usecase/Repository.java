@@ -6,7 +6,7 @@ import java.sql.Connection;
 
 public interface Repository {
     Connection getConnection();
-    void add(Workflow item);
+    void save(Workflow item);
 //    Workflow findById(String id);
 }
 
