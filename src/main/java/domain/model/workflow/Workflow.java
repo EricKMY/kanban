@@ -32,4 +32,20 @@ public class Workflow {
     public Lane findLaneById(String laneId) {
         return stageList.get(laneId);
     }
+
+    public String getWorkflowName() {
+        return workflowName;
+    }
+
+    public void setWorkflowId(String workflowId) {
+        this.workflowId = workflowId;
+    }
+
+    public void setWorkflowName(String workflowName) {
+        this.workflowName = workflowName;
+    }
+
+    public void setBoardId(String boardId) {
+        this.boardId = boardId;
+    }
 }
