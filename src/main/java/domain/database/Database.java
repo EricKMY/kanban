@@ -1,11 +1,11 @@
-package domain.adapter;
+package domain.database;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
+import java.util.Map;
 
 public interface Database {
     Connection connect();
     void createTable(String tableName);
     void save(String[] attribute);
-//    ResultSet findById(String id);
+    Map<String, String> findById(String id);
 }

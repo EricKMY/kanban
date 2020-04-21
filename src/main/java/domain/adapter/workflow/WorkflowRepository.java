@@ -1,22 +1,24 @@
 package domain.adapter.workflow;
 
-import domain.adapter.Database;
-import domain.adapter.MySQL;
-import domain.usecase.Repository;
+import domain.database.Database;
+import domain.adapter.database.MySQL;
+import domain.usecase.repository.IWorkflowRepository;
 import domain.model.workflow.Workflow;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.HashMap;
 
-public class WorkflowRepository implements Repository {
+public class WorkflowRepository implements IWorkflowRepository {
     Map<String, Workflow> map = new HashMap<String, Workflow>();
     private Connection connection = null;
     Database database = new MySQL();
 
     public WorkflowRepository() {
-//        database.connect();
-//        database.createTable("workflow");
+        database.connect();
+        database.createTable("workflow");
     }
 
     public Connection getConnection() {
@@ -25,19 +27,35 @@ public class WorkflowRepository implements Repository {
 
     public void save(Workflow workflow) {
         map.put(workflow.getWorkflowId(), workflow);
-//        convertFormat(map.get(workflow.getWorkflowId()));
-//        database.save(convertFormat(workflow));
+        convertFormat(map.get(workflow.getWorkflowId()));
+        database.save(convertFormat(workflow));
     }
 
     public Workflow findById(String workflowId) {
-        return map.get(workflowId);
+        Map<String, String> result = database.findById(workflowId);
+        Workflow workflow = workflow = getInstance(result);
+
+        return workflow;
+
+//        return map.get(workflowId);
     }
 
     private String[] convertFormat(Workflow workflow) {
-        String attribute[] = new String[2];
+        String attribute[] = new String[3];
         attribute[0] = workflow.getWorkflowId();
-//        attribute[1] = workflow.getWorkflowName();
+        attribute[1] = workflow.getWorkflowName();
+        attribute[2] = workflow.getBoardId();
 
         return attribute;
+    }
+
+    private Workflow getInstance(Map<String, String> result) {
+        String workflowId = result.get("id");
+        String workflowName = result.get("name");
+        String boardId = result.get("boardId");
+        Workflow workflow = new Workflow(workflowName, boardId);
+        workflow.setWorkflowId(workflowId);
+
+        return workflow;
     }
 }

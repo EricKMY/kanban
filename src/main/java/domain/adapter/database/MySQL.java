@@ -1,11 +1,14 @@
-package domain.adapter;
+package domain.adapter.database;
+
+import domain.database.Database;
 
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MySQL implements Database {
     private String tableName;
     private Statement statement;
-    private ResultSet resultSet = null;
     String sql;
 
     public Connection connect() {
@@ -51,27 +54,35 @@ public class MySQL implements Database {
         }
     }
 
-//    public ResultSet findById(String id) {
-//        sql = "SELECT * FROME " + this.tableName + " WHERE id = '" + id + "'";
-//        Connection connection = this.connect();
-//
-//        try {
-//            statement = connection.createStatement();
-//            statement.executeUpdate(sql);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-//            try {
-//                connection.close();
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+    public Map<String, String> findById(String id) {
+        Connection connection = this.connect();
+        ResultSet resultSet = null;
+        sql = "SELECT * FROM " + this.tableName + " WHERE id = '" + id + "'";
+        Map<String, String> result = new HashMap<String, String>();
+
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            while(resultSet.next()) {
+                result.put("id", resultSet.getString("id"));
+                result.put("name", resultSet.getString("name"));
+                result.put("boardId", resultSet.getString("boardId"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return  result;
+    }
 
     private void createWorkflowTable() {
         Connection connection = this.connect();
-        sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(id VARCHAR(50) not NULL, name VARCHAR(10))";
+        sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(id VARCHAR(50) not NULL, name VARCHAR(50), boardId VARCHAR(50))";
 
         try {
             statement = connection.createStatement();

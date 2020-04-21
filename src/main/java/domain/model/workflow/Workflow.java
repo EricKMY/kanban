@@ -28,4 +28,20 @@ public class Workflow {
         stageList.put(stage.getStageId(), stage);
         return stage.getStageId();
     }
+
+    public String getWorkflowName() {
+        return workflowName;
+    }
+
+    public void setWorkflowId(String workflowId) {
+        this.workflowId = workflowId;
+    }
+
+    public void setWorkflowName(String workflowName) {
+        this.workflowName = workflowName;
+    }
+
+    public void setBoardId(String boardId) {
+        this.boardId = boardId;
+    }
 }
