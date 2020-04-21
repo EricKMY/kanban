@@ -11,10 +11,9 @@ public class CreateBoardUseCase {
     }
 
     public void execute(CreateBoardInput input, CreateBoardOutput output) {
-        Board board = new Board(input.getBoardName());
-        boardRepository.add(board);
+        Board board = new Board(input.getBoardName(), input.getUsername());
+        boardRepository.save(board);
 
         output.setBoardId(board.getBoardId());
-        boardRepository.save(board.getBoardId(), board);
     }
 }

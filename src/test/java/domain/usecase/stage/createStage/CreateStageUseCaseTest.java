@@ -29,7 +29,7 @@ public class CreateStageUseCaseTest {
     }
 
     @Test
-    public void CreateStage() {
+    public void createStage() {
         CreateStageUseCase createStageUseCase = new CreateStageUseCase(
                 workflowRepository.findById(workflowId));
         CreateStageInput input = new CreateStageInput();

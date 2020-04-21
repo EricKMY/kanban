@@ -13,10 +13,11 @@ public class CreateBoardUseCaseTest {
         CreateBoardInput input = new CreateBoardInput();
         CreateBoardOutput output = new CreateBoardOutput();
 
-        input.setBoardName("Board1");
+        input.setUsername("kanban777");
+        input.setBoardName("kanbanSystem");
 
         createBoardUseCase.execute(input, output);
 
-        assertEquals('B', output.getBoardId().charAt(0));
+        assertEquals("kanban777", boardRepository.findById(output.getBoardId()).getUsername());
     }
 }
