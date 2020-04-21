@@ -29,7 +29,7 @@ public class Workflow {
         return stage.getLaneId();
     }
 
-    public Lane findById(String laneId) {
+    public Lane findLaneById(String laneId) {
         return stageList.get(laneId);
     }
 }

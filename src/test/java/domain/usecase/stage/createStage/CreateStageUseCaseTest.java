@@ -2,7 +2,6 @@ package domain.usecase.stage.createStage;
 
 import domain.adapter.workflow.WorkflowRepository;
 import domain.model.workflow.Lane;
-import domain.model.workflow.Stage;
 import domain.model.workflow.SwimLane;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowInput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowOutput;
@@ -35,11 +34,12 @@ public class CreateStageUseCaseTest {
     @Test
     public void createTopStage() {
         CreateStageUseCase createStageUseCase = new CreateStageUseCase(
-                workflowRepository.findById(workflowId));
+                workflowRepository);
         CreateStageInput input = new CreateStageInput();
         CreateStageOutput output = new CreateStageOutput();
 
         input.setStageName("Backlog");
+        input.setWorkflowId(workflowId);
 
         createStageUseCase.execute(input, output);
 
@@ -49,10 +49,11 @@ public class CreateStageUseCaseTest {
     @Test
     public void createLane() {
         CreateStageUseCase createStageUseCase = new CreateStageUseCase(
-                workflowRepository.findById(workflowId));
+                workflowRepository);
         CreateStageInput input = new CreateStageInput();
         CreateStageOutput output = new CreateStageOutput();
 
+        input.setWorkflowId(workflowId);
         input.setStageName("Backlog");
 
         createStageUseCase.execute(input, output);
@@ -61,12 +62,12 @@ public class CreateStageUseCaseTest {
 
         workflowRepository
                 .findById(workflowId)
-                .findById(laneId)
+                .findLaneById(laneId)
                 .addLane(swimLane);
 
-        assertEquals(1,
-                workflowRepository.findById(workflowId)
-                .findById(laneId)
+        assertEquals(1, workflowRepository
+                .findById(workflowId)
+                .findLaneById(laneId)
                 .getChildAmount());
 
     }
