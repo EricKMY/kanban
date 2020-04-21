@@ -1,6 +1,7 @@
 package domain.adapter.workflow;
 
 import domain.model.workflow.Workflow;
+import domain.usecase.workflow.createWorkflow.CreateWorkflowInput;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -10,5 +11,10 @@ public class WorkflowRepository {
 
     public void add(Workflow workflow) {
         map.put(workflow.getWorkflowId(), workflow);
+    }
+
+
+    public Workflow findById(String workflowId) {
+        return map.get(workflowId);
     }
 }

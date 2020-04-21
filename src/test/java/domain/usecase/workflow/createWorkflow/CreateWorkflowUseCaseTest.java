@@ -19,6 +19,6 @@ public class CreateWorkflowUseCaseTest {
 
         createWorkflowUseCase.execute(input, output);
 
-//        assertEquals("board00000001", workflowRepository.findById(output.getWorkflowId()).getBoardId());
+        assertEquals("board00000001", workflowRepository.findById(output.getWorkflowId()).getBoardId());
     }
 }
