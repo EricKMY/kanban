@@ -1,10 +1,7 @@
 package domain.usecase.card.createCard;
 
 import domain.adapter.stage.StageRepository;
-import domain.model.Stage;
-import domain.usecase.card.createCard.CreateCardInput;
-import domain.usecase.card.createCard.CreateCardOutput;
-import domain.usecase.card.createCard.CreateCardUseCase;
+import domain.model.workflow.Stage;
 import org.junit.Before;
 import org.junit.Test;
 

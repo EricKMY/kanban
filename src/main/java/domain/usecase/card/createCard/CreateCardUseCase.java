@@ -1,6 +1,6 @@
 package domain.usecase.card.createCard;
 
-import domain.model.Stage;
+import domain.model.workflow.Stage;
 import domain.adapter.stage.StageRepository;
 
 public class CreateCardUseCase {

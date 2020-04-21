@@ -1,7 +1,9 @@
-package domain.model;
+package domain.model.workflow;
 
-import java.util.Map;
+import domain.model.card.Card;
+
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class Stage {

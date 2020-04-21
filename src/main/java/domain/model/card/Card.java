@@ -1,4 +1,4 @@
-package domain.model;
+package domain.model.card;
 
 import java.util.UUID;
 

@@ -1,6 +1,6 @@
 package domain.adapter.stage;
 
-import domain.model.Stage;
+import domain.model.workflow.Stage;
 
 import java.util.HashMap;
 import java.util.Map;

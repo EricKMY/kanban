@@ -1,6 +1,6 @@
 package domain.adapter.workflow;
 
-import domain.model.Workflow;
+import domain.model.workflow.Workflow;
 
 import java.util.Map;
 import java.util.HashMap;

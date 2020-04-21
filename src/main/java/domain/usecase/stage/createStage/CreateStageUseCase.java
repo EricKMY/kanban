@@ -1,7 +1,7 @@
 package domain.usecase.stage.createStage;
 
-import domain.model.Stage;
 import domain.adapter.stage.StageRepository;
+import domain.model.workflow.Stage;
 
 public class CreateStageUseCase {
     private StageRepository stageRepository;
