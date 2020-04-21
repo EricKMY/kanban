@@ -13,7 +13,7 @@ public class CreateWorkflowUseCase {
 
     public void execute(CreateWorkflowInput input, CreateWorkflowOutput output) {
         Workflow workflow = new Workflow(input.getWorkflowName(), input.getBoardId());
-        workflowRepository.add(workflow);
+        workflowRepository.save(workflow);
 
         output.setWorkflowId(workflow.getWorkflowId());
     }
