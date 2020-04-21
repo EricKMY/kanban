@@ -8,7 +8,7 @@ public class Workflow {
     private String workflowName;
     private String workflowId;
     private String boardId;
-    Map<String, Stage> stageList = new HashMap<String, Stage>();
+    Map<String, Lane> stageList = new HashMap<String, Lane>();
 
     public Workflow(String workflowName, String boardId) {
         this.workflowName = workflowName;
@@ -24,8 +24,12 @@ public class Workflow {
     }
 
     public String createStage(String stageName) {
-        Stage stage = new Stage(stageName);
-        stageList.put(stage.getStageId(), stage);
-        return stage.getStageId();
+        Lane stage = new Stage(stageName);
+        stageList.put(stage.getLaneId(), stage);
+        return stage.getLaneId();
+    }
+
+    public Lane findById(String laneId) {
+        return stageList.get(laneId);
     }
 }

@@ -4,19 +4,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class Stage implements Lane {
-    private String stageName;
-    private String workflowId;
-    private String stageId;
+public class SwimLane implements Lane{
+    private String swimLaneName;
+    private String swimLaneId;
     Map<String, Lane> laneList = new HashMap<String, Lane>();
 
-    public Stage(String stageName) {
-        this.stageName = stageName;
-        stageId = "S" + UUID.randomUUID().toString();
+    public SwimLane(String swimLaneName) {
+        this.swimLaneName = swimLaneName;
+        swimLaneId = "S" + UUID.randomUUID().toString();
     }
 
     public String getLaneId() {
-        return stageId;
+        return swimLaneId;
     }
 
     public void addLane(Lane lane) {
@@ -30,8 +29,4 @@ public class Stage implements Lane {
     public Lane findById(String laneId) {
         return laneList.get(laneId);
     }
-
-//    public String getWorkflowId() {
-//
-//    }
 }
