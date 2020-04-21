@@ -1,10 +1,11 @@
-package domain.model;
+package domain.model.card;
 
 import java.util.UUID;
 
 public class Card {
     private String cardId;
     private String cardName;
+    private String blocker = "";
 
     public Card(String cardName) {
         this.cardName = cardName;
@@ -13,5 +14,13 @@ public class Card {
 
     public String getCardId() {
         return cardId;
+    }
+
+    public void editBlocker(String blocker) {
+        this.blocker = blocker;
+    }
+
+    public String getBlocker() {
+        return blocker;
     }
 }

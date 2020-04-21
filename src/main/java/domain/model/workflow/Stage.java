@@ -1,13 +1,14 @@
-package domain.model;
+package domain.model.workflow;
 
-import java.util.Map;
+import domain.model.card.Card;
+
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class Stage {
     private String stageName;
     private String stageId;
-    private Map<String, Card> cardMap = new HashMap<String, Card>();
 
     public Stage(String stageName) {
         this.stageName = stageName;
@@ -16,11 +17,5 @@ public class Stage {
 
     public String getStageId() {
         return stageId;
-    }
-
-    public String createCard(String cardName) {
-        Card card = new Card(cardName);
-        cardMap.put(card.getCardId(), card);
-        return card.getCardId();
     }
 }

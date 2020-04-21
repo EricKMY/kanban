@@ -1,18 +1,23 @@
 package domain.usecase.card.createCard;
 
-import domain.model.Stage;
-import domain.adapter.stage.StageRepository;
+
+import domain.adapter.card.CardRepository;
+import domain.model.card.Card;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CreateCardUseCase {
-    private StageRepository stageRepository;
+    private CardRepository cardRepository;
 
-    public CreateCardUseCase(StageRepository stageRepository) {
-        this.stageRepository = stageRepository;
+    public CreateCardUseCase(CardRepository cardRepository) {
+        this.cardRepository = cardRepository;
     }
 
     public void execute(CreateCardInput input, CreateCardOutput output) {
-        Stage stage = stageRepository.getStageById(input.getStageId());
-        String cardId = stage.createCard(input.getCardName());  //create card return value negotiable.
-        output.setCardId(cardId);
+        Card card = new Card(input.getCardName());
+        cardRepository.save(card);
+
+        output.setCardId(card.getCardId());
     }
 }

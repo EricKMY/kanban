@@ -1,19 +1,17 @@
 package domain.usecase.stage.createStage;
 
-import domain.model.Stage;
-import domain.adapter.stage.StageRepository;
+import domain.model.workflow.Workflow;
 
 public class CreateStageUseCase {
-    private StageRepository stageRepository;
+    private Workflow workflow;
 
-    public CreateStageUseCase(StageRepository stageRepository) {
-        this.stageRepository = stageRepository;
+    public CreateStageUseCase(Workflow workflow) {
+        this.workflow = workflow;
     }
 
     public void execute(CreateStageInput input, CreateStageOutput output) {
-        Stage stage = new Stage(input.getStageName());
-        stageRepository.add(stage);
+        String stageId = workflow.createStage(input.getStageName());
 
-        output.setStageId(stage.getStageId());
+        output.setStageId(stageId);
     }
 }

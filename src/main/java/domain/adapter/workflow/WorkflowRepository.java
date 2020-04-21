@@ -6,8 +6,6 @@ import domain.usecase.Repository;
 import domain.model.workflow.Workflow;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -31,11 +29,9 @@ public class WorkflowRepository implements Repository {
 //        database.save(convertFormat(workflow));
     }
 
-//    public Workflow findById(String id) {
-////        ???????
-//        Workflow workflow;
-//        return workflow;
-//    }
+    public Workflow findById(String workflowId) {
+        return map.get(workflowId);
+    }
 
     private String[] convertFormat(Workflow workflow) {
         String attribute[] = new String[2];
