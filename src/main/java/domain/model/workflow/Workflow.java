@@ -1,4 +1,4 @@
-package domain.model;
+package domain.model.workflow;
 
 import java.util.UUID;
 
@@ -13,5 +13,9 @@ public class Workflow {
 
     public String getWorkflowId() {
         return workflowId;
+    }
+
+    public String getWorkflowName() {
+        return workflowName;
     }
 }

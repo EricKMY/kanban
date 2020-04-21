@@ -1,7 +1,10 @@
-package domain.usecase;
+package domain.usecase.workflow.createWorkflow;
 
 import domain.adapter.workflow.WorkflowRepository;
-import domain.model.Workflow;
+import domain.model.workflow.Workflow;
+import domain.usecase.CreateWorkflowInput;
+import domain.usecase.CreateWorkflowOutput;
+
 
 public class CreateWorkflowUseCase {
     private WorkflowRepository workflowRepository;

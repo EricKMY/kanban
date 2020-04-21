@@ -1,14 +1,47 @@
 package domain.adapter.workflow;
 
-import domain.model.Workflow;
+import domain.adapter.Database;
+import domain.adapter.MySQL;
+import domain.usecase.Repository;
+import domain.model.workflow.Workflow;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Map;
 import java.util.HashMap;
 
-public class WorkflowRepository {
+public class WorkflowRepository implements Repository {
     Map<String, Workflow> map = new HashMap<String, Workflow>();
+    private Connection connection = null;
+    Database database = new MySQL();
+
+    public WorkflowRepository() {
+//        database.connect();
+//        database.createTable("workflow");
+    }
+
+    public Connection getConnection() {
+        return database.connect();
+    }
 
     public void add(Workflow workflow) {
         map.put(workflow.getWorkflowId(), workflow);
+//        convertFormat(map.get(workflow.getWorkflowId()));
+//        database.save(convertFormat(workflow));
+    }
+
+//    public Workflow findById(String id) {
+////        ???????
+//        Workflow workflow;
+//        return workflow;
+//    }
+
+    private String[] convertFormat(Workflow workflow) {
+        String attribute[] = new String[2];
+        attribute[0] = workflow.getWorkflowId();
+        attribute[1] = workflow.getWorkflowName();
+
+        return attribute;
     }
 }

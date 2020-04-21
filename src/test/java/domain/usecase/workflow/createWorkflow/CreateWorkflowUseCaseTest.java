@@ -1,13 +1,11 @@
 package domain.usecase.workflow.createWorkflow;
 
 import domain.adapter.workflow.WorkflowRepository;
-import domain.usecase.CreateWorkflowInput;
-import domain.usecase.CreateWorkflowOutput;
-import domain.usecase.CreateWorkflowUseCase;
 import org.junit.Test;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import domain.usecase.CreateWorkflowInput;
+import domain.usecase.CreateWorkflowOutput;
 
 public class CreateWorkflowUseCaseTest {
 
@@ -15,7 +13,7 @@ public class CreateWorkflowUseCaseTest {
     public void createWorkflow(){
         WorkflowRepository workflowRepository = new WorkflowRepository();
         CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository);
-        CreateWorkflowInput input = new CreateWorkflowInput();
+        domain.usecase.CreateWorkflowInput input = new CreateWorkflowInput();
         CreateWorkflowOutput output = new CreateWorkflowOutput();
 
         input.setWorkflowName("Workflow1");
