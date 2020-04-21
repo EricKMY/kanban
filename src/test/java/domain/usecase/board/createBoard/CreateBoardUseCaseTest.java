@@ -1,7 +1,6 @@
 package domain.usecase.board.createBoard;
 
 import domain.adapter.board.BoardRepository;
-import domain.adapter.workflow.WorkflowRepository;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

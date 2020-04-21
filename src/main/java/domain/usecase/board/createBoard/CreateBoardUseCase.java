@@ -1,7 +1,6 @@
 package domain.usecase.board.createBoard;
 
 import domain.adapter.board.BoardRepository;
-import domain.model.Workflow;
 import domain.model.board.Board;
 
 public class CreateBoardUseCase {
