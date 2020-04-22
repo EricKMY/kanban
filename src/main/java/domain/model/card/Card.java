@@ -23,4 +23,12 @@ public class Card {
     public String getBlocker() {
         return blocker;
     }
+
+    public String getCardName() {
+        return cardName;
+    }
+
+    public void setCardId(String cardId) {
+        this.cardId = cardId;
+    }
 }

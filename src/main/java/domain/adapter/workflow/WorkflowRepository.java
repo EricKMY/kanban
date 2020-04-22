@@ -1,13 +1,12 @@
 package domain.adapter.workflow;
 
-import domain.database.Database;
-import domain.adapter.database.MySQL;
+import domain.database.MySQL;
+import domain.adapter.database.Database;
 import domain.usecase.repository.IWorkflowRepository;
 import domain.model.workflow.Workflow;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
 import java.util.Map;
 import java.util.HashMap;
 
@@ -33,7 +32,7 @@ public class WorkflowRepository implements IWorkflowRepository {
 
     public Workflow findById(String workflowId) {
         Map<String, String> result = database.findById(workflowId);
-        Workflow workflow = workflow = getInstance(result);
+        Workflow workflow = getInstance(result);
 
         return workflow;
 
@@ -50,8 +49,8 @@ public class WorkflowRepository implements IWorkflowRepository {
     }
 
     private Workflow getInstance(Map<String, String> result) {
-        String workflowId = result.get("id");
-        String workflowName = result.get("name");
+        String workflowId = result.get("workflowId");
+        String workflowName = result.get("workflowName");
         String boardId = result.get("boardId");
         Workflow workflow = new Workflow(workflowName, boardId);
         workflow.setWorkflowId(workflowId);

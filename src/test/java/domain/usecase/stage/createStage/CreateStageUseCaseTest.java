@@ -2,7 +2,6 @@ package domain.usecase.stage.createStage;
 
 import domain.adapter.workflow.WorkflowRepository;
 import domain.model.workflow.Lane;
-import domain.model.workflow.Stage;
 import domain.model.workflow.SwimLane;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowInput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowOutput;
