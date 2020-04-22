@@ -11,9 +11,9 @@ import domain.usecase.card.commitCard.CommitCardInput;
 import domain.usecase.card.commitCard.CommitCardOutput;
 import domain.usecase.card.commitCard.CommitCardUseCase;
 import domain.usecase.repository.IWorkflowRepository;
-import domain.usecase.stage.createStage.CreateStageInput;
-import domain.usecase.stage.createStage.CreateStageOutput;
-import domain.usecase.stage.createStage.CreateStageUseCase;
+import domain.usecase.workflow.lane.createStage.CreateStageInput;
+import domain.usecase.workflow.lane.createStage.CreateStageOutput;
+import domain.usecase.workflow.lane.createStage.CreateStageUseCase;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowInput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowOutput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowUseCase;
@@ -69,7 +69,7 @@ public class CommitCardUseCaseTest {
     }
 
     private String createStage(String workflowId, String stageName) {
-        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository);
+        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository);
         CreateStageInput input = new CreateStageInput();
         CreateStageOutput output = new CreateStageOutput();
 
