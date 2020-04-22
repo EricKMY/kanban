@@ -1,6 +1,9 @@
 package domain.database;
 
+import domain.adapter.database.BoardTable;
+import domain.adapter.database.CardTable;
 import domain.adapter.database.Database;
+import domain.adapter.database.WorkflowTable;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -33,13 +36,13 @@ public class MySQL implements Database {
     public void createTable(String tableName) {
         this.tableName = tableName;
 
-        if(tableName == "board")
+        if(tableName == BoardTable.name)
             createBoardTable();
 
-        if(tableName == "workflow")
+        if(tableName == WorkflowTable.name)
             createWorkflowTable();
 
-        if(tableName == "card")
+        if(tableName == CardTable.name)
             createCardTable();
     }
 
@@ -76,10 +79,30 @@ public class MySQL implements Database {
         return  result;
     }
 
+    public void closeConnect(Connection connection) {
+        try{
+            connection.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void closeResultSet(ResultSet resultSet) {
+        try{
+            resultSet.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 
     private void createBoardTable() {
         Connection connection = this.connect();
-        sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(boardId VARCHAR(50) not NULL, boardName VARCHAR(50), userName VARCHAR(50))";
+        sql = "CREATE TABLE IF NOT EXISTS " + tableName +
+                "(" + BoardTable.id +  " VARCHAR(50) not NULL, " +
+                BoardTable.name + " VARCHAR(50), " +
+                BoardTable.userName +  " VARCHAR(50))";
 
         try {
             statement = connection.createStatement();
@@ -87,17 +110,16 @@ public class MySQL implements Database {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            this.closeConnect(connection);
         }
     }
 
     private void createWorkflowTable() {
         Connection connection = this.connect();
-        sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(workflowId VARCHAR(50) not NULL, workflowName VARCHAR(50), boardId VARCHAR(50))";
+        sql = "CREATE TABLE IF NOT EXISTS " + tableName +
+                "(" + WorkflowTable.id  + " VARCHAR(50) not NULL, " +
+                WorkflowTable.name + " VARCHAR(50), " +
+                WorkflowTable.boardId + " VARCHAR(50))";
 
         try {
             statement = connection.createStatement();
@@ -105,18 +127,17 @@ public class MySQL implements Database {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            this.closeConnect(connection);
         }
 
     }
 
     private void createCardTable() {
         Connection connection = this.connect();
-        sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(cardId VARCHAR(50) not NULL, cardName VARCHAR(50), blocker VARCHAR(50))";
+        sql = "CREATE TABLE IF NOT EXISTS " + tableName +
+                "(" + CardTable.id +  " VARCHAR(50) not NULL, " +
+                CardTable.name + " VARCHAR(50), " +
+                CardTable.blocker + " VARCHAR(50))";
 
         try {
             statement = connection.createStatement();
@@ -124,11 +145,7 @@ public class MySQL implements Database {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            this.closeConnect(connection);
         }
 
     }
@@ -156,18 +173,15 @@ public class MySQL implements Database {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             while(resultSet.next()) {
-                result.put("boardId", resultSet.getString("boardId"));
-                result.put("boardName", resultSet.getString("boardName"));
-                result.put("userName", resultSet.getString("userName"));
+                result.put(BoardTable.id, resultSet.getString(BoardTable.id));
+                result.put(BoardTable.name, resultSet.getString(BoardTable.name));
+                result.put(BoardTable.userName, resultSet.getString(BoardTable.userName));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            this.closeResultSet(resultSet);
+            this.closeConnect(connection);
         }
         return result;
     }
@@ -189,11 +203,8 @@ public class MySQL implements Database {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            this.closeResultSet(resultSet);
+            this.closeConnect(connection);
         }
         return result;
     }
@@ -215,11 +226,8 @@ public class MySQL implements Database {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            this.closeResultSet(resultSet);
+            this.closeConnect(connection);
         }
         return result;
     }

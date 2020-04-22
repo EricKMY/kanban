@@ -8,4 +8,5 @@ public interface Database {
     void createTable(String tableName);
     void save(String[] attribute);
     Map<String, String> findById(String id);
+    void closeConnect(Connection connection);
 }

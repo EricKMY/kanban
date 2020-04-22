@@ -3,7 +3,6 @@ package domain.adapter.board;
 import domain.adapter.database.Database;
 import domain.database.MySQL;
 import domain.model.board.Board;
-import domain.model.workflow.Workflow;
 import domain.usecase.repository.IBoardRepository;
 
 import java.util.Map;
