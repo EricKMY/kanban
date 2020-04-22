@@ -1,7 +1,6 @@
 package domain.usecase.workflow.createWorkflow;
 
 import domain.adapter.board.BoardRepository;
-import domain.adapter.card.CardRepository;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.adapter.workflow.WorkflowRepository;
 import domain.usecase.board.createBoard.CreateBoardInput;
@@ -29,12 +28,7 @@ public class CreateWorkflowUseCaseTest {
 
     @Test
     public void createWorkflow(){
-<<<<<<< HEAD
-        WorkflowInMemoryRepository workflowInMemoryRepository = new WorkflowInMemoryRepository();
-        CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowInMemoryRepository);
-=======
         CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository, boardRepository);
->>>>>>> b6ba6d640c3b25fc7118ce02590a237543588086
         CreateWorkflowInput input = new CreateWorkflowInput();
         CreateWorkflowOutput output = new CreateWorkflowOutput();
 
@@ -43,9 +37,6 @@ public class CreateWorkflowUseCaseTest {
 
         createWorkflowUseCase.execute(input, output);
 
-<<<<<<< HEAD
-        assertEquals("board00000001", workflowInMemoryRepository.findById(output.getWorkflowId()).getBoardId());
-=======
         assertEquals(baordId, workflowRepository.findById(output.getWorkflowId()).getBoardId());
     }
 
@@ -59,6 +50,5 @@ public class CreateWorkflowUseCaseTest {
 
         createBoardUseCase.execute(input, output);
         return output.getBoardId();
->>>>>>> b6ba6d640c3b25fc7118ce02590a237543588086
     }
 }

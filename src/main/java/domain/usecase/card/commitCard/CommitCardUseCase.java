@@ -1,6 +1,5 @@
 package domain.usecase.card.commitCard;
 
-import domain.adapter.card.CardRepository;
 import domain.model.workflow.Workflow;
 import domain.usecase.repository.IWorkflowRepository;
 
