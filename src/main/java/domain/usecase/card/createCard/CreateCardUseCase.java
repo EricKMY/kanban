@@ -1,21 +1,38 @@
-//package domain.usecase.card.createCard;
-//
-//import domain.adapter.card.CardRepository;
-//import domain.model.card.Card;
-//
-//public class CreateCardUseCase {
-//    private CardRepository cardRepository;
-//    private String workflowId;
-//
-//    public CreateCardUseCase(CardRepository cardRepository, String workflowId) {
-//        this.cardRepository = cardRepository;
-//        this.workflowId = workflowId;
-//    }
-//
-//    public void execute(CreateCardInput input, CreateCardOutput output) {
-//        Card card = new Card(input.getCardName(), workflowId);
-//        cardRepository.save(card);
-//
-//        output.setCardId(card.getCardId());
-//    }
-//}
+package domain.usecase.card.createCard;
+
+import domain.adapter.card.CardRepository;
+import domain.adapter.workflow.WorkflowRepository;
+import domain.model.card.Card;
+import domain.usecase.card.commitCard.CommitCardInput;
+import domain.usecase.card.commitCard.CommitCardOutput;
+import domain.usecase.card.commitCard.CommitCardUseCase;
+import domain.usecase.repository.IWorkflowRepository;
+
+public class CreateCardUseCase {
+    private IWorkflowRepository workflowRepository;
+    private CardRepository cardRepository;
+
+    public CreateCardUseCase(IWorkflowRepository workflowRepository, CardRepository cardRepository) {
+        this.workflowRepository = workflowRepository;
+        this.cardRepository = cardRepository;
+    }
+
+    public void execute(CreateCardInput input, CreateCardOutput output) {
+        Card card = new Card(input.getCardName(), input.getWorkflowId());
+        cardRepository.save(card);
+
+        output.setCardId(card.getCardId());
+
+        // commit card
+        CommitCardUseCase commitCardUseCase = new CommitCardUseCase(workflowRepository);
+
+        CommitCardInput commitCardInput = new CommitCardInput();
+        CommitCardOutput commitCardOutput = new CommitCardOutput();
+
+        commitCardInput.setWorkflowId(input.getWorkflowId());
+        commitCardInput.setLaneId(input.getLaneId());
+        commitCardInput.setCardId(card.getCardId());
+
+        commitCardUseCase.execute(commitCardInput, commitCardOutput);
+    }
+}
