@@ -15,7 +15,7 @@ public class CommitCardUseCase {
 
     public void execute(CommitCardInput input, CommitCardOutput output) {
         Workflow workflow = workflowRepository.findById(input.getWorkflowId());
-        workflow.commitCard(input.getCardId(), input.getStageId());
+        workflow.commitCard(input.getCardId(), input.getLaneId());
         workflowRepository.save(workflow);
     }
 }

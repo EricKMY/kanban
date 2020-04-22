@@ -1,21 +1,40 @@
 package domain.usecase.card.createCard;
 
 import domain.adapter.card.CardRepository;
+import domain.adapter.workflow.WorkflowRepository;
 import domain.model.card.Card;
+import domain.usecase.card.commitCard.CommitCardInput;
+import domain.usecase.card.commitCard.CommitCardOutput;
+import domain.usecase.card.commitCard.CommitCardUseCase;
+import domain.usecase.repository.IWorkflowRepository;
 
 public class CreateCardUseCase {
+    private IWorkflowRepository workflowRepository;
     private CardRepository cardRepository;
-    private String workflowId;
 
-    public CreateCardUseCase(CardRepository cardRepository, String workflowId) {
+    public CreateCardUseCase(IWorkflowRepository workflowRepository, CardRepository cardRepository) {
+        this.workflowRepository = workflowRepository;
         this.cardRepository = cardRepository;
-        this.workflowId = workflowId;
     }
 
     public void execute(CreateCardInput input, CreateCardOutput output) {
-        Card card = new Card(input.getCardName(), workflowId);
+        Card card = new Card(input.getCardName(), input.getWorkflowId());
         cardRepository.save(card);
 
         output.setCardId(card.getCardId());
+
+        CommitCardUseCase commitCardUseCase = new CommitCardUseCase(
+                workflowRepository,
+                cardRepository);
+
+        // commit card
+        CommitCardInput commitCardInput = new CommitCardInput();
+        CommitCardOutput commitCardOutput = new CommitCardOutput();
+
+        commitCardInput.setWorkflowId(input.getWorkflowId());
+        commitCardInput.setLaneId(input.getLaneId());
+        commitCardInput.setCardId(card.getCardId());
+
+        commitCardUseCase.execute(commitCardInput, commitCardOutput);
     }
 }

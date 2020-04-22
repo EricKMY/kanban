@@ -22,8 +22,7 @@ public class CommitCardUseCaseTest {
     private IWorkflowRepository workflowRepository;
     private CardRepository cardRepository;
     private String workflowId;
-    private String stageId;
-    private String cardId;
+    private String laneId;
 
 
     @Before
@@ -32,12 +31,12 @@ public class CommitCardUseCaseTest {
         cardRepository = new CardRepository();
 
         workflowId = createWorkflow("board00000001", "defaultWorkflow");
-        stageId = createStage(workflowId, "developing");
-        cardId = createCard(workflowId, "Design domain model");
+        laneId = createStage(workflowId, "developing");
     }
 
     @Test
     public void commitCard() {
+        String cardId = "Design domain model";
         CardRepository cardRepository = new CardRepository();
         CommitCardUseCase commitCardUseCase = new CommitCardUseCase(
                 workflowRepository,
@@ -47,25 +46,12 @@ public class CommitCardUseCaseTest {
         CommitCardOutput output = new CommitCardOutput();
 
         input.setWorkflowId(workflowId);
-        input.setStageId(stageId);
+        input.setLaneId(laneId);
         input.setCardId(cardId);
 
         commitCardUseCase.execute(input, output);
-        assertEquals(stageId, workflowRepository.findById(workflowId).findLaneByCardId(cardId).getLaneId());
+        assertEquals(laneId, workflowRepository.findById(workflowId).findLaneByCardId(cardId).getLaneId());
     }
-
-
-    private String createCard(String workflowId, String cardName) {
-        CreateCardUseCase createCardUseCase = new CreateCardUseCase(cardRepository, workflowId);
-        CreateCardInput input = new CreateCardInput();
-        CreateCardOutput output = new CreateCardOutput();
-
-        input.setCardName(cardName);
-
-        createCardUseCase.execute(input, output);
-        return output.getCardId();
-    }
-
 
     private String createWorkflow(String boardId, String workflowName) {
         CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository);

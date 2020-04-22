@@ -6,7 +6,6 @@ public class Card {
     private String cardId;
     private String cardName;
     private String workflowId;
-    private String blocker = "";
 
     public Card(String cardName, String workflowId) {
         this.cardName = cardName;
@@ -15,13 +14,5 @@ public class Card {
 
     public String getCardId() {
         return cardId;
-    }
-
-    public void editBlocker(String blocker) {
-        this.blocker = blocker;
-    }
-
-    public String getBlocker() {
-        return blocker;
     }
 }
