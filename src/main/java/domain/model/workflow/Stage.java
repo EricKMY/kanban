@@ -3,6 +3,7 @@ package domain.model.workflow;
 import java.util.*;
 
 public class Stage implements Lane {
+
     private String stageName;
     private String workflowId;
     private String stageId;
@@ -12,6 +13,10 @@ public class Stage implements Lane {
     public Stage(String stageName) {
         this.stageName = stageName;
         stageId = "S" + UUID.randomUUID().toString();
+    }
+
+    public String getLaneName() {
+        return stageName;
     }
 
     public String getLaneId() {
@@ -32,6 +37,10 @@ public class Stage implements Lane {
 
     public void addCard(String cardId) {
         cardList.add(cardId);
+    }
+
+    public Map<String, Lane> getChildMap(){
+        return Collections.unmodifiableMap(laneList);
     }
 
     public boolean isCardContained(String cardId) {

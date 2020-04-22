@@ -8,7 +8,7 @@ public class Workflow {
     private String workflowName;
     private String workflowId;
     private String boardId;
-    Map<String, Lane> stageList = new HashMap<String, Lane>();
+    Map<String, Lane> laneList = new HashMap<String, Lane>();
 
     public Workflow(String workflowName, String boardId) {
         this.workflowName = workflowName;
@@ -24,13 +24,49 @@ public class Workflow {
     }
 
     public String createStage(String stageName) {
-        Lane stage = new Stage(stageName);
-        stageList.put(stage.getLaneId(), stage);
-        return stage.getLaneId();
+        Lane lane = new Stage(stageName);
+        laneList.put(lane.getLaneId(), lane);
+        return lane.getLaneId();
+    }
+
+    public String createStage(String stageName, String parentLaneId) {
+        Lane lane = new Stage(stageName);
+        Lane parentLane = findLaneById(parentLaneId);
+        parentLane.addLane(lane);
+        return lane.getLaneId();
+    }
+
+    public String createSwinlane(String swinlaneName, String parentLaneId) {
+        Lane lane = new SwimLane(swinlaneName);
+        Lane parentLane = findLaneById(parentLaneId);
+        parentLane.addLane(lane);
+        return lane.getLaneId();
     }
 
     public Lane findLaneById(String laneId) {
-        return stageList.get(laneId);
+        if (laneList.containsKey(laneId)){
+            return laneList.get(laneId);
+        }
+        Lane result;
+        for (Lane lane : laneList.values()){
+            if ((result = findLaneById(lane, laneId)) != null){
+                return result;
+            }
+        }
+        return null;
+    }
+
+    private Lane findLaneById(Lane lane, String laneId) {
+        if (lane.getChildMap().containsKey(laneId)){
+            return lane.getChildMap().get(laneId);
+        }
+        Lane result;
+        for (Lane childLane : lane.getChildMap().values()){
+            if ((result = findLaneById(lane, laneId)) != null){
+                return result;
+            }
+        }
+        return null;
     }
 
     public String getWorkflowName() {
@@ -55,11 +91,12 @@ public class Workflow {
     }
 
     public Lane findLaneByCardId(String cardId) {
-        for (Lane lane : stageList.values()){
+        for (Lane lane : laneList.values()){
             if (lane.isCardContained(cardId)){
                 return lane;
             }
         }
         return null;
     }
+
 }

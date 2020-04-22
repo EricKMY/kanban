@@ -1,14 +1,10 @@
-package domain.usecase.card;
+package domain.usecase.workflow.lane.createStage;
 
 import domain.adapter.board.BoardRepository;
-import domain.adapter.card.CardRepository;
 import domain.adapter.workflow.WorkflowRepository;
 import domain.usecase.board.createBoard.CreateBoardInput;
 import domain.usecase.board.createBoard.CreateBoardOutput;
 import domain.usecase.board.createBoard.CreateBoardUseCase;
-import domain.usecase.card.createCard.CreateCardInput;
-import domain.usecase.card.createCard.CreateCardOutput;
-import domain.usecase.card.createCard.CreateCardUseCase;
 import domain.usecase.repository.IWorkflowRepository;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowInput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowOutput;
@@ -19,44 +15,56 @@ import domain.usecase.workflow.lane.createStage.CreateStageUseCase;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-public class CreateCardUseCaseTest {
-
+public class CreateStageUseCaseTest {
     private BoardRepository boardRepository;
     private IWorkflowRepository workflowRepository;
-    private CardRepository cardRepository;
     private String workflowId;
-    private String laneId;
 
 
     @Before
     public void setup() {
         boardRepository = new BoardRepository();
         workflowRepository = new WorkflowRepository();
-        cardRepository = new CardRepository();
 
         String boardId = createBoard("kanban777", "kanban");
         workflowId = createWorkflow(boardId, "defaultWorkflow");
-        laneId = createStage(workflowId, "developing");
     }
 
     @Test
-    public void createCard() {
-        CreateCardUseCase createCardUseCase = new CreateCardUseCase(
-                workflowRepository,
-                cardRepository);
+    public void createTopStage() {
+        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository);
+        CreateStageInput input = new CreateStageInput();
+        CreateStageOutput output = new CreateStageOutput();
 
-        CreateCardInput input = new CreateCardInput();
-        CreateCardOutput output = new CreateCardOutput();
-
-        input.setCardName("firstEvent");
+        input.setStageName("Backlog");
         input.setWorkflowId(workflowId);
-        input.setLaneId(laneId);
+        input.setParentLaneId(null);
 
-        createCardUseCase.execute(input, output);
-        assertEquals('C', cardRepository.findById(output.getCardId()).getCardId().charAt(0));
+        createStageUseCase.execute(input, output);
+
+        assertEquals('S', output.getStageId().charAt(0));
+        assertEquals("Backlog", workflowRepository.findById(workflowId).findLaneById(output.getStageId()).getLaneName());
     }
+
+    @Test
+    public void createStageUnderLane() {
+        String parentLaneId = createTopStage(workflowId, "Backlog");
+        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository);
+        CreateStageInput input = new CreateStageInput();
+        CreateStageOutput output = new CreateStageOutput();
+
+        input.setStageName("Developing");
+        input.setWorkflowId(workflowId);
+        input.setParentLaneId(parentLaneId);
+
+        createStageUseCase.execute(input, output);
+
+        assertEquals(1, workflowRepository.findById(workflowId).findLaneById(parentLaneId).getChildAmount());
+        assertEquals("Developing", workflowRepository.findById(workflowId).findLaneById(output.getStageId()).getLaneName());
+    }
+
 
     private String createWorkflow(String boardId, String workflowName) {
         CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository, boardRepository);
@@ -71,20 +79,6 @@ public class CreateCardUseCaseTest {
 
     }
 
-
-    private String createStage(String workflowId, String stageName) {
-        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository);
-        CreateStageInput input = new CreateStageInput();
-        CreateStageOutput output = new CreateStageOutput();
-
-        input.setWorkflowId(workflowId);
-        input.setStageName(stageName);
-
-        createStageUseCase.execute(input, output);
-
-        return output.getStageId();
-    }
-
     private String createBoard(String username, String boardName) {
         CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardRepository);
         CreateBoardInput input = new CreateBoardInput();
@@ -95,5 +89,20 @@ public class CreateCardUseCaseTest {
 
         createBoardUseCase.execute(input, output);
         return output.getBoardId();
+    }
+
+
+    private String createTopStage(String workflowId, String stageName) {
+        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository);
+        CreateStageInput input = new CreateStageInput();
+        CreateStageOutput output = new CreateStageOutput();
+
+        input.setStageName("Backlog");
+        input.setWorkflowId(workflowId);
+        input.setParentLaneId(null);
+
+        createStageUseCase.execute(input, output);
+
+        return output.getStageId();
     }
 }

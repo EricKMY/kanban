@@ -5,7 +5,7 @@ import java.util.*;
 public class SwimLane implements Lane{
     private String swimLaneName;
     private String swimLaneId;
-    Map<String, Lane> laneList = new HashMap<String, Lane>();;
+    Map<String, Lane> laneList = new HashMap<String, Lane>();
     List<String> cardList = new ArrayList<String>();
 
     public SwimLane(String swimLaneName) {
@@ -29,11 +29,19 @@ public class SwimLane implements Lane{
         return laneList.get(laneId);
     }
 
+    public Map<String, Lane> getChildMap(){
+        return Collections.unmodifiableMap(laneList);
+    }
+
     public void addCard(String cardId) {
         cardList.add(cardId);
     }
 
     public boolean isCardContained(String cardId) {
         return cardList.contains(cardId);
+    }
+
+    public String getLaneName() {
+        return swimLaneName;
     }
 }
