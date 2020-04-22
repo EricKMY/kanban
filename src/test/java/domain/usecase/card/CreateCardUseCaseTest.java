@@ -1,4 +1,4 @@
-package domain.usecase.card.createCard;
+package domain.usecase.card;
 
 import domain.adapter.board.BoardRepository;
 import domain.adapter.card.CardRepository;
@@ -6,6 +6,9 @@ import domain.adapter.workflow.WorkflowRepository;
 import domain.usecase.board.createBoard.CreateBoardInput;
 import domain.usecase.board.createBoard.CreateBoardOutput;
 import domain.usecase.board.createBoard.CreateBoardUseCase;
+import domain.usecase.card.createCard.CreateCardInput;
+import domain.usecase.card.createCard.CreateCardOutput;
+import domain.usecase.card.createCard.CreateCardUseCase;
 import domain.usecase.repository.IWorkflowRepository;
 import domain.usecase.stage.createStage.CreateStageInput;
 import domain.usecase.stage.createStage.CreateStageOutput;

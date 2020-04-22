@@ -1,4 +1,4 @@
-package domain.usecase.workflow.commitWorkflow;
+package domain.usecase.workflow;
 
 import domain.adapter.board.BoardRepository;
 import domain.adapter.workflow.WorkflowRepository;
@@ -6,6 +6,9 @@ import domain.usecase.board.createBoard.CreateBoardInput;
 import domain.usecase.board.createBoard.CreateBoardOutput;
 import domain.usecase.board.createBoard.CreateBoardUseCase;
 import domain.usecase.repository.IWorkflowRepository;
+import domain.usecase.workflow.commitWorkflow.CommitWorkflowInput;
+import domain.usecase.workflow.commitWorkflow.CommitWorkflowOutput;
+import domain.usecase.workflow.commitWorkflow.CommitWorkflowUseCase;
 import org.junit.Before;
 import org.junit.Test;
 

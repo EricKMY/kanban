@@ -1,7 +1,10 @@
-package domain.usecase.board.createBoard;
+package domain.usecase.board;
 
 import domain.adapter.board.BoardRepository;
 import domain.adapter.board.BoardInMemoryRepository;
+import domain.usecase.board.createBoard.CreateBoardInput;
+import domain.usecase.board.createBoard.CreateBoardOutput;
+import domain.usecase.board.createBoard.CreateBoardUseCase;
 import domain.usecase.repository.IBoardRepository;
 import org.junit.Test;
 

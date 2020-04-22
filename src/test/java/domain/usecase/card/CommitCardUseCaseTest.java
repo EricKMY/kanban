@@ -1,14 +1,19 @@
-package domain.usecase.stage.createStage;
+package domain.usecase.card;
 
 import domain.adapter.board.BoardRepository;
+import domain.adapter.card.CardRepository;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.adapter.workflow.WorkflowRepository;
-import domain.model.workflow.Lane;
-import domain.model.workflow.SwimLane;
 import domain.usecase.board.createBoard.CreateBoardInput;
 import domain.usecase.board.createBoard.CreateBoardOutput;
 import domain.usecase.board.createBoard.CreateBoardUseCase;
+import domain.usecase.card.commitCard.CommitCardInput;
+import domain.usecase.card.commitCard.CommitCardOutput;
+import domain.usecase.card.commitCard.CommitCardUseCase;
 import domain.usecase.repository.IWorkflowRepository;
+import domain.usecase.stage.createStage.CreateStageInput;
+import domain.usecase.stage.createStage.CreateStageOutput;
+import domain.usecase.stage.createStage.CreateStageUseCase;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowInput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowOutput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowUseCase;
@@ -17,7 +22,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class CreateStageUseCaseTest {
+public class CommitCardUseCaseTest {
     private BoardRepository boardRepository;
     private IWorkflowRepository workflowRepository;
     private String workflowId;
@@ -28,51 +33,26 @@ public class CreateStageUseCaseTest {
     public void setup() {
         boardRepository = new BoardRepository();
         workflowRepository = new WorkflowRepository();
-
         String boardId = createBoard("kanban777", "kanban");
         workflowId = createWorkflow(boardId, "defaultWorkflow");
-        laneId = workflowRepository.findById(workflowId).createStage("TopStage");
+        laneId = createStage(workflowId, "developing");
     }
 
     @Test
-    public void createTopStage() {
-        CreateStageUseCase createStageUseCase = new CreateStageUseCase(
+    public void commitCard() {
+        String cardId = "C012345678";
+        CommitCardUseCase commitCardUseCase = new CommitCardUseCase(
                 workflowRepository);
-        CreateStageInput input = new CreateStageInput();
-        CreateStageOutput output = new CreateStageOutput();
 
-        input.setStageName("Backlog");
-        input.setWorkflowId(workflowId);
-
-        createStageUseCase.execute(input, output);
-
-        assertEquals('S', output.getStageId().charAt(0));
-    }
-
-    @Test
-    public void createLane() {
-        CreateStageUseCase createStageUseCase = new CreateStageUseCase(
-                workflowRepository);
-        CreateStageInput input = new CreateStageInput();
-        CreateStageOutput output = new CreateStageOutput();
+        CommitCardInput input = new CommitCardInput();
+        CommitCardOutput output = new CommitCardOutput();
 
         input.setWorkflowId(workflowId);
-        input.setStageName("Backlog");
+        input.setLaneId(laneId);
+        input.setCardId(cardId);
 
-        createStageUseCase.execute(input, output);
-
-        Lane swimLane = new SwimLane("BottomLane");
-
-        workflowRepository
-                .findById(workflowId)
-                .findLaneById(laneId)
-                .addLane(swimLane);
-
-        assertEquals(1, workflowRepository
-                .findById(workflowId)
-                .findLaneById(laneId)
-                .getChildAmount());
-
+        commitCardUseCase.execute(input, output);
+        assertEquals(laneId, workflowRepository.findById(workflowId).findLaneByCardId(cardId).getLaneId());
     }
 
     private String createWorkflow(String boardId, String workflowName) {
@@ -86,6 +66,19 @@ public class CreateStageUseCaseTest {
         createWorkflowUseCase.execute(input, output);
         return output.getWorkflowId();
 
+    }
+
+    private String createStage(String workflowId, String stageName) {
+        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository);
+        CreateStageInput input = new CreateStageInput();
+        CreateStageOutput output = new CreateStageOutput();
+
+        input.setWorkflowId(workflowId);
+        input.setStageName(stageName);
+
+        createStageUseCase.execute(input, output);
+
+        return output.getStageId();
     }
 
     private String createBoard(String username, String boardName) {
