@@ -3,11 +3,12 @@ package domain.usecase.workflow.createWorkflow;
 
 import domain.adapter.workflow.WorkflowRepository;
 import domain.model.workflow.Workflow;
+import domain.usecase.repository.IWorkflowRepository;
 
 public class CreateWorkflowUseCase {
-    private WorkflowRepository workflowRepository;
+    private IWorkflowRepository workflowRepository;
 
-    public CreateWorkflowUseCase(WorkflowRepository workflowRepository) {
+    public CreateWorkflowUseCase(IWorkflowRepository workflowRepository) {
         this.workflowRepository = workflowRepository;
     }
 

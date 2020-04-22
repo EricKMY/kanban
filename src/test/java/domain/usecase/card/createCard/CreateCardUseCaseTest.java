@@ -14,7 +14,6 @@ import static org.junit.Assert.*;
 public class CreateCardUseCaseTest {
 
     private WorkflowRepository workflowRepository;
-    private CreateWorkflowOutput output;
     private String workflowId;
 
     @Before
@@ -22,12 +21,14 @@ public class CreateCardUseCaseTest {
         workflowRepository = new WorkflowRepository();
         CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository);
         CreateWorkflowInput input = new CreateWorkflowInput();
-        output = new CreateWorkflowOutput();
+        CreateWorkflowOutput output = new CreateWorkflowOutput();
 
         input.setBoardId("board00000001");
         input.setWorkflowName("defaultWorkflow");
 
         createWorkflowUseCase.execute(input, output);
+
+        workflowId = output.getWorkflowId();
     }
 
     @Test
@@ -35,7 +36,7 @@ public class CreateCardUseCaseTest {
         CardRepository cardRepository = new CardRepository();
         CreateCardUseCase createCardUseCase = new CreateCardUseCase(
                 cardRepository,
-                workflowRepository.findById(output.getWorkflowId()).getWorkflowId());
+                workflowId);
 
         CreateCardInput input = new CreateCardInput();
         CreateCardOutput output = new CreateCardOutput();

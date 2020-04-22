@@ -3,12 +3,13 @@ package domain.usecase.stage.createStage;
 import domain.adapter.workflow.WorkflowRepository;
 import domain.model.workflow.Lane;
 import domain.model.workflow.Workflow;
+import domain.usecase.repository.IWorkflowRepository;
 
 public class CreateStageUseCase {
-    private WorkflowRepository workflowRepository;
+    private IWorkflowRepository workflowRepository;
     private Workflow workflow;
 
-    public CreateStageUseCase(WorkflowRepository workflowRepository) {
+    public CreateStageUseCase(IWorkflowRepository workflowRepository) {
         this.workflowRepository = workflowRepository;
     }
 

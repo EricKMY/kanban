@@ -1,8 +1,10 @@
 package domain.usecase.stage.createStage;
 
+import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.adapter.workflow.WorkflowRepository;
 import domain.model.workflow.Lane;
 import domain.model.workflow.SwimLane;
+import domain.usecase.repository.IWorkflowRepository;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowInput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowOutput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowUseCase;
@@ -12,13 +14,13 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class CreateStageUseCaseTest {
-    private WorkflowRepository workflowRepository;
+    private IWorkflowRepository workflowRepository;
     private String workflowId;
     private String laneId;
 
     @Before
     public void setup() {
-        workflowRepository = new WorkflowRepository();
+        workflowRepository = new WorkflowInMemoryRepository();
         CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository);
         CreateWorkflowInput input = new CreateWorkflowInput();
         CreateWorkflowOutput output = new CreateWorkflowOutput();

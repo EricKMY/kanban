@@ -13,11 +13,6 @@ public class CreateCardUseCase {
     }
 
     public void execute(CreateCardInput input, CreateCardOutput output) {
-//        Card card = new Card(input.getCardName());
-//        cardRepository.save(card);
-//
-//        output.setCardId(card.getCardId());
-
         Card card = new Card(input.getCardName(), workflowId);
         cardRepository.save(card);
 
