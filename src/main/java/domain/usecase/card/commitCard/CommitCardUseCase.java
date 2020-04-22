@@ -6,11 +6,9 @@ import domain.usecase.repository.IWorkflowRepository;
 
 public class CommitCardUseCase {
     private IWorkflowRepository workflowRepository;
-    private CardRepository cardRepository;
 
-    public CommitCardUseCase(IWorkflowRepository workflowRepository, CardRepository cardRepository) {
+    public CommitCardUseCase(IWorkflowRepository workflowRepository) {
         this.workflowRepository = workflowRepository;
-        this.cardRepository = cardRepository;
     }
 
     public void execute(CommitCardInput input, CommitCardOutput output) {

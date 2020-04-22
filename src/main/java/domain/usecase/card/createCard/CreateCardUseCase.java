@@ -24,9 +24,7 @@ public class CreateCardUseCase {
         output.setCardId(card.getCardId());
 
         // commit card
-        CommitCardUseCase commitCardUseCase = new CommitCardUseCase(
-                workflowRepository,
-                cardRepository);
+        CommitCardUseCase commitCardUseCase = new CommitCardUseCase(workflowRepository);
 
         CommitCardInput commitCardInput = new CommitCardInput();
         CommitCardOutput commitCardOutput = new CommitCardOutput();

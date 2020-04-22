@@ -1,9 +1,11 @@
 package domain.usecase.card.createCard;
 
+import domain.adapter.board.BoardRepository;
 import domain.adapter.card.CardRepository;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
-import domain.adapter.workflow.WorkflowRepository;
-import domain.model.workflow.Stage;
+import domain.usecase.board.createBoard.CreateBoardInput;
+import domain.usecase.board.createBoard.CreateBoardOutput;
+import domain.usecase.board.createBoard.CreateBoardUseCase;
 import domain.usecase.repository.IWorkflowRepository;
 import domain.usecase.stage.createStage.CreateStageInput;
 import domain.usecase.stage.createStage.CreateStageOutput;
@@ -18,6 +20,7 @@ import static org.junit.Assert.*;
 
 public class CreateCardUseCaseTest {
 
+    private BoardRepository boardRepository;
     private IWorkflowRepository workflowRepository;
     private CardRepository cardRepository;
     private String workflowId;
@@ -26,10 +29,12 @@ public class CreateCardUseCaseTest {
 
     @Before
     public void setup() {
+        boardRepository = new BoardRepository();
         workflowRepository = new WorkflowInMemoryRepository();
         cardRepository = new CardRepository();
 
-        workflowId = createWorkflow("board00000001", "defaultWorkflow");
+        String boardId = createBoard("kanban777", "kanban");
+        workflowId = createWorkflow(boardId, "defaultWorkflow");
         laneId = createStage(workflowId, "developing");
     }
 
@@ -51,7 +56,7 @@ public class CreateCardUseCaseTest {
     }
 
     private String createWorkflow(String boardId, String workflowName) {
-        CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository);
+        CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository, boardRepository);
 
         CreateWorkflowInput input = new CreateWorkflowInput();
         CreateWorkflowOutput output = new CreateWorkflowOutput();
@@ -75,5 +80,17 @@ public class CreateCardUseCaseTest {
         createStageUseCase.execute(input, output);
 
         return output.getStageId();
+    }
+
+    private String createBoard(String username, String boardName) {
+        CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardRepository);
+        CreateBoardInput input = new CreateBoardInput();
+        CreateBoardOutput output = new CreateBoardOutput();
+
+        input.setUsername(username);
+        input.setBoardName(boardName);
+
+        createBoardUseCase.execute(input, output);
+        return output.getBoardId();
     }
 }
