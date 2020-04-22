@@ -15,7 +15,6 @@ public class CreateCardUseCaseTest {
 
     private WorkflowRepository workflowRepository;
     private String workflowId;
-
     @Before
     public void setup() {
         workflowRepository = new WorkflowRepository();
@@ -46,4 +45,5 @@ public class CreateCardUseCaseTest {
         createCardUseCase.execute(input, output);
         assertEquals('C', cardRepository.findById(output.getCardId()).getCardId().charAt(0));
     }
+
 }

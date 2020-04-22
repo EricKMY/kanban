@@ -8,4 +8,8 @@ public interface Lane {
     public int getChildAmount();
 //    public String getWorkflowId();
     public Lane findById(String laneId);
+
+    void addCard(String cardId);
+
+    boolean isCardContained(String cardId);
 }
