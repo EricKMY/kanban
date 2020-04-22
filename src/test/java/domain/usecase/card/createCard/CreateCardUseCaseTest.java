@@ -7,12 +7,12 @@ import domain.usecase.board.createBoard.CreateBoardInput;
 import domain.usecase.board.createBoard.CreateBoardOutput;
 import domain.usecase.board.createBoard.CreateBoardUseCase;
 import domain.usecase.repository.IWorkflowRepository;
-import domain.usecase.stage.createStage.CreateStageInput;
-import domain.usecase.stage.createStage.CreateStageOutput;
-import domain.usecase.stage.createStage.CreateStageUseCase;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowInput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowOutput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowUseCase;
+import domain.usecase.workflow.lane.createStage.CreateStageInput;
+import domain.usecase.workflow.lane.createStage.CreateStageOutput;
+import domain.usecase.workflow.lane.createStage.CreateStageUseCase;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -70,7 +70,7 @@ public class CreateCardUseCaseTest {
 
 
     private String createStage(String workflowId, String stageName) {
-        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository);
+        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository);
         CreateStageInput input = new CreateStageInput();
         CreateStageOutput output = new CreateStageOutput();
 

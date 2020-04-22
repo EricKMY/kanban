@@ -1,8 +1,9 @@
-package domain.usecase.stage.createStage;
+package domain.usecase.workflow.lane.createStage;
 
 public class CreateStageInput {
     private String stageName;
     private String workflowId;
+    private String parentLaneId;
 
     public String getStageName() {
         return stageName;
@@ -20,4 +21,11 @@ public class CreateStageInput {
         return workflowId;
     }
 
+    public String getParentLaneId() {
+        return parentLaneId;
+    }
+
+    public void setParentLaneId(String parentLaneId) {
+        this.parentLaneId = parentLaneId;
+    }
 }

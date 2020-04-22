@@ -1,16 +1,16 @@
-package domain.usecase.workflow.lane;
+package domain.usecase.workflow.lane.createSwinlane;
 
-public class CreateStageInput {
-    private String stageName;
+public class CreateSwinlaneInput {
+    private String swinlaneName;
     private String workflowId;
     private String parentLaneId;
 
-    public String getStageName() {
-        return stageName;
+    public String getSwinlaneName() {
+        return swinlaneName;
     }
 
-    public void setStageName(String stageName) {
-        this.stageName = stageName;
+    public void setSwinlaneName(String swinlaneName) {
+        this.swinlaneName = swinlaneName;
     }
 
     public void setWorkflowId(String workflowId) {

@@ -1,4 +1,4 @@
-package domain.usecase.workflow.lane;
+package domain.usecase.workflow.lane.createSwinlane;
 
 import domain.adapter.board.BoardRepository;
 import domain.model.workflow.Workflow;

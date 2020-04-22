@@ -1,7 +1,6 @@
-package domain.usecase.workflow.lane;
+package domain.usecase.workflow.lane.createSwinlane;
 
 import domain.adapter.board.BoardRepository;
-import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.adapter.workflow.WorkflowRepository;
 import domain.usecase.board.createBoard.CreateBoardInput;
 import domain.usecase.board.createBoard.CreateBoardOutput;
@@ -10,6 +9,12 @@ import domain.usecase.repository.IWorkflowRepository;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowInput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowOutput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowUseCase;
+import domain.usecase.workflow.lane.createStage.CreateStageInput;
+import domain.usecase.workflow.lane.createStage.CreateStageOutput;
+import domain.usecase.workflow.lane.createStage.CreateStageUseCase;
+import domain.usecase.workflow.lane.createSwinlane.CreateSwinlaneInput;
+import domain.usecase.workflow.lane.createSwinlane.CreateSwinlaneOutput;
+import domain.usecase.workflow.lane.createSwinlane.CreateSwinlaneUseCase;
 import org.junit.Before;
 import org.junit.Test;
 
