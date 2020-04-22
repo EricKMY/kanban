@@ -1,8 +1,10 @@
 package domain.usecase.stage.createStage;
 
+import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.adapter.workflow.WorkflowRepository;
 import domain.model.workflow.Lane;
 import domain.model.workflow.SwimLane;
+import domain.usecase.repository.IWorkflowRepository;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowInput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowOutput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowUseCase;
@@ -12,13 +14,13 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class CreateStageUseCaseTest {
-    private WorkflowRepository workflowRepository;
+    private IWorkflowRepository workflowRepository;
     private String workflowId;
     private String laneId;
 
     @Before
     public void setup() {
-        workflowRepository = new WorkflowRepository();
+        workflowRepository = new WorkflowInMemoryRepository();
         CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository);
         CreateWorkflowInput input = new CreateWorkflowInput();
         CreateWorkflowOutput output = new CreateWorkflowOutput();
@@ -34,11 +36,12 @@ public class CreateStageUseCaseTest {
     @Test
     public void createTopStage() {
         CreateStageUseCase createStageUseCase = new CreateStageUseCase(
-                workflowRepository.findById(workflowId));
+                workflowRepository);
         CreateStageInput input = new CreateStageInput();
         CreateStageOutput output = new CreateStageOutput();
 
         input.setStageName("Backlog");
+        input.setWorkflowId(workflowId);
 
         createStageUseCase.execute(input, output);
 
@@ -48,10 +51,11 @@ public class CreateStageUseCaseTest {
     @Test
     public void createLane() {
         CreateStageUseCase createStageUseCase = new CreateStageUseCase(
-                workflowRepository.findById(workflowId));
+                workflowRepository);
         CreateStageInput input = new CreateStageInput();
         CreateStageOutput output = new CreateStageOutput();
 
+        input.setWorkflowId(workflowId);
         input.setStageName("Backlog");
 
         createStageUseCase.execute(input, output);
@@ -60,12 +64,12 @@ public class CreateStageUseCaseTest {
 
         workflowRepository
                 .findById(workflowId)
-                .findById(laneId)
+                .findLaneById(laneId)
                 .addLane(swimLane);
 
-        assertEquals(1,
-                workflowRepository.findById(workflowId)
-                .findById(laneId)
+        assertEquals(1, workflowRepository
+                .findById(workflowId)
+                .findLaneById(laneId)
                 .getChildAmount());
 
     }

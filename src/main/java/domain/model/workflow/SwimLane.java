@@ -1,13 +1,12 @@
 package domain.model.workflow;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class SwimLane implements Lane{
     private String swimLaneName;
     private String swimLaneId;
-    Map<String, Lane> laneList = new HashMap<String, Lane>();
+    Map<String, Lane> laneList = new HashMap<String, Lane>();;
+    List<String> cardList = new ArrayList<String>();
 
     public SwimLane(String swimLaneName) {
         this.swimLaneName = swimLaneName;
@@ -28,5 +27,13 @@ public class SwimLane implements Lane{
 
     public Lane findById(String laneId) {
         return laneList.get(laneId);
+    }
+
+    public void addCard(String cardId) {
+        cardList.add(cardId);
+    }
+
+    public boolean isCardContained(String cardId) {
+        return cardList.contains(cardId);
     }
 }

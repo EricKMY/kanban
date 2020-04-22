@@ -29,7 +29,7 @@ public class Workflow {
         return stage.getLaneId();
     }
 
-    public Lane findById(String laneId) {
+    public Lane findLaneById(String laneId) {
         return stageList.get(laneId);
     }
 
@@ -47,5 +47,19 @@ public class Workflow {
 
     public void setBoardId(String boardId) {
         this.boardId = boardId;
+    }
+
+    public void commitCard(String cardId, String laneId) {
+        Lane lane = findLaneById(laneId);
+        lane.addCard(cardId);
+    }
+
+    public Lane findLaneByCardId(String cardId) {
+        for (Lane lane : stageList.values()){
+            if (lane.isCardContained(cardId)){
+                return lane;
+            }
+        }
+        return null;
     }
 }

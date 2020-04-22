@@ -13,9 +13,9 @@ public class MySQL implements Database {
 
     public Connection connect() {
         String driver = "com.mysql.jdbc.Driver";
-        String url = "jdbc:mysql://localhost:3306/kanban";
-        String user = "root";
-        String password = "";
+        String url = "jdbc:mysql://localhost:3306/kanban?serverTimezone=UTC";
+        String user = "kanban";
+        String password = "777777";
 
         Connection connection = null;
         try{

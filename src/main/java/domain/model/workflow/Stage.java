@@ -1,14 +1,13 @@
 package domain.model.workflow;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class Stage implements Lane {
     private String stageName;
     private String workflowId;
     private String stageId;
     Map<String, Lane> laneList = new HashMap<String, Lane>();
+    List<String> cardList = new ArrayList<String>();
 
     public Stage(String stageName) {
         this.stageName = stageName;
@@ -29,6 +28,14 @@ public class Stage implements Lane {
 
     public Lane findById(String laneId) {
         return laneList.get(laneId);
+    }
+
+    public void addCard(String cardId) {
+        cardList.add(cardId);
+    }
+
+    public boolean isCardContained(String cardId) {
+        return cardList.contains(cardId);
     }
 
 //    public String getWorkflowId() {
