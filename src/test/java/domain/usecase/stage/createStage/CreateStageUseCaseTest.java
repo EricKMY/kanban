@@ -1,6 +1,5 @@
 package domain.usecase.stage.createStage;
 
-import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.adapter.workflow.WorkflowRepository;
 import domain.model.workflow.Lane;
 import domain.model.workflow.SwimLane;
@@ -20,7 +19,7 @@ public class CreateStageUseCaseTest {
 
     @Before
     public void setup() {
-        workflowRepository = new WorkflowInMemoryRepository();
+        workflowRepository = new WorkflowRepository();
         CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository);
         CreateWorkflowInput input = new CreateWorkflowInput();
         CreateWorkflowOutput output = new CreateWorkflowOutput();

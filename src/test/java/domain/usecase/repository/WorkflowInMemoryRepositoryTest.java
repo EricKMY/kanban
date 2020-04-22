@@ -1,27 +1,27 @@
 package domain.usecase.repository;
 
-import domain.adapter.workflow.WorkflowRepository;
+import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.model.workflow.Workflow;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-public class WorkflowRepositoryTest {
+public class WorkflowInMemoryRepositoryTest {
 
     @Test
     public void getConnection() {
-        WorkflowRepository workflowRepository = new WorkflowRepository();
-        assertNotEquals(null, workflowRepository.getConnection());
+        WorkflowInMemoryRepository workflowInMemoryRepository = new WorkflowInMemoryRepository();
+        assertNotEquals(null, workflowInMemoryRepository.getConnection());
     }
 
     @Test
     public void save() {
         Workflow workflow = new Workflow("workflow2", "board00000001");
-        WorkflowRepository workflowRepository = new WorkflowRepository();
+        WorkflowInMemoryRepository workflowInMemoryRepository = new WorkflowInMemoryRepository();
 
-        workflowRepository.save(workflow);
-        Workflow returnWorkflow = workflowRepository.findById(workflow.getWorkflowId());
+        workflowInMemoryRepository.save(workflow);
+        Workflow returnWorkflow = workflowInMemoryRepository.findById(workflow.getWorkflowId());
 
         assertEquals(workflow.getWorkflowId(), returnWorkflow.getWorkflowId());
         assertEquals(workflow.getWorkflowName(), returnWorkflow.getWorkflowName());

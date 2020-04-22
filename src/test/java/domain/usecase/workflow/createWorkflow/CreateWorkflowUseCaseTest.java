@@ -1,6 +1,6 @@
 package domain.usecase.workflow.createWorkflow;
 
-import domain.adapter.workflow.WorkflowRepository;
+import domain.adapter.workflow.WorkflowInMemoryRepository;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -9,8 +9,8 @@ public class CreateWorkflowUseCaseTest {
 
     @Test
     public void createWorkflow(){
-        WorkflowRepository workflowRepository = new WorkflowRepository();
-        CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository);
+        WorkflowInMemoryRepository workflowInMemoryRepository = new WorkflowInMemoryRepository();
+        CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowInMemoryRepository);
         CreateWorkflowInput input = new CreateWorkflowInput();
         CreateWorkflowOutput output = new CreateWorkflowOutput();
 
@@ -19,6 +19,6 @@ public class CreateWorkflowUseCaseTest {
 
         createWorkflowUseCase.execute(input, output);
 
-        assertEquals("board00000001", workflowRepository.findById(output.getWorkflowId()).getBoardId());
+        assertEquals("board00000001", workflowInMemoryRepository.findById(output.getWorkflowId()).getBoardId());
     }
 }

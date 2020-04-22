@@ -11,11 +11,12 @@ public class MySQL implements Database {
     private Statement statement;
     String sql;
 
+//    User: "root", Password: "" <== Don't change, if change notify.
     public Connection connect() {
         String driver = "com.mysql.jdbc.Driver";
         String url = "jdbc:mysql://localhost:3306/kanban?serverTimezone=UTC";
-        String user = "kanban";
-        String password = "777777";
+        String user = "root";
+        String password = "";
 
         Connection connection = null;
         try{
@@ -32,8 +33,12 @@ public class MySQL implements Database {
     public void createTable(String tableName) {
         this.tableName = tableName;
 
+        if(tableName == "board")
+            createBoardTable();
+
         if(tableName == "workflow")
             createWorkflowTable();
+
         if(tableName == "card")
             createCardTable();
     }
@@ -59,12 +64,35 @@ public class MySQL implements Database {
     public Map<String, String> findById(String id) {
         Map<String, String> result = null;
 
+        if(this.tableName == "board")
+            result = findBoardById(id);
+
         if(this.tableName == "workflow")
             result = findWorkflowById(id);
+
         if(this.tableName == "card")
             result = findCardById(id);
 
         return  result;
+    }
+
+
+    private void createBoardTable() {
+        Connection connection = this.connect();
+        sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(boardId VARCHAR(50) not NULL, boardName VARCHAR(50), userName VARCHAR(50))";
+
+        try {
+            statement = connection.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void createWorkflowTable() {
@@ -116,6 +144,32 @@ public class MySQL implements Database {
                 sql = sql + ")";
         }
         return sql;
+    }
+
+    private Map<String, String> findBoardById(String boardId) {
+        Connection connection = this.connect();
+        ResultSet resultSet = null;
+        sql = "SELECT * FROM " + this.tableName + " WHERE boardId = '" + boardId + "'";
+        Map<String, String> result = new HashMap<String, String>();
+
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            while(resultSet.next()) {
+                result.put("boardId", resultSet.getString("boardId"));
+                result.put("boardName", resultSet.getString("boardName"));
+                result.put("userName", resultSet.getString("userName"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 
     private Map<String, String> findWorkflowById(String workflowId) {
