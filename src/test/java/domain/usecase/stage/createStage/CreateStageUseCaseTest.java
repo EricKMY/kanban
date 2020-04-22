@@ -2,6 +2,7 @@ package domain.usecase.stage.createStage;
 
 import domain.adapter.board.BoardRepository;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
+import domain.adapter.workflow.WorkflowRepository;
 import domain.model.workflow.Lane;
 import domain.model.workflow.SwimLane;
 import domain.usecase.board.createBoard.CreateBoardInput;
@@ -26,7 +27,7 @@ public class CreateStageUseCaseTest {
     @Before
     public void setup() {
         boardRepository = new BoardRepository();
-        workflowRepository = new WorkflowInMemoryRepository();
+        workflowRepository = new WorkflowRepository();
 
         String boardId = createBoard("kanban777", "kanban");
         workflowId = createWorkflow(boardId, "defaultWorkflow");

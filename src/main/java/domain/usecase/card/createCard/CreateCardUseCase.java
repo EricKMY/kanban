@@ -1,7 +1,6 @@
 package domain.usecase.card.createCard;
 
 import domain.adapter.card.CardRepository;
-import domain.adapter.workflow.WorkflowRepository;
 import domain.model.card.Card;
 import domain.usecase.card.commitCard.CommitCardInput;
 import domain.usecase.card.commitCard.CommitCardOutput;

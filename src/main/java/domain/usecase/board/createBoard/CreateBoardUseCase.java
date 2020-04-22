@@ -1,18 +1,18 @@
 package domain.usecase.board.createBoard;
 
-import domain.adapter.board.BoardRepository;
 import domain.model.board.Board;
+import domain.usecase.repository.IBoardRepository;
 
 public class CreateBoardUseCase {
-    private BoardRepository boardRepository;
+    private IBoardRepository iBoardRepository;
 
-    public CreateBoardUseCase(BoardRepository boardRepository) {
-        this.boardRepository = boardRepository;
+    public CreateBoardUseCase(IBoardRepository iBoardRepository) {
+        this.iBoardRepository = iBoardRepository;
     }
 
     public void execute(CreateBoardInput input, CreateBoardOutput output) {
         Board board = new Board(input.getBoardName(), input.getUsername());
-        boardRepository.save(board);
+        iBoardRepository.save(board);
 
         output.setBoardId(board.getBoardId());
     }

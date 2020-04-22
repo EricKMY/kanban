@@ -2,7 +2,7 @@ package domain.usecase.card.createCard;
 
 import domain.adapter.board.BoardRepository;
 import domain.adapter.card.CardRepository;
-import domain.adapter.workflow.WorkflowInMemoryRepository;
+import domain.adapter.workflow.WorkflowRepository;
 import domain.usecase.board.createBoard.CreateBoardInput;
 import domain.usecase.board.createBoard.CreateBoardOutput;
 import domain.usecase.board.createBoard.CreateBoardUseCase;
@@ -30,7 +30,7 @@ public class CreateCardUseCaseTest {
     @Before
     public void setup() {
         boardRepository = new BoardRepository();
-        workflowRepository = new WorkflowInMemoryRepository();
+        workflowRepository = new WorkflowRepository();
         cardRepository = new CardRepository();
 
         String boardId = createBoard("kanban777", "kanban");

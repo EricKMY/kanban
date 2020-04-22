@@ -1,4 +1,4 @@
-package domain.database;
+package domain.adapter.database;
 
 import java.sql.Connection;
 import java.util.Map;
