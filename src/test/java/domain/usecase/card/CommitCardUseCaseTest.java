@@ -1,8 +1,6 @@
 package domain.usecase.card;
 
 import domain.adapter.board.BoardRepository;
-import domain.adapter.card.CardRepository;
-import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.adapter.workflow.WorkflowRepository;
 import domain.usecase.board.createBoard.CreateBoardInput;
 import domain.usecase.board.createBoard.CreateBoardOutput;

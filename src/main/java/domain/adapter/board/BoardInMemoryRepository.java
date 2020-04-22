@@ -12,7 +12,6 @@ public class BoardInMemoryRepository implements IBoardRepository {
     private Database database = new MySQL();
 
     public BoardInMemoryRepository() {
-        database.connect();
         database.createTable("board");
     }
 

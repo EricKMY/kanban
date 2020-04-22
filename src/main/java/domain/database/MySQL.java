@@ -47,8 +47,8 @@ public class MySQL implements Database {
     }
 
     public void save(String[] attribute) {
-        sql = convertToAdd(sql, attribute);
         Connection connection = this.connect();
+        sql = convertToAdd(sql, attribute);
 
         try {
             statement = connection.createStatement();
@@ -56,11 +56,7 @@ public class MySQL implements Database {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            this.closeConnect(connection);
         }
     }
 

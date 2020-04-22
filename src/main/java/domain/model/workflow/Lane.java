@@ -1,8 +1,6 @@
 package domain.model.workflow;
 
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public interface Lane {
     String getLaneId();

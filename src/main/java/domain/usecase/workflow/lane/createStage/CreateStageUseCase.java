@@ -9,7 +9,6 @@ public class CreateStageUseCase {
     private BoardRepository boardRepository;
     private Workflow workflow;
 
-
     public CreateStageUseCase(IWorkflowRepository workflowRepository, BoardRepository boardRepository) {
         this.workflowRepository = workflowRepository;
         this.boardRepository = boardRepository;

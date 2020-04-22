@@ -1,6 +1,5 @@
 package domain.adapter.workflow;
 
-import domain.model.board.Board;
 import domain.model.workflow.Workflow;
 import domain.usecase.repository.IWorkflowRepository;
 

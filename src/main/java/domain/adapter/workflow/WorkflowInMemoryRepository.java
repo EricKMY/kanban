@@ -16,7 +16,6 @@ public class WorkflowInMemoryRepository implements IWorkflowRepository {
     Database database = new MySQL();
 
     public WorkflowInMemoryRepository() {
-        database.connect();
         database.createTable("workflow");
     }
 
@@ -35,8 +34,6 @@ public class WorkflowInMemoryRepository implements IWorkflowRepository {
         Workflow workflow = getInstance(result);
 
         return workflow;
-
-//        return map.get(workflowId);
     }
 
     private String[] convertFormat(Workflow workflow) {
