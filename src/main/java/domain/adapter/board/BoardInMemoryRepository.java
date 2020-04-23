@@ -1,7 +1,6 @@
 package domain.adapter.board;
 
-import domain.adapter.database.Database;
-import domain.database.MySQL;
+import domain.adapter.database.IDatabase;
 import domain.model.board.Board;
 import domain.usecase.repository.IBoardRepository;
 
@@ -9,9 +8,10 @@ import java.util.Map;
 
 public class BoardInMemoryRepository implements IBoardRepository {
 
-    private Database database = new MySQL();
+    private IDatabase database;
 
-    public BoardInMemoryRepository() {
+    public BoardInMemoryRepository(IDatabase database) {
+        this.database = database;
         database.createTable("board");
     }
 

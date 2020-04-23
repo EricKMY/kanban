@@ -7,8 +7,6 @@ import java.util.UUID;
 public class Board {
 
     private String boardId;
-
-
     private String boardName;
     private String username;
 

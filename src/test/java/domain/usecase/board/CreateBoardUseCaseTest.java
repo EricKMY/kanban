@@ -2,6 +2,8 @@ package domain.usecase.board;
 
 import domain.adapter.board.BoardRepository;
 import domain.adapter.board.BoardInMemoryRepository;
+import domain.adapter.database.IDatabase;
+import domain.database.MySQL;
 import domain.usecase.board.createBoard.CreateBoardInput;
 import domain.usecase.board.createBoard.CreateBoardOutput;
 import domain.usecase.board.createBoard.CreateBoardUseCase;
@@ -28,7 +30,8 @@ public class CreateBoardUseCaseTest {
 
     @Test
     public void createBoardInDB(){
-        IBoardRepository boardRepository = new BoardInMemoryRepository();
+        IDatabase database = new MySQL();
+        IBoardRepository boardRepository = new BoardInMemoryRepository(database);
         CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardRepository);
         CreateBoardInput input = new CreateBoardInput();
         CreateBoardOutput output = new CreateBoardOutput();

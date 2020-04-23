@@ -2,14 +2,14 @@ package domain.database;
 
 import domain.adapter.database.BoardTable;
 import domain.adapter.database.CardTable;
-import domain.adapter.database.Database;
+import domain.adapter.database.IDatabase;
 import domain.adapter.database.WorkflowTable;
 
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MySQL implements Database {
+public class MySQL implements IDatabase {
     private String tableName;
     private Statement statement;
     String sql;

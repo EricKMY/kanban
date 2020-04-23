@@ -1,21 +1,20 @@
 package domain.adapter.workflow;
 
 import domain.database.MySQL;
-import domain.adapter.database.Database;
+import domain.adapter.database.IDatabase;
 import domain.usecase.repository.IWorkflowRepository;
 import domain.model.workflow.Workflow;
 
 import java.sql.Connection;
 
 import java.util.Map;
-import java.util.HashMap;
 
 public class WorkflowInMemoryRepository implements IWorkflowRepository {
-    Map<String, Workflow> map = new HashMap<String, Workflow>();
-    private Connection connection = null;
-    Database database = new MySQL();
 
-    public WorkflowInMemoryRepository() {
+    IDatabase database;
+
+    public WorkflowInMemoryRepository(IDatabase database) {
+        this.database = database;
         database.createTable("workflow");
     }
 
@@ -24,8 +23,7 @@ public class WorkflowInMemoryRepository implements IWorkflowRepository {
     }
 
     public void save(Workflow workflow) {
-        map.put(workflow.getWorkflowId(), workflow);
-        convertFormat(map.get(workflow.getWorkflowId()));
+        convertFormat(workflow);
         database.save(convertFormat(workflow));
     }
 

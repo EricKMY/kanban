@@ -9,6 +9,7 @@ public class Card {
 
     public Card(String cardName, String workflowId) {
         this.cardName = cardName;
+        this.workflowId = workflowId;
         cardId = "C" + UUID.randomUUID().toString();
     }
 

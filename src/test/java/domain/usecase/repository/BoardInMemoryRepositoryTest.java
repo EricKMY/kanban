@@ -1,6 +1,8 @@
 package domain.usecase.repository;
 
 import domain.adapter.board.BoardInMemoryRepository;
+import domain.adapter.database.IDatabase;
+import domain.database.MySQL;
 import domain.model.board.Board;
 
 import org.junit.Test;
@@ -12,7 +14,8 @@ public class BoardInMemoryRepositoryTest {
     @Test
     public void save() {
         Board board = new Board("Kanban_Project", "Tina");
-        IBoardRepository boardRepository = new BoardInMemoryRepository();
+        IDatabase database = new MySQL();
+        IBoardRepository boardRepository = new BoardInMemoryRepository(database);
 
         boardRepository.save(board);
         Board returnBoard = boardRepository.findById(board.getBoardId());
