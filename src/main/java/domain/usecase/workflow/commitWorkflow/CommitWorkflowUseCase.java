@@ -1,18 +1,18 @@
 package domain.usecase.workflow.commitWorkflow;
-import domain.adapter.board.BoardRepository;
+import domain.adapter.board.BoardInMemoryRepository;
 import domain.model.board.Board;
 
 public class CommitWorkflowUseCase {
-    private BoardRepository boardRepository;
+    private BoardInMemoryRepository boardInMemoryRepository;
 
-    public CommitWorkflowUseCase(BoardRepository boardRepository) {
-        this.boardRepository = boardRepository;
+    public CommitWorkflowUseCase(BoardInMemoryRepository boardInMemoryRepository) {
+        this.boardInMemoryRepository = boardInMemoryRepository;
     }
 
 
     public void execute(CommitWorkflowInput input, CommitWorkflowOutput output) {
-        Board board = boardRepository.findById(input.getBoardId());
+        Board board = boardInMemoryRepository.findById(input.getBoardId());
         board.addWorkflow(input.getWorkflowId());
-        boardRepository.save(board);
+        boardInMemoryRepository.save(board);
     }
 }

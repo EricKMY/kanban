@@ -1,6 +1,6 @@
 package domain.usecase.workflow;
 
-import domain.adapter.board.BoardRepository;
+import domain.adapter.board.BoardInMemoryRepository;
 import domain.usecase.board.createBoard.CreateBoardInput;
 import domain.usecase.board.createBoard.CreateBoardOutput;
 import domain.usecase.board.createBoard.CreateBoardUseCase;
@@ -14,19 +14,19 @@ import static org.junit.Assert.assertTrue;
 
 public class CommitWorkflowUseCaseTest {
 
-    private BoardRepository boardRepository;
+    private BoardInMemoryRepository boardInMemoryRepository;
     private String baordId;
 
     @Before
     public void setup() {
-        boardRepository = new BoardRepository();
+        boardInMemoryRepository = new BoardInMemoryRepository();
         baordId = createBoard("kanban777", "kanbanSystem");
     }
 
     @Test
     public void commitWorkflow() {
         String workflowId = "W012345678";
-        CommitWorkflowUseCase commitWorkflowUseCase = new CommitWorkflowUseCase(boardRepository);
+        CommitWorkflowUseCase commitWorkflowUseCase = new CommitWorkflowUseCase(boardInMemoryRepository);
         CommitWorkflowInput input = new CommitWorkflowInput();
         CommitWorkflowOutput output = new CommitWorkflowOutput();
 
@@ -35,11 +35,11 @@ public class CommitWorkflowUseCaseTest {
 
         commitWorkflowUseCase.execute(input, output);
 
-        assertTrue(boardRepository.findById(baordId).isWorkflowContained("W012345678"));
+        assertTrue(boardInMemoryRepository.findById(baordId).isWorkflowContained("W012345678"));
     }
 
     private String createBoard(String username, String boardName) {
-        CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardRepository);
+        CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardInMemoryRepository);
         CreateBoardInput input = new CreateBoardInput();
         CreateBoardOutput output = new CreateBoardOutput();
 

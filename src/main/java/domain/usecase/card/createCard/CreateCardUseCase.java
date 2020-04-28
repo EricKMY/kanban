@@ -20,7 +20,7 @@ public class CreateCardUseCase {
         Card card = new Card(input.getCardName(), input.getWorkflowId());
         cardRepository.save(card);
 
-        output.setCardId(card.getCardId());
+        output.setCardId(card.getId());
 
         // commit card
         CommitCardUseCase commitCardUseCase = new CommitCardUseCase(workflowRepository);
@@ -30,7 +30,7 @@ public class CreateCardUseCase {
 
         commitCardInput.setWorkflowId(input.getWorkflowId());
         commitCardInput.setLaneId(input.getLaneId());
-        commitCardInput.setCardId(card.getCardId());
+        commitCardInput.setCardId(card.getId());
 
         commitCardUseCase.execute(commitCardInput, commitCardOutput);
     }

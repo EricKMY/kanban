@@ -14,6 +14,6 @@ public class CreateBoardUseCase {
         Board board = new Board(input.getBoardName(), input.getUsername());
         iBoardRepository.save(board);
 
-        output.setBoardId(board.getBoardId());
+        output.setBoardId(board.getId());
     }
 }

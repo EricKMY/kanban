@@ -1,46 +1,46 @@
 package domain.model.workflow;
 
+import domain.model.Entity;
+
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
-public class Workflow {
-    private String workflowName;
-    private String workflowId;
+public class Workflow extends Entity {
     private String boardId;
     Map<String, Lane> laneList = new HashMap<String, Lane>();
 
-    public Workflow(String workflowName, String boardId) {
-        this.workflowName = workflowName;
+    public Workflow(String workflowName, String boardId, String workflowId) {
+        super(workflowName, workflowId);
         this.boardId = boardId;
-        workflowId = "W" + UUID.randomUUID().toString();
     }
 
-    public String getWorkflowId() {
-        return workflowId;
+    public Workflow(String workflowName, String boardId) {
+        super(workflowName);
+        this.boardId = boardId;
     }
+
     public String getBoardId() {
         return boardId;
     }
 
     public String createStage(String stageName) {
         Lane lane = new Stage(stageName);
-        laneList.put(lane.getLaneId(), lane);
-        return lane.getLaneId();
+        laneList.put(lane.getId(), lane);
+        return lane.getId();
     }
 
     public String createStage(String stageName, String parentLaneId) {
         Lane lane = new Stage(stageName);
         Lane parentLane = findLaneById(parentLaneId);
         parentLane.addLane(lane);
-        return lane.getLaneId();
+        return lane.getId();
     }
 
     public String createSwinlane(String swinlaneName, String parentLaneId) {
         Lane lane = new SwimLane(swinlaneName);
         Lane parentLane = findLaneById(parentLaneId);
         parentLane.addLane(lane);
-        return lane.getLaneId();
+        return lane.getId();
     }
 
     public Lane findLaneById(String laneId) {
@@ -67,22 +67,6 @@ public class Workflow {
             }
         }
         return null;
-    }
-
-    public String getWorkflowName() {
-        return workflowName;
-    }
-
-    public void setWorkflowId(String workflowId) {
-        this.workflowId = workflowId;
-    }
-
-    public void setWorkflowName(String workflowName) {
-        this.workflowName = workflowName;
-    }
-
-    public void setBoardId(String boardId) {
-        this.boardId = boardId;
     }
 
     public void commitCard(String cardId, String laneId) {

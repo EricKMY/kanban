@@ -1,19 +1,27 @@
 package domain.model.card;
 
-import java.util.UUID;
+import domain.model.AggregateRoot;
+import domain.model.card.event.CardCreated;
 
-public class Card {
-    private String cardId;
-    private String cardName;
+public class Card extends AggregateRoot {
+
     private String workflowId;
 
-    public Card(String cardName, String workflowId) {
-        this.cardName = cardName;
-        this.workflowId = workflowId;
-        cardId = "C" + UUID.randomUUID().toString();
+
+    public Card(String cardName, String laneId, String workflowId) {
+        super(cardName);
+        addDomainEvent(new CardCreated(cardName, laneId, workflowId));
     }
 
-    public String getCardId() {
-        return cardId;
+    public Card(String cardName, String cardId) {
+        super(cardName, cardId);
+    }
+
+    public void setWorkflowId(String workflowId) {
+        this.workflowId = workflowId;
+    }
+
+    public String getWorkflowId(){
+        return workflowId;
     }
 }

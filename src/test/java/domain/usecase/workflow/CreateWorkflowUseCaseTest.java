@@ -1,7 +1,7 @@
 package domain.usecase.workflow;
 
-import domain.adapter.board.BoardRepository;
-import domain.adapter.workflow.WorkflowRepository;
+import domain.adapter.board.BoardInMemoryRepository;
+import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.usecase.board.createBoard.CreateBoardInput;
 import domain.usecase.board.createBoard.CreateBoardOutput;
 import domain.usecase.board.createBoard.CreateBoardUseCase;
@@ -16,21 +16,21 @@ import static org.junit.Assert.assertEquals;
 
 public class CreateWorkflowUseCaseTest {
 
-    private BoardRepository boardRepository;
+    private BoardInMemoryRepository boardInMemoryRepository;
     private IWorkflowRepository workflowRepository;
     private String baordId;
 
     @Before
     public void setup() {
-        boardRepository = new BoardRepository();
-        workflowRepository = new WorkflowRepository();
+        boardInMemoryRepository = new BoardInMemoryRepository();
+        workflowRepository = new WorkflowInMemoryRepository();
 
         baordId = createBoard("kanban777", "kanbanSystem");
     }
 
     @Test
     public void createWorkflow(){
-        CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository, boardRepository);
+        CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository, boardInMemoryRepository);
         CreateWorkflowInput input = new CreateWorkflowInput();
         CreateWorkflowOutput output = new CreateWorkflowOutput();
 
@@ -43,7 +43,7 @@ public class CreateWorkflowUseCaseTest {
     }
 
     private String createBoard(String username, String boardName) {
-        CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardRepository);
+        CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardInMemoryRepository);
         CreateBoardInput input = new CreateBoardInput();
         CreateBoardOutput output = new CreateBoardOutput();
 
