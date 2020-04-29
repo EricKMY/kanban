@@ -10,12 +10,10 @@ import domain.usecase.repository.ICardRepository;
 import domain.usecase.repository.IWorkflowRepository;
 
 public class CreateCardUseCase {
-    private IWorkflowRepository workflowRepository;
     private ICardRepository cardRepository;
     private DomainEventBus eventBus;
 
-    public CreateCardUseCase(IWorkflowRepository workflowRepository, ICardRepository cardRepository, DomainEventBus eventBus) {
-        this.workflowRepository = workflowRepository;
+    public CreateCardUseCase(ICardRepository cardRepository, DomainEventBus eventBus) {
         this.cardRepository = cardRepository;
         this.eventBus = eventBus;
     }

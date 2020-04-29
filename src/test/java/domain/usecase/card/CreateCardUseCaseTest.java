@@ -46,9 +46,7 @@ public class CreateCardUseCaseTest {
 
     @Test
     public void createCard() {
-        CreateCardUseCase createCardUseCase = new CreateCardUseCase(
-                workflowRepository,
-                cardRepository, eventBus);
+        CreateCardUseCase createCardUseCase = new CreateCardUseCase(cardRepository, eventBus);
 
         CreateCardInput input = new CreateCardInput();
         CreateCardOutput output = new CreateCardOutput();
