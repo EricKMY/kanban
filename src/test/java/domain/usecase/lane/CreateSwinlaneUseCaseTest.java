@@ -2,12 +2,16 @@ package domain.usecase.lane;
 
 import domain.adapter.board.BoardInMemoryRepository;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
+import domain.model.DomainEventBus;
+import domain.usecase.DomainEventHandler;
+import domain.usecase.TestUtility;
 import domain.usecase.board.createBoard.CreateBoardInput;
 import domain.usecase.board.createBoard.CreateBoardOutput;
 import domain.usecase.board.createBoard.CreateBoardUseCase;
 import domain.usecase.lane.createSwinlane.CreateSwinlaneInput;
 import domain.usecase.lane.createSwinlane.CreateSwinlaneOutput;
 import domain.usecase.lane.createSwinlane.CreateSwinlaneUseCase;
+import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.IWorkflowRepository;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowInput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowOutput;
@@ -21,75 +25,41 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class CreateSwinlaneUseCaseTest {
-    private BoardInMemoryRepository boardInMemoryRepository;
+    private IBoardRepository boardRepository;
     private IWorkflowRepository workflowRepository;
     private String workflowId;
+    private String topStageId;
+    private DomainEventBus eventBus;
+    private TestUtility testUtility;
 
 
     @Before
     public void setup() {
-        boardInMemoryRepository = new BoardInMemoryRepository();
+        boardRepository = new BoardInMemoryRepository();
         workflowRepository = new WorkflowInMemoryRepository();
 
-        String boardId = createBoard("kanban777", "kanban");
-        workflowId = createWorkflow(boardId, "defaultWorkflow");
+        eventBus = new DomainEventBus();
+        eventBus.register(new DomainEventHandler(boardRepository, workflowRepository));
+        testUtility = new TestUtility(boardRepository, workflowRepository, eventBus);
+
+        String boardId = testUtility.createBoard("kanban777", "kanban");
+        workflowId = testUtility.createWorkflow(boardId, "defaultWorkflow");
+        topStageId = testUtility.createTopStage(workflowId, "Backlog");
     }
 
     @Test
     public void createSwinlane() {
-        String parentLaneId = createTopStage(workflowId, "Backlog");
-        CreateSwinlaneUseCase createSwinlaneUseCase = new CreateSwinlaneUseCase(workflowRepository, boardInMemoryRepository);
+        CreateSwinlaneUseCase createSwinlaneUseCase = new CreateSwinlaneUseCase(workflowRepository, boardRepository);
         CreateSwinlaneInput input = new CreateSwinlaneInput();
         CreateSwinlaneOutput output = new CreateSwinlaneOutput();
 
         input.setSwinlaneName("Urgent");
         input.setWorkflowId(workflowId);
-        input.setParentLaneId(parentLaneId);
+        input.setParentLaneId(topStageId);
 
         createSwinlaneUseCase.execute(input, output);
 
-        assertEquals(1, workflowRepository.findById(workflowId).findLaneById(parentLaneId).getChildAmount());
+        assertEquals(1, workflowRepository.findById(workflowId).findLaneById(topStageId).getChildAmount());
         assertEquals("Urgent", workflowRepository.findById(workflowId).findLaneById(output.getSwinlaneId()).getName());
-    }
-
-
-    private String createWorkflow(String boardId, String workflowName) {
-        CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository, boardInMemoryRepository);
-
-        CreateWorkflowInput input = new CreateWorkflowInput();
-        CreateWorkflowOutput output = new CreateWorkflowOutput();
-        input.setBoardId(boardId);
-        input.setWorkflowName(workflowName);
-
-        createWorkflowUseCase.execute(input, output);
-        return output.getWorkflowId();
-
-    }
-
-    private String createBoard(String username, String boardName) {
-        CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardInMemoryRepository);
-        CreateBoardInput input = new CreateBoardInput();
-        CreateBoardOutput output = new CreateBoardOutput();
-
-        input.setUsername(username);
-        input.setBoardName(boardName);
-
-        createBoardUseCase.execute(input, output);
-        return output.getBoardId();
-    }
-
-
-    private String createTopStage(String workflowId, String stageName) {
-        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardInMemoryRepository);
-        CreateStageInput input = new CreateStageInput();
-        CreateStageOutput output = new CreateStageOutput();
-
-        input.setStageName("Developing");
-        input.setWorkflowId(workflowId);
-        input.setParentLaneId(null);
-
-        createStageUseCase.execute(input, output);
-
-        return output.getStageId();
     }
 }

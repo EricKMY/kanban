@@ -1,22 +1,26 @@
 package domain.model.workflow;
 
+import domain.model.AggregateRoot;
 import domain.model.Entity;
+import domain.model.workflow.event.WorkflowCreated;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Workflow extends Entity {
+public class Workflow extends AggregateRoot {
     private String boardId;
     Map<String, Lane> laneList = new HashMap<String, Lane>();
 
     public Workflow(String workflowName, String boardId, String workflowId) {
         super(workflowName, workflowId);
         this.boardId = boardId;
+        addDomainEvent(new WorkflowCreated(name, id, boardId));
     }
 
     public Workflow(String workflowName, String boardId) {
         super(workflowName);
         this.boardId = boardId;
+        addDomainEvent(new WorkflowCreated(name, id, boardId));
     }
 
     public String getBoardId() {

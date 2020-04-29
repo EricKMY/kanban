@@ -2,16 +2,17 @@ package domain.usecase.lane.createStage;
 
 import domain.adapter.board.BoardInMemoryRepository;
 import domain.model.workflow.Workflow;
+import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.IWorkflowRepository;
 
 public class CreateStageUseCase {
     private IWorkflowRepository workflowRepository;
-    private BoardInMemoryRepository boardInMemoryRepository;
+    private IBoardRepository boardRepository;
     private Workflow workflow;
 
-    public CreateStageUseCase(IWorkflowRepository workflowRepository, BoardInMemoryRepository boardInMemoryRepository) {
+    public CreateStageUseCase(IWorkflowRepository workflowRepository, IBoardRepository boardRepository) {
         this.workflowRepository = workflowRepository;
-        this.boardInMemoryRepository = boardInMemoryRepository;
+        this.boardRepository = boardRepository;
     }
 
     public void execute(CreateStageInput input, CreateStageOutput output) {

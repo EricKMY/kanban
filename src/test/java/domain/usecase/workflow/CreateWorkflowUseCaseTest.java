@@ -2,9 +2,13 @@ package domain.usecase.workflow;
 
 import domain.adapter.board.BoardInMemoryRepository;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
+import domain.model.DomainEventBus;
+import domain.usecase.DomainEventHandler;
+import domain.usecase.TestUtility;
 import domain.usecase.board.createBoard.CreateBoardInput;
 import domain.usecase.board.createBoard.CreateBoardOutput;
 import domain.usecase.board.createBoard.CreateBoardUseCase;
+import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.IWorkflowRepository;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowInput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowOutput;
@@ -16,41 +20,36 @@ import static org.junit.Assert.assertEquals;
 
 public class CreateWorkflowUseCaseTest {
 
-    private BoardInMemoryRepository boardInMemoryRepository;
+    private IBoardRepository boardRepository;
     private IWorkflowRepository workflowRepository;
-    private String baordId;
+    private String boardId;
+    private DomainEventBus eventBus;
+    private TestUtility testUtility;
 
     @Before
     public void setup() {
-        boardInMemoryRepository = new BoardInMemoryRepository();
+        boardRepository = new BoardInMemoryRepository();
         workflowRepository = new WorkflowInMemoryRepository();
 
-        baordId = createBoard("kanban777", "kanbanSystem");
+        eventBus = new DomainEventBus();
+        eventBus.register(new DomainEventHandler(boardRepository, workflowRepository));
+        testUtility = new TestUtility(boardRepository, workflowRepository, eventBus);
+
+        boardId = testUtility.createBoard("kanban777", "kanbanSystem");
     }
 
     @Test
     public void createWorkflow(){
-        CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository, boardInMemoryRepository);
+        CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository, eventBus);
         CreateWorkflowInput input = new CreateWorkflowInput();
         CreateWorkflowOutput output = new CreateWorkflowOutput();
 
-        input.setBoardId(baordId);
+        input.setBoardId(boardId);
         input.setWorkflowName("defaultWorkflow");
 
         createWorkflowUseCase.execute(input, output);
 
-        assertEquals(baordId, workflowRepository.findById(output.getWorkflowId()).getBoardId());
+        assertEquals(boardId, workflowRepository.findById(output.getWorkflowId()).getBoardId());
     }
 
-    private String createBoard(String username, String boardName) {
-        CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardInMemoryRepository);
-        CreateBoardInput input = new CreateBoardInput();
-        CreateBoardOutput output = new CreateBoardOutput();
-
-        input.setUsername(username);
-        input.setBoardName(boardName);
-
-        createBoardUseCase.execute(input, output);
-        return output.getBoardId();
-    }
 }

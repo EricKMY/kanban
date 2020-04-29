@@ -2,17 +2,18 @@ package domain.usecase.lane.createSwinlane;
 
 import domain.adapter.board.BoardInMemoryRepository;
 import domain.model.workflow.Workflow;
+import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.IWorkflowRepository;
 
 public class CreateSwinlaneUseCase {
     private IWorkflowRepository workflowRepository;
-    private BoardInMemoryRepository boardInMemoryRepository;
+    private IBoardRepository boardRepository;
     private Workflow workflow;
 
 
-    public CreateSwinlaneUseCase(IWorkflowRepository workflowRepository, BoardInMemoryRepository boardInMemoryRepository) {
+    public CreateSwinlaneUseCase(IWorkflowRepository workflowRepository, IBoardRepository boardRepository) {
         this.workflowRepository = workflowRepository;
-        this.boardInMemoryRepository = boardInMemoryRepository;
+        this.boardRepository = boardRepository;
     }
 
     public void execute(CreateSwinlaneInput input, CreateSwinlaneOutput output) {
