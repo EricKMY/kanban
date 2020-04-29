@@ -1,7 +1,11 @@
 package domain.usecase;
 
 import com.google.common.eventbus.Subscribe;
+import domain.model.card.event.CardCreated;
 import domain.model.workflow.event.WorkflowCreated;
+import domain.usecase.card.commitCard.CommitCardInput;
+import domain.usecase.card.commitCard.CommitCardOutput;
+import domain.usecase.card.commitCard.CommitCardUseCase;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.IWorkflowRepository;
 import domain.usecase.workflow.commitWorkflow.CommitWorkflowInput;
@@ -26,21 +30,21 @@ public class DomainEventHandler {
         CommitWorkflowOutput commitWorkflowOutput = new CommitWorkflowOutput();
 
         commitWorkflowInput.setBoardId(workflowCreated.getBoardId());
-        commitWorkflowInput.setWorkflowId(workflowCreated.getWorkflowId());
+        commitWorkflowInput.setWorkflowId(workflowCreated.getId());
 
         commitWorkflowUseCase.execute(commitWorkflowInput, commitWorkflowOutput);
     }
-//
-//    @Subscribe
-//    public void handleEvent(CardCreated cardCreated) {
-//        CommitCardUseCase commitCardUseCase = new CommitCardUseCase(workflowRepository);
-//        CommitCardInput commitCardInput = new CommitCardInput();
-//        commitCardInput.setCardId(cardCreated.getCardId());
-//        commitCardInput.setStageId(cardCreated.getStageId());
-//        commitCardInput.setWorkflowId(cardCreated.getWorkflowId());
-//        CommitCardOutput commitCardOutput = new CommitCardOutput();
-//
-//        commitCardUseCase.execute(commitCardInput, commitCardOutput);
-//    }
+
+    @Subscribe
+    public void handleEvent(CardCreated cardCreated) {
+        CommitCardUseCase commitCardUseCase = new CommitCardUseCase(workflowRepository);
+        CommitCardInput commitCardInput = new CommitCardInput();
+        commitCardInput.setCardId(cardCreated.getId());
+        commitCardInput.setLaneId(cardCreated.getLaneId());
+        commitCardInput.setWorkflowId(cardCreated.getWorkflowId());
+        CommitCardOutput commitCardOutput = new CommitCardOutput();
+
+        commitCardUseCase.execute(commitCardInput, commitCardOutput);
+    }
 
 }

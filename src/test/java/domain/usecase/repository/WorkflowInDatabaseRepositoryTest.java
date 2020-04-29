@@ -18,6 +18,7 @@ public class WorkflowInDatabaseRepositoryTest {
         WorkflowInDatabaseRepository workflowInDatabaseRepository = new WorkflowInDatabaseRepository(database);
 
         workflowInDatabaseRepository.save(workflow);
+
         Workflow returnWorkflow = workflowInDatabaseRepository.findById(workflow.getId());
 
         assertEquals(workflow.getId(), returnWorkflow.getId());

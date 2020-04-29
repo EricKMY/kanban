@@ -4,22 +4,15 @@ import domain.adapter.board.BoardInMemoryRepository;
 import domain.adapter.card.CardRepository;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.model.DomainEventBus;
+import domain.model.card.Card;
 import domain.usecase.DomainEventHandler;
 import domain.usecase.TestUtility;
-import domain.usecase.board.createBoard.CreateBoardInput;
-import domain.usecase.board.createBoard.CreateBoardOutput;
-import domain.usecase.board.createBoard.CreateBoardUseCase;
 import domain.usecase.card.createCard.CreateCardInput;
 import domain.usecase.card.createCard.CreateCardOutput;
 import domain.usecase.card.createCard.CreateCardUseCase;
 import domain.usecase.repository.IBoardRepository;
+import domain.usecase.repository.ICardRepository;
 import domain.usecase.repository.IWorkflowRepository;
-import domain.usecase.workflow.createWorkflow.CreateWorkflowInput;
-import domain.usecase.workflow.createWorkflow.CreateWorkflowOutput;
-import domain.usecase.workflow.createWorkflow.CreateWorkflowUseCase;
-import domain.usecase.lane.createStage.CreateStageInput;
-import domain.usecase.lane.createStage.CreateStageOutput;
-import domain.usecase.lane.createStage.CreateStageUseCase;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,7 +22,7 @@ public class CreateCardUseCaseTest {
 
     private IBoardRepository boardRepository;
     private IWorkflowRepository workflowRepository;
-    private CardRepository cardRepository;
+    private ICardRepository cardRepository;
     private String workflowId;
     private String laneId;
     private DomainEventBus eventBus;
@@ -55,7 +48,7 @@ public class CreateCardUseCaseTest {
     public void createCard() {
         CreateCardUseCase createCardUseCase = new CreateCardUseCase(
                 workflowRepository,
-                cardRepository);
+                cardRepository, eventBus);
 
         CreateCardInput input = new CreateCardInput();
         CreateCardOutput output = new CreateCardOutput();
@@ -65,9 +58,30 @@ public class CreateCardUseCaseTest {
         input.setLaneId(laneId);
 
         createCardUseCase.execute(input, output);
-        assertNotNull(cardRepository.findById(output.getCardId()));
+
+        assertEquals(0, cardRepository
+                .findById(output.getCardId())
+                .getDomainEvents()
+                .size());
+
         assertEquals(workflowId, cardRepository
                 .findById(output.getCardId())
                 .getWorkflowId());
+
+        assertEquals(laneId, cardRepository
+                .findById(output.getCardId())
+                .getLaneId());
+
+        assertNotNull(cardRepository
+                .findById(output.getCardId())
+                .getId());
+    }
+
+    @Test
+    public void cardEventHandler() {
+
+        Card card = new Card("firstEvent", laneId, workflowId);
+
+        assertEquals(1, card.getDomainEvents().size());
     }
 }

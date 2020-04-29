@@ -18,6 +18,7 @@ public class BoardInDatabaseRepositoryTest {
         IBoardRepository boardRepository = new BoardInDatabaseRepository(database);
 
         boardRepository.save(board);
+
         Board returnBoard = boardRepository.findById(board.getId());
 
         assertEquals(board.getId(), returnBoard.getId());

@@ -3,11 +3,9 @@ package domain.usecase.workflow;
 import domain.adapter.board.BoardInMemoryRepository;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.model.DomainEventBus;
+import domain.model.workflow.Workflow;
 import domain.usecase.DomainEventHandler;
 import domain.usecase.TestUtility;
-import domain.usecase.board.createBoard.CreateBoardInput;
-import domain.usecase.board.createBoard.CreateBoardOutput;
-import domain.usecase.board.createBoard.CreateBoardUseCase;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.IWorkflowRepository;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowInput;
@@ -49,7 +47,19 @@ public class CreateWorkflowUseCaseTest {
 
         createWorkflowUseCase.execute(input, output);
 
+        assertEquals(0, workflowRepository
+                .findById(output.getWorkflowId())
+                .getDomainEvents()
+                .size());
+
         assertEquals(boardId, workflowRepository.findById(output.getWorkflowId()).getBoardId());
+    }
+
+    @Test
+    public void workflowEventHandler() {
+        Workflow workflow = new Workflow("defaultWorkflow", boardId);
+        assertEquals(1, workflow.getDomainEvents().size());
+
     }
 
 }

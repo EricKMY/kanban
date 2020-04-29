@@ -13,6 +13,7 @@ import domain.usecase.workflow.commitWorkflow.CommitWorkflowUseCase;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class CommitWorkflowUseCaseTest {
@@ -43,7 +44,6 @@ public class CommitWorkflowUseCaseTest {
 
         input.setWorkflowId(workflowId);
         input.setBoardId(boardId);
-
         commitWorkflowUseCase.execute(input, output);
 
         assertTrue(boardRepository.findById(boardId).isWorkflowContained("W012345678"));

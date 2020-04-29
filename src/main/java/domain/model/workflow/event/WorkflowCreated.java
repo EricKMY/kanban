@@ -23,7 +23,7 @@ public class WorkflowCreated implements DomainEvent {
         return workflowName;
     }
 
-    public String getWorkflowId() {
+    public String getId() {
         return workflowId;
     }
 

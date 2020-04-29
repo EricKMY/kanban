@@ -10,9 +10,11 @@ public class CardCreated implements DomainEvent {
     private String cardName;
     private String workflowId;
     private String laneId;
+    private String cardId;
 
-    public CardCreated(String cardName, String laneId, String workflowId){
+    public CardCreated(String cardName, String cardId, String laneId, String workflowId){
         this.cardName = cardName;
+        this.cardId = cardId;
         this.laneId = laneId;
         this.workflowId = workflowId;
         this.OccurredOn = DateProvider.now();
@@ -20,6 +22,10 @@ public class CardCreated implements DomainEvent {
 
     public String getCardName() {
         return cardName;
+    }
+
+    public String getId() {
+        return cardId;
     }
 
     public String getWorkflowId() {
