@@ -59,6 +59,7 @@ public class CreateWorkflowUseCaseTest {
     public void workflowEventHandler() {
         Workflow workflow = new Workflow("defaultWorkflow", boardId);
         assertEquals(1, workflow.getDomainEvents().size());
+        assertEquals("Workflow Created: defaultWorkflow", workflow.getDomainEvents().get(0).getDetail());
 
     }
 

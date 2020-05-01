@@ -13,8 +13,12 @@ import domain.usecase.card.createCard.CreateCardUseCase;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.ICardRepository;
 import domain.usecase.repository.IWorkflowRepository;
+import com.google.common.eventbus.SubscriberExceptionHandler;
+import java.lang.reflect.InvocationTargetException;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.Assert.*;
 
@@ -81,5 +85,14 @@ public class CreateCardUseCaseTest {
         Card card = new Card("firstEvent", laneId, workflowId);
 
         assertEquals(1, card.getDomainEvents().size());
+        assertEquals("Card Created: firstEvent", card.getDomainEvents().get(0).getDetail());
+    }
+
+    @Test
+    public void cardEventHandlerError() {
+
+        Card card = new Card("firstEvent", "0", "0");
+        cardRepository.save(card);
+
     }
 }
