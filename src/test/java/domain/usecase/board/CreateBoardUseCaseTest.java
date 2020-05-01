@@ -2,7 +2,6 @@ package domain.usecase.board;
 
 import domain.adapter.board.BoardInMemoryRepository;
 import domain.adapter.board.BoardInDatabaseRepository;
-import domain.adapter.database.MySqlDatabase;
 import domain.usecase.board.createBoard.CreateBoardInput;
 import domain.usecase.board.createBoard.CreateBoardOutput;
 import domain.usecase.board.createBoard.CreateBoardUseCase;
@@ -29,8 +28,7 @@ public class CreateBoardUseCaseTest {
 
     @Test
     public void createBoardInDB(){
-        IDatabase database = new MySqlDatabase();
-        IBoardRepository boardRepository = new BoardInDatabaseRepository(database);
+        IBoardRepository boardRepository = new BoardInDatabaseRepository();
         CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardRepository);
         CreateBoardInput input = new CreateBoardInput();
         CreateBoardOutput output = new CreateBoardOutput();

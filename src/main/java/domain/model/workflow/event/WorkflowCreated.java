@@ -27,6 +27,10 @@ public class WorkflowCreated implements DomainEvent {
         return workflowId;
     }
 
+    public String getDetail() {
+        return "Workflow Created: " + workflowName;
+    }
+
     public String getBoardId() {
         return boardId;
     }

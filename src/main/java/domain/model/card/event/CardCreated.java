@@ -28,6 +28,10 @@ public class CardCreated implements DomainEvent {
         return cardId;
     }
 
+    public String getDetail() {
+        return "Card Created: " + cardName;
+    }
+
     public String getWorkflowId() {
         return workflowId;
     }
