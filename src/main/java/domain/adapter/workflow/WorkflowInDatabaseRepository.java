@@ -26,10 +26,14 @@ public class WorkflowInDatabaseRepository implements IWorkflowRepository {
     public void save(Workflow workflow) {
         connection = database.connect();
         statement = null;
-        String sql = "INSERT INTO " + WorkflowTable.tableName + " " +
-                     "VALUES(" + "'" + workflow.getId() + "', " +
-                                 "'" + workflow.getName() + "', " +
-                                 "'" + workflow.getBoardId() + "')";
+        String sql =
+                "INSERT INTO " + WorkflowTable.tableName + " " +
+                    "(" + WorkflowTable.id + ", " +
+                          WorkflowTable.name + ", " +
+                          WorkflowTable.boardId + ") " +
+                "VALUES (" + "'" + workflow.getId() + "', " +
+                             "'" + workflow.getName() + "', " +
+                             "'" + workflow.getBoardId() + "')";
 
         try {
             statement = connection.createStatement();
@@ -46,9 +50,10 @@ public class WorkflowInDatabaseRepository implements IWorkflowRepository {
     public Workflow findById(String workflowId){
         connection = database.connect();
         ResultSet resultSet = null;
-        String sql = "SELECT * " +
-                     "FROM " + WorkflowTable.tableName + " " +
-                     "WHERE workflowId = '" + workflowId + "'";
+        String sql =
+                "SELECT * " +
+                "FROM " + WorkflowTable.tableName + " " +
+                "WHERE workflowId = '" + workflowId + "'";
 
         Workflow workflow = null;
 
