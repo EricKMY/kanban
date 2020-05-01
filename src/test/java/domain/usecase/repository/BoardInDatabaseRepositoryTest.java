@@ -1,8 +1,6 @@
 package domain.usecase.repository;
 
 import domain.adapter.board.BoardInDatabaseRepository;
-import domain.adapter.database.IDatabase;
-import domain.database.MySqlDatabase;
 import domain.model.board.Board;
 
 import org.junit.Test;
@@ -12,10 +10,9 @@ import static org.junit.Assert.assertEquals;
 public class BoardInDatabaseRepositoryTest {
 
     @Test
-    public void save() {
+    public void save_a_new_board() {
         Board board = new Board("Kanban_Project", "Tina");
-        IDatabase database = new MySqlDatabase();
-        IBoardRepository boardRepository = new BoardInDatabaseRepository(database);
+        IBoardRepository boardRepository = new BoardInDatabaseRepository();
 
         boardRepository.save(board);
 

@@ -1,8 +1,7 @@
 package domain.usecase.repository;
 
-import domain.adapter.database.IDatabase;
 import domain.adapter.workflow.WorkflowInDatabaseRepository;
-import domain.database.MySqlDatabase;
+import domain.adapter.database.MySqlDatabase;
 import domain.model.workflow.Workflow;
 import org.junit.Test;
 
