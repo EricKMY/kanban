@@ -5,9 +5,14 @@ import java.sql.*;
 public class DatabaseConnector {
 
     private String databaseName = "kanban";
+    private Connection connection = null;
+    private Statement statement = null;
 
     public DatabaseConnector() {
         createDatabase();
+        createBoardTable();
+        createWorkflowTable();
+        createCardTable();
     }
 
 //    User: "root", Password: "" <== Don't change, if change notify.
@@ -65,6 +70,61 @@ public class DatabaseConnector {
             statement.executeUpdate(sql);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }
+    }
+
+    private void createBoardTable() {
+        connection = this.connect();
+        Statement statement = null;
+        String sql = "CREATE TABLE IF NOT EXISTS " + BoardTable.tableName +
+                "(" + BoardTable.id +  " VARCHAR(50) not NULL, " +
+                      BoardTable.name + " VARCHAR(50), " +
+                      BoardTable.userName +  " VARCHAR(50))";
+
+        try {
+            statement = connection.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(statement);
+            this.closeConnect(connection);
+        }
+    }
+
+    private void createWorkflowTable() {
+        connection = this.connect();
+        String sql = "CREATE TABLE IF NOT EXISTS " + WorkflowTable.tableName +
+                "(" + WorkflowTable.id  + " VARCHAR(50) not NULL, " +
+                      WorkflowTable.name + " VARCHAR(50), " +
+                      WorkflowTable.boardId + " VARCHAR(50))";
+
+        try {
+            statement = connection.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(statement);
+            this.closeConnect(connection);
+        }
+    }
+
+    private void createCardTable() {
+        connection = this.connect();
+        String sql = "CREATE TABLE IF NOT EXISTS " + CardTable.tableName +
+                "(" + CardTable.id  + " VARCHAR(50) not NULL, " +
+                      CardTable.name + " VARCHAR(50), " +
+                      CardTable.blocker + " VARCHAR(50))";
+
+        try {
+            statement = connection.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(statement);
+            this.closeConnect(connection);
         }
     }
 }

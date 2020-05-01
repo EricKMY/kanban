@@ -18,9 +18,9 @@ public class BoardInDatabaseRepository implements IBoardRepository {
 
     public BoardInDatabaseRepository() {
         this.database = new DatabaseConnector();
-        createBoardTable();
     }
 
+    /* refactor Board to DTO */
     public void save(Board board) {
         connection = database.connect();
         statement = null;
@@ -40,6 +40,7 @@ public class BoardInDatabaseRepository implements IBoardRepository {
         }
     }
 
+    /* refactor Board to DTO */
     public Board findById(String boardId) {
         connection = database.connect();
         ResultSet resultSet = null;
@@ -47,7 +48,6 @@ public class BoardInDatabaseRepository implements IBoardRepository {
                      "FROM " + BoardTable.tableName + " " +
                      "WHERE boardId = '" + boardId + "'";
 
-        /* refactor Board to DTO */
         Board board = null;
 
         try {
@@ -71,24 +71,5 @@ public class BoardInDatabaseRepository implements IBoardRepository {
         }
 
         return board;
-    }
-
-    private void createBoardTable() {
-        Connection connection = database.connect();
-        Statement statement = null;
-        String sql = "CREATE TABLE IF NOT EXISTS " + BoardTable.tableName +
-                "(" + BoardTable.id +  " VARCHAR(50) not NULL, " +
-                      BoardTable.name + " VARCHAR(50), " +
-                      BoardTable.userName +  " VARCHAR(50))";
-
-        try {
-            statement = connection.createStatement();
-            statement.executeUpdate(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            database.closeStatement(statement);
-            database.closeConnect(connection);
-        }
     }
 }

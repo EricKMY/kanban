@@ -1,5 +1,6 @@
 package domain.adapter.workflow;
 
+import domain.adapter.database.BoardTable;
 import domain.adapter.database.WorkflowTable;
 import domain.adapter.database.DatabaseConnector;
 import domain.usecase.repository.IWorkflowRepository;
@@ -19,9 +20,9 @@ public class WorkflowInDatabaseRepository implements IWorkflowRepository {
 
     public WorkflowInDatabaseRepository() {
         database = new DatabaseConnector();
-        createWorkflowTable();
     }
 
+    /* refactor Workflow to DTO */
     public void save(Workflow workflow) {
         connection = database.connect();
         statement = null;
@@ -41,6 +42,7 @@ public class WorkflowInDatabaseRepository implements IWorkflowRepository {
         }
     }
 
+    /* refactor Workflow to DTO */
     public Workflow findById(String workflowId){
         connection = database.connect();
         ResultSet resultSet = null;
@@ -50,7 +52,6 @@ public class WorkflowInDatabaseRepository implements IWorkflowRepository {
 
         Workflow workflow = null;
 
-        /* refactor Workflow to DTO */
         try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
@@ -70,23 +71,5 @@ public class WorkflowInDatabaseRepository implements IWorkflowRepository {
         }
 
         return workflow;
-    }
-
-    private void createWorkflowTable() {
-        connection = database.connect();
-        String sql = "CREATE TABLE IF NOT EXISTS " + WorkflowTable.tableName +
-                     "(" + WorkflowTable.id  + " VARCHAR(50) not NULL, " +
-                           WorkflowTable.name + " VARCHAR(50), " +
-                           WorkflowTable.boardId + " VARCHAR(50))";
-
-        try {
-            statement = connection.createStatement();
-            statement.executeUpdate(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            database.closeStatement(statement);
-            database.closeConnect(connection);
-        }
     }
 }
