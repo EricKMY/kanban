@@ -1,53 +1,92 @@
 package domain.adapter.workflow;
 
-import domain.adapter.database.IDatabase;
+import domain.adapter.database.WorkflowTable;
+import domain.adapter.database.DatabaseConnector;
 import domain.usecase.repository.IWorkflowRepository;
 import domain.model.workflow.Workflow;
 
 import java.sql.Connection;
 
-import java.util.Map;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class WorkflowInDatabaseRepository implements IWorkflowRepository {
 
-    IDatabase database;
+    private DatabaseConnector database;
+    private Connection connection = null;
+    private Statement statement = null;
 
-    public WorkflowInDatabaseRepository(IDatabase database) {
-        this.database = database;
-        database.createTable("workflow");
-    }
-
-    public Connection getConnection() {
-        return database.connect();
+    public WorkflowInDatabaseRepository() {
+        database = new DatabaseConnector();
+        createWorkflowTable();
     }
 
     public void save(Workflow workflow) {
-        convertFormat(workflow);
-        database.save(convertFormat(workflow));
+        connection = database.connect();
+        statement = null;
+        String sql = "INSERT INTO " + WorkflowTable.tableName + " " +
+                     "VALUES(" + "'" + workflow.getId() + "', " +
+                                 "'" + workflow.getName() + "', " +
+                                 "'" + workflow.getBoardId() + "')";
+
+        try {
+            statement = connection.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            database.closeStatement(statement);
+            database.closeConnect(connection);
+        }
     }
 
-    public Workflow findById(String workflowId) {
-        Map<String, String> result = database.findById(workflowId);
-        Workflow workflow = getInstance(result);
+    public Workflow findById(String workflowId){
+        connection = database.connect();
+        ResultSet resultSet = null;
+        String sql = "SELECT * " +
+                     "FROM " + WorkflowTable.tableName + " " +
+                     "WHERE workflowId = '" + workflowId + "'";
+
+        Workflow workflow = null;
+
+        /* refactor Workflow to DTO */
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            while(resultSet.next()) {
+                workflow = new Workflow(
+                        resultSet.getString("workflowId"),
+                        resultSet.getString("workflowName"),
+                        resultSet.getString("boardId")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            database.closeResultSet(resultSet);
+            database.closeStatement(statement);
+            database.closeConnect(connection);
+        }
 
         return workflow;
     }
 
-    private String[] convertFormat(Workflow workflow) {
-        String attribute[] = new String[3];
-        attribute[0] = workflow.getId();
-        attribute[1] = workflow.getName();
-        attribute[2] = workflow.getBoardId();
+    private void createWorkflowTable() {
+        connection = database.connect();
+        String sql = "CREATE TABLE IF NOT EXISTS " + WorkflowTable.tableName +
+                     "(" + WorkflowTable.id  + " VARCHAR(50) not NULL, " +
+                           WorkflowTable.name + " VARCHAR(50), " +
+                           WorkflowTable.boardId + " VARCHAR(50))";
 
-        return attribute;
-    }
-
-    private Workflow getInstance(Map<String, String> result) {
-        String workflowId = result.get("workflowId");
-        String workflowName = result.get("workflowName");
-        String boardId = result.get("boardId");
-        Workflow workflow = new Workflow(workflowName, workflowId);
-
-        return workflow;
+        try {
+            statement = connection.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            database.closeStatement(statement);
+            database.closeConnect(connection);
+        }
     }
 }

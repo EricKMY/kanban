@@ -10,5 +10,8 @@
         <module name="SA_Project" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="kanban" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>

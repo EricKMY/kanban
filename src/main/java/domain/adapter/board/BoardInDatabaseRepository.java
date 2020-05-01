@@ -1,44 +1,94 @@
 package domain.adapter.board;
 
-import domain.adapter.database.IDatabase;
+import domain.adapter.database.BoardTable;
+import domain.adapter.database.DatabaseConnector;
 import domain.model.board.Board;
 import domain.usecase.repository.IBoardRepository;
 
-import java.util.Map;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class BoardInDatabaseRepository implements IBoardRepository {
 
-    private IDatabase database;
+    private DatabaseConnector database;
+    private Connection connection = null;
+    private Statement statement = null;
 
-    public BoardInDatabaseRepository(IDatabase database) {
-        this.database = database;
-        database.createTable("board");
+    public BoardInDatabaseRepository() {
+        this.database = new DatabaseConnector();
+        createBoardTable();
     }
 
     public void save(Board board) {
-        database.save(convertFormat(board));
+        connection = database.connect();
+        statement = null;
+        String sql = "INSERT INTO " + BoardTable.tableName + " " +
+                     "VALUES(" + "'" + board.getId() + "', " +
+                             "'" + board.getName() + "', " +
+                             "'" + board.getUsername() + "')";
+
+        try {
+            statement = connection.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            database.closeStatement(statement);
+            database.closeConnect(connection);
+        }
     }
 
     public Board findById(String boardId) {
-        Map<String, String> result = database.findById(boardId);
-        Board board = getInstance(result);
+        connection = database.connect();
+        ResultSet resultSet = null;
+        String sql = "SELECT * " +
+                     "FROM " + BoardTable.tableName + " " +
+                     "WHERE boardId = '" + boardId + "'";
+
+        /* refactor Board to DTO */
+        Board board = null;
+
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+
+            while(resultSet.next()) {
+                board = new Board(
+                        resultSet.getString(BoardTable.id),
+                        resultSet.getString(BoardTable.name),
+                        resultSet.getString(BoardTable.userName)
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            database.closeResultSet(resultSet);
+            database.closeStatement(statement);
+            database.closeConnect(connection);
+        }
+
         return board;
     }
 
-    private String[] convertFormat(Board board) {
-        String attribute[] = new String[3];
-        attribute[0] = board.getId();
-        attribute[1] = board.getName();
-        attribute[2] = board.getUsername();
-        return attribute;
-    }
+    private void createBoardTable() {
+        Connection connection = database.connect();
+        Statement statement = null;
+        String sql = "CREATE TABLE IF NOT EXISTS " + BoardTable.tableName +
+                "(" + BoardTable.id +  " VARCHAR(50) not NULL, " +
+                      BoardTable.name + " VARCHAR(50), " +
+                      BoardTable.userName +  " VARCHAR(50))";
 
-    private Board getInstance(Map<String, String> result) {
-        String boardId = result.get("boardId");
-        String boardName = result.get("boardName");
-        String username = result.get("userName");
-        Board board = new Board(boardName, username, boardId);
-
-        return board;
+        try {
+            statement = connection.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            database.closeStatement(statement);
+            database.closeConnect(connection);
+        }
     }
 }

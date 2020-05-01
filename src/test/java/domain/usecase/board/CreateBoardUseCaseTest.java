@@ -2,8 +2,7 @@ package domain.usecase.board;
 
 import domain.adapter.board.BoardInMemoryRepository;
 import domain.adapter.board.BoardInDatabaseRepository;
-import domain.adapter.database.IDatabase;
-import domain.database.MySqlDatabase;
+import domain.adapter.database.MySqlDatabase;
 import domain.usecase.board.createBoard.CreateBoardInput;
 import domain.usecase.board.createBoard.CreateBoardOutput;
 import domain.usecase.board.createBoard.CreateBoardUseCase;
