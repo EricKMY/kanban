@@ -7,6 +7,9 @@ import domain.usecase.board.createBoard.CreateBoardUseCase;
 import domain.usecase.lane.createStage.CreateStageInput;
 import domain.usecase.lane.createStage.CreateStageOutput;
 import domain.usecase.lane.createStage.CreateStageUseCase;
+import domain.usecase.lane.createSwinlane.CreateSwinlaneInput;
+import domain.usecase.lane.createSwinlane.CreateSwinlaneOutput;
+import domain.usecase.lane.createSwinlane.CreateSwinlaneUseCase;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.IWorkflowRepository;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowInput;
@@ -60,5 +63,34 @@ public class TestUtility {
         createStageUseCase.execute(input, output);
 
         return output.getStageId();
+    }
+
+    public String createStage(String workflowId, String parentId, String stageName) {
+        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository);
+        CreateStageInput input = new CreateStageInput();
+        CreateStageOutput output = new CreateStageOutput();
+
+        input.setWorkflowId(workflowId);
+        input.setParentLaneId(parentId);
+        input.setStageName(stageName);
+
+        createStageUseCase.execute(input, output);
+
+        return output.getStageId();
+    }
+
+    public String createSwimeLane(String workflowId, String parentId, String stageName) {
+
+        CreateSwinlaneUseCase createSwinlaneUseCase = new CreateSwinlaneUseCase(workflowRepository, boardRepository);
+        CreateSwinlaneInput input = new CreateSwinlaneInput();
+        CreateSwinlaneOutput output = new CreateSwinlaneOutput();
+
+        input.setSwinlaneName(stageName);
+        input.setWorkflowId(workflowId);
+        input.setParentLaneId(parentId);
+
+        createSwinlaneUseCase.execute(input, output);
+
+        return output.getSwinlaneId();
     }
 }

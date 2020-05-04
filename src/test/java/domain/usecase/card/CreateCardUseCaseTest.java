@@ -13,12 +13,8 @@ import domain.usecase.card.createCard.CreateCardUseCase;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.ICardRepository;
 import domain.usecase.repository.IWorkflowRepository;
-import com.google.common.eventbus.SubscriberExceptionHandler;
-import java.lang.reflect.InvocationTargetException;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.Assert.*;
 
