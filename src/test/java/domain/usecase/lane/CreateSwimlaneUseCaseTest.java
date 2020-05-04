@@ -5,12 +5,9 @@ import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.model.DomainEventBus;
 import domain.usecase.DomainEventHandler;
 import domain.usecase.TestUtility;
-import domain.usecase.lane.createStage.CreateStageInput;
-import domain.usecase.lane.createStage.CreateStageOutput;
-import domain.usecase.lane.createStage.CreateStageUseCase;
-import domain.usecase.lane.createSwinlane.CreateSwinlaneInput;
-import domain.usecase.lane.createSwinlane.CreateSwinlaneOutput;
-import domain.usecase.lane.createSwinlane.CreateSwinlaneUseCase;
+import domain.usecase.lane.createSwimlane.CreateSwimlaneInput;
+import domain.usecase.lane.createSwimlane.CreateSwimlaneOutput;
+import domain.usecase.lane.createSwimlane.CreateSwimlaneUseCase;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.IWorkflowRepository;
 import org.junit.Before;
@@ -43,15 +40,15 @@ public class CreateSwimlaneUseCaseTest {
 
     @Test
     public void createSwimlaneUnderTopStage() {
-        CreateSwinlaneUseCase createSwinlaneUseCase = new CreateSwinlaneUseCase(workflowRepository, boardRepository);
-        CreateSwinlaneInput input = new CreateSwinlaneInput();
-        CreateSwinlaneOutput output = new CreateSwinlaneOutput();
+        CreateSwimlaneUseCase createSwimlaneUseCase = new CreateSwimlaneUseCase(workflowRepository, boardRepository);
+        CreateSwimlaneInput input = new CreateSwimlaneInput();
+        CreateSwimlaneOutput output = new CreateSwimlaneOutput();
 
         input.setSwinlaneName("Urgent");
         input.setWorkflowId(workflowId);
         input.setParentLaneId(topStageId);
 
-        createSwinlaneUseCase.execute(input, output);
+        createSwimlaneUseCase.execute(input, output);
 
         assertEquals(1, workflowRepository
                                 .findById(workflowId)
@@ -68,15 +65,15 @@ public class CreateSwimlaneUseCaseTest {
     public void createSwimlaneUnderStage() {
         String parenStageId = testUtility.createStage(workflowId, topStageId, "Developing");
 
-        CreateSwinlaneUseCase createSwinlaneUseCase = new CreateSwinlaneUseCase(workflowRepository, boardRepository);
-        CreateSwinlaneInput input = new CreateSwinlaneInput();
-        CreateSwinlaneOutput output = new CreateSwinlaneOutput();
+        CreateSwimlaneUseCase createSwimlaneUseCase = new CreateSwimlaneUseCase(workflowRepository, boardRepository);
+        CreateSwimlaneInput input = new CreateSwimlaneInput();
+        CreateSwimlaneOutput output = new CreateSwimlaneOutput();
 
         input.setSwinlaneName("Urgent");
         input.setWorkflowId(workflowId);
         input.setParentLaneId(parenStageId);
 
-        createSwinlaneUseCase.execute(input, output);
+        createSwimlaneUseCase.execute(input, output);
 
         assertEquals(1, workflowRepository
                                 .findById(workflowId)
@@ -96,17 +93,17 @@ public class CreateSwimlaneUseCaseTest {
     @Test
     public void createSwimlaneUnderSwimlane() {
 
-        String parenStageId = testUtility.createSwimeLane(workflowId, topStageId, "Undo");
+        String parenStageId = testUtility.createSwimLane(workflowId, topStageId, "Undo");
 
-        CreateSwinlaneUseCase createSwinlaneUseCase = new CreateSwinlaneUseCase(workflowRepository, boardRepository);
-        CreateSwinlaneInput input = new CreateSwinlaneInput();
-        CreateSwinlaneOutput output = new CreateSwinlaneOutput();
+        CreateSwimlaneUseCase createSwimlaneUseCase = new CreateSwimlaneUseCase(workflowRepository, boardRepository);
+        CreateSwimlaneInput input = new CreateSwimlaneInput();
+        CreateSwimlaneOutput output = new CreateSwimlaneOutput();
 
         input.setSwinlaneName("Urgent");
         input.setWorkflowId(workflowId);
         input.setParentLaneId(parenStageId);
 
-        createSwinlaneUseCase.execute(input, output);
+        createSwimlaneUseCase.execute(input, output);
 
         assertEquals(1, workflowRepository
                                 .findById(workflowId)

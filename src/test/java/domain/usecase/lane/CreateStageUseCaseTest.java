@@ -115,7 +115,7 @@ public class CreateStageUseCaseTest {
 
     @Test
     public void createStageUnderSwimeLane() {
-        String parenStageId = testUtility.createSwimeLane(workflowId, topStageId, "Undo");
+        String parenStageId = testUtility.createSwimLane(workflowId, topStageId, "Undo");
 
         CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository);
         CreateStageInput input = new CreateStageInput();
