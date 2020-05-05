@@ -41,4 +41,8 @@ public class Board extends Entity {
     public boolean isWorkflowContained(String workflowId) {
         return workflowList.contains(workflowId);
     }
+
+    public List<String> getWorkflows() {
+        return workflowList;
+    }
 }

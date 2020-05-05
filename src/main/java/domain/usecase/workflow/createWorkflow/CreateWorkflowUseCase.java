@@ -1,6 +1,5 @@
 package domain.usecase.workflow.createWorkflow;
 
-import domain.adapter.board.BoardInMemoryRepository;
 import domain.model.DomainEventBus;
 import domain.model.workflow.Workflow;
 import domain.usecase.repository.IWorkflowRepository;

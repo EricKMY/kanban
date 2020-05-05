@@ -1,6 +1,7 @@
 package domain.model;
 
 import com.google.common.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 

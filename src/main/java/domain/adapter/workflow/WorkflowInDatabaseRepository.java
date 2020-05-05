@@ -62,9 +62,9 @@ public class WorkflowInDatabaseRepository implements IWorkflowRepository {
             resultSet = statement.executeQuery(sql);
             while(resultSet.next()) {
                 workflow = new Workflow(
-                        resultSet.getString("workflowId"),
                         resultSet.getString("workflowName"),
-                        resultSet.getString("boardId")
+                        resultSet.getString("boardId"),
+                        resultSet.getString("workflowId")
                 );
             }
         } catch (SQLException e) {

@@ -1,5 +1,7 @@
 package domain.adapter.database;
 
+import com.sun.corba.se.spi.orbutil.threadpool.Work;
+
 import java.sql.*;
 
 public class DatabaseConnector {
@@ -13,12 +15,13 @@ public class DatabaseConnector {
         createBoardTable();
         createWorkflowTable();
         createCardTable();
+        createWorkflowBoardTable();
     }
 
 //    User: "root", Password: "" <== Don't change, if change notify.
     public Connection connect() {
         String driver = "com.mysql.jdbc.Driver";
-        String url = "jdbc:mysql://localhost:3306/kanban?serverTimezone=UTC";
+        String url = "jdbc:mysql://localhost:3306/" + databaseName + "?serverTimezone=UTC";
         String user = "root";
         String password = "";
 
@@ -61,7 +64,20 @@ public class DatabaseConnector {
     }
 
     private void createDatabase() {
-        Connection connection = this.connect();
+        String driver = "com.mysql.jdbc.Driver";
+        String url = "jdbc:mysql://localhost:3306/?serverTimezone=UTC";
+        String user = "root";
+        String password = "";
+
+        Connection connection = null;
+        try{
+            Class.forName(driver);
+            connection = DriverManager.getConnection(url, user, password);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
         Statement statement = null;
         String sql = "CREATE DATABASE IF NOT EXISTS " + databaseName;
 
@@ -116,6 +132,24 @@ public class DatabaseConnector {
                 "(" + CardTable.id  + " VARCHAR(50) not NULL, " +
                       CardTable.name + " VARCHAR(50), " +
                       CardTable.blocker + " VARCHAR(50))";
+
+        try {
+            statement = connection.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(statement);
+            this.closeConnect(connection);
+        }
+    }
+
+    private void createWorkflowBoardTable() {
+        connection = this.connect();
+        Statement statement = null;
+        String sql = "CREATE TABLE IF NOT EXISTS " + WorkflowBoardTable.tableName +
+                "(" + WorkflowBoardTable.workflowId +  " VARCHAR(50) not NULL, " +
+                WorkflowBoardTable.boardId + " VARCHAR(50) not NULL)";
 
         try {
             statement = connection.createStatement();
