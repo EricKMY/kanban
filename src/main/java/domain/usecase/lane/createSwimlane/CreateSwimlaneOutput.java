@@ -1,6 +1,6 @@
-package domain.usecase.lane.createSwinlane;
+package domain.usecase.lane.createSwimlane;
 
-public class CreateSwinlaneOutput {
+public class CreateSwimlaneOutput {
     private String swinlaneId;
 
     public String getSwinlaneId() {

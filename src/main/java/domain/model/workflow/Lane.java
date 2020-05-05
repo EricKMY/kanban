@@ -37,7 +37,4 @@ public abstract class Lane extends Entity {
         return cardList.contains(cardId);
     }
 
-//    public String getWorkflowId() {
-//
-//    }
 }

@@ -1,22 +1,21 @@
-package domain.usecase.lane.createSwinlane;
+package domain.usecase.lane.createSwimlane;
 
-import domain.adapter.board.BoardInMemoryRepository;
 import domain.model.workflow.Workflow;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.IWorkflowRepository;
 
-public class CreateSwinlaneUseCase {
+public class CreateSwimlaneUseCase {
     private IWorkflowRepository workflowRepository;
     private IBoardRepository boardRepository;
     private Workflow workflow;
 
 
-    public CreateSwinlaneUseCase(IWorkflowRepository workflowRepository, IBoardRepository boardRepository) {
+    public CreateSwimlaneUseCase(IWorkflowRepository workflowRepository, IBoardRepository boardRepository) {
         this.workflowRepository = workflowRepository;
         this.boardRepository = boardRepository;
     }
 
-    public void execute(CreateSwinlaneInput input, CreateSwinlaneOutput output) {
+    public void execute(CreateSwimlaneInput input, CreateSwimlaneOutput output) {
         workflow = workflowRepository.findById(input.getWorkflowId());
         String swinlaneId = workflow.createSwinlane(input.getSwinlaneName(), input.getParentLaneId());
 
