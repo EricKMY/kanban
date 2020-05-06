@@ -1,24 +1,21 @@
-package domain.usecase.card;
+package domain.model.card;
 
 import domain.adapter.board.BoardInMemoryRepository;
 import domain.adapter.card.CardRepository;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.model.DomainEventBus;
-import domain.model.card.Card;
 import domain.usecase.DomainEventHandler;
 import domain.usecase.TestUtility;
-import domain.usecase.card.createCard.CreateCardInput;
-import domain.usecase.card.createCard.CreateCardOutput;
-import domain.usecase.card.createCard.CreateCardUseCase;
+import domain.usecase.card.CardDTOConverter;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.ICardRepository;
 import domain.usecase.repository.IWorkflowRepository;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-public class CreateCardUseCaseTest {
+public class CardTest {
 
     private IBoardRepository boardRepository;
     private IWorkflowRepository workflowRepository;
@@ -45,28 +42,19 @@ public class CreateCardUseCaseTest {
     }
 
     @Test
-    public void createCard() {
-        CreateCardUseCase createCardUseCase = new CreateCardUseCase(cardRepository, eventBus);
+    public void cardEventHandler() {
 
-        CreateCardInput input = new CreateCardInput();
-        CreateCardOutput output = new CreateCardOutput();
+        Card card = new Card("firstEvent", laneId, workflowId);
 
-        input.setCardName("firstEvent");
-        input.setWorkflowId(workflowId);
-        input.setLaneId(laneId);
+        assertEquals(1, card.getDomainEvents().size());
+        assertEquals("Card Created: firstEvent", card.getDomainEvents().get(0).getDetail());
+    }
 
-        createCardUseCase.execute(input, output);
+    @Test
+    public void cardEventHandlerError() {
 
-        assertEquals(workflowId, cardRepository
-                .findById(output.getCardId())
-                .getWorkflowId());
-
-        assertEquals(laneId, cardRepository
-                .findById(output.getCardId())
-                .getLaneId());
-
-        assertNotNull(cardRepository
-                .findById(output.getCardId())
-                .getId());
+        Card card = new Card("firstEvent", "0", "0");
+        cardRepository.save(CardDTOConverter.toDTO(card));
+//        eventBus.postAll(card);
     }
 }

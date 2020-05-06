@@ -1,22 +1,18 @@
-package domain.usecase.workflow;
+package domain.model.workflow;
 
 import domain.adapter.board.BoardInMemoryRepository;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.model.DomainEventBus;
-import domain.model.workflow.Workflow;
 import domain.usecase.DomainEventHandler;
 import domain.usecase.TestUtility;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.IWorkflowRepository;
-import domain.usecase.workflow.createWorkflow.CreateWorkflowInput;
-import domain.usecase.workflow.createWorkflow.CreateWorkflowOutput;
-import domain.usecase.workflow.createWorkflow.CreateWorkflowUseCase;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class CreateWorkflowUseCaseTest {
+public class WorkflowTest {
 
     private IBoardRepository boardRepository;
     private IWorkflowRepository workflowRepository;
@@ -37,17 +33,10 @@ public class CreateWorkflowUseCaseTest {
     }
 
     @Test
-    public void createWorkflow(){
-        CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository, eventBus);
-        CreateWorkflowInput input = new CreateWorkflowInput();
-        CreateWorkflowOutput output = new CreateWorkflowOutput();
+    public void workflowEventHandler() {
+        Workflow workflow = new Workflow("defaultWorkflow", boardId);
+        assertEquals(1, workflow.getDomainEvents().size());
+        assertEquals("Workflow Created: defaultWorkflow", workflow.getDomainEvents().get(0).getDetail());
 
-        input.setBoardId(boardId);
-        input.setWorkflowName("defaultWorkflow");
-
-        createWorkflowUseCase.execute(input, output);
-
-        assertEquals(boardId, workflowRepository.findById(output.getWorkflowId()).getBoardId());
     }
-
 }
