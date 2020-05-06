@@ -1,19 +1,22 @@
 package domain.adapter.board;
 
 import domain.model.board.Board;
+import domain.usecase.board.createBoard.BoardDTO;
 import domain.usecase.repository.IBoardRepository;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class BoardInMemoryRepository implements IBoardRepository {
-    Map<String, Board> map = new HashMap<String, Board>();
+    Map<String, BoardDTO> boardDTOMap = new HashMap<String, BoardDTO>();
 
-    public void save(Board board) {
-        map.put(board.getId(), board);
+
+    @Override
+    public void save(BoardDTO boardDTO) {
+        boardDTOMap.put(boardDTO.getId(), boardDTO);
     }
 
-    public Board findById(String boardId) {
-        return map.get(boardId);
+    public BoardDTO findById(String boardId) {
+        return boardDTOMap.get(boardId);
     }
 }

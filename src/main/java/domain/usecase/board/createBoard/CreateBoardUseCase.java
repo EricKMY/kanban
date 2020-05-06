@@ -4,15 +4,15 @@ import domain.model.board.Board;
 import domain.usecase.repository.IBoardRepository;
 
 public class CreateBoardUseCase {
-    private IBoardRepository iBoardRepository;
+    private IBoardRepository boardRepository;
 
     public CreateBoardUseCase(IBoardRepository iBoardRepository) {
-        this.iBoardRepository = iBoardRepository;
+        this.boardRepository = iBoardRepository;
     }
 
     public void execute(CreateBoardInput input, CreateBoardOutput output) {
         Board board = new Board(input.getBoardName(), input.getUsername());
-        iBoardRepository.save(board);
+        boardRepository.save(BoardDTOConverter.toDTO(board));
 
         output.setBoardId(board.getId());
     }

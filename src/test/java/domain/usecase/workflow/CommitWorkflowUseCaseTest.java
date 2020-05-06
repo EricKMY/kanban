@@ -5,6 +5,8 @@ import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.model.DomainEventBus;
 import domain.usecase.DomainEventHandler;
 import domain.usecase.TestUtility;
+import domain.usecase.board.createBoard.BoardDTO;
+import domain.usecase.board.createBoard.BoardDTOConverter;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.IWorkflowRepository;
 import domain.usecase.workflow.commitWorkflow.CommitWorkflowInput;
@@ -46,6 +48,6 @@ public class CommitWorkflowUseCaseTest {
         input.setBoardId(boardId);
         commitWorkflowUseCase.execute(input, output);
 
-        assertTrue(boardRepository.findById(boardId).isWorkflowContained("W012345678"));
+        assertTrue(BoardDTOConverter.toEntity(boardRepository.findById(boardId)).isWorkflowContained("W012345678"));
     }
 }

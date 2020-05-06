@@ -4,6 +4,7 @@ import domain.adapter.database.BoardTable;
 import domain.adapter.database.DatabaseConnector;
 import domain.adapter.database.WorkflowBoardTable;
 import domain.model.board.Board;
+import domain.usecase.board.createBoard.BoardDTO;
 import domain.usecase.repository.IBoardRepository;
 
 import java.sql.Connection;
@@ -23,17 +24,17 @@ public class BoardInDatabaseRepository implements IBoardRepository {
     }
 
     /* refactor Board to DTO */
-    public void save(Board board) {
-        if(isBoardExist(board.getId()))
+    public void save(BoardDTO boardDTO) {
+        if(isBoardExist(boardDTO.getId()))
             ;   //update
         else {
-            addBoard(board);
-            addWorkflows(board.getId(), board.getWorkflows());
+            addBoard(boardDTO);
+            addWorkflows(boardDTO.getId(), boardDTO.getWorkflows());
         }
     }
 
     /* refactor Board to DTO */
-    public Board findById(String boardId) {
+    public BoardDTO findById(String boardId) {
         connection = database.connect();
         ResultSet resultSet = null;
         String sql =
@@ -41,18 +42,18 @@ public class BoardInDatabaseRepository implements IBoardRepository {
                 "FROM " + BoardTable.tableName + " " +
                 "WHERE boardId = '" + boardId + "'";
 
-        Board board = null;
+        BoardDTO boardDTO = null;
 
         try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
 
             while(resultSet.next()) {
-                board = new Board(
-                        resultSet.getString(BoardTable.name),
-                        resultSet.getString(BoardTable.userName),
-                        resultSet.getString(BoardTable.id)
-                );
+                boardDTO = new BoardDTO();
+                boardDTO.setId(BoardTable.id);
+                boardDTO.setName(BoardTable.name);
+                boardDTO.setUsername(BoardTable.userName);
+                boardDTO.setWorkflows(null);
             }
 
         } catch (SQLException e) {
@@ -63,10 +64,10 @@ public class BoardInDatabaseRepository implements IBoardRepository {
             database.closeConnect(connection);
         }
 
-        return board;
+        return boardDTO;
     }
 
-    private void addBoard(Board board) {
+    private void addBoard(BoardDTO boardDTO) {
         connection = database.connect();
         statement = null;
         String sql =
@@ -74,9 +75,9 @@ public class BoardInDatabaseRepository implements IBoardRepository {
                         "(" + BoardTable.id + ", " +
                         BoardTable.name + ", " +
                         BoardTable.userName + ") " +
-                        "VALUES (" + "'" + board.getId() + "', " +
-                        "'" + board.getName() + "', " +
-                        "'" + board.getUsername() + "')";
+                        "VALUES (" + "'" + boardDTO.getId() + "', " +
+                        "'" + boardDTO.getName() + "', " +
+                        "'" + boardDTO.getUsername() + "')";
 
         try {
             statement = connection.createStatement();

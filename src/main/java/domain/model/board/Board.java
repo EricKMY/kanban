@@ -4,17 +4,17 @@ import domain.model.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class Board extends Entity {
 
     private String username;
 
-    List<String> workflowList = new ArrayList<String>();
+    List<String> workflows = new ArrayList<String>();
 
-    public Board(String boardName, String username, String boardId){
+    public Board(String boardName, String username, String boardId, List<String> workflows){
         super(boardName, boardId);
         this.username = username;
+        this.workflows.addAll(workflows);
     }
 
     public Board(String boardName, String username) {
@@ -35,14 +35,14 @@ public class Board extends Entity {
     }
 
     public void addWorkflow(String workflowId) {
-        workflowList.add(workflowId);
+        workflows.add(workflowId);
     }
 
     public boolean isWorkflowContained(String workflowId) {
-        return workflowList.contains(workflowId);
+        return workflows.contains(workflowId);
     }
 
     public List<String> getWorkflows() {
-        return workflowList;
+        return workflows;
     }
 }

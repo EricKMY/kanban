@@ -3,6 +3,7 @@ package domain.usecase.repository;
 import domain.adapter.board.BoardInDatabaseRepository;
 import domain.model.board.Board;
 
+import domain.usecase.board.createBoard.BoardDTOConverter;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -14,9 +15,9 @@ public class BoardInDatabaseRepositoryTest {
         Board board = new Board("Kanban_Project", "Tina");
         IBoardRepository boardRepository = new BoardInDatabaseRepository();
 
-        boardRepository.save(board);
+        boardRepository.save(BoardDTOConverter.toDTO(board));
 
-        Board returnBoard = boardRepository.findById(board.getId());
+        Board returnBoard = BoardDTOConverter.toEntity(boardRepository.findById(board.getId()));
 
         assertEquals(board.getId(), returnBoard.getId());
         assertEquals(board.getName(), returnBoard.getName());
