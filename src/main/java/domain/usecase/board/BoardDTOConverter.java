@@ -1,4 +1,4 @@
-package domain.usecase.board.createBoard;
+package domain.usecase.board;
 
 import domain.model.board.Board;
 

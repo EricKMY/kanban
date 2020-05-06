@@ -1,4 +1,4 @@
-package domain.usecase.board.createBoard;
+package domain.usecase.board;
 
 import java.util.ArrayList;
 import java.util.List;

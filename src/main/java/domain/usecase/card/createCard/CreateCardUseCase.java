@@ -3,6 +3,8 @@ package domain.usecase.card.createCard;
 import domain.model.DomainEventBus;
 import domain.model.card.Card;
 import domain.model.card.event.CardCreated;
+import domain.usecase.card.CardDTO;
+import domain.usecase.card.CardDTOConverter;
 import domain.usecase.card.commitCard.CommitCardInput;
 import domain.usecase.card.commitCard.CommitCardOutput;
 import domain.usecase.card.commitCard.CommitCardUseCase;
@@ -20,7 +22,7 @@ public class CreateCardUseCase {
 
     public void execute(CreateCardInput input, CreateCardOutput output) {
         Card card = new Card(input.getCardName(), input.getLaneId(), input.getWorkflowId());
-        cardRepository.save(card);
+        cardRepository.save(CardDTOConverter.toDTO(card));
 
         output.setCardId(card.getId());
         eventBus.postAll(card);

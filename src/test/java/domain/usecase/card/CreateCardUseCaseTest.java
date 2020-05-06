@@ -57,11 +57,6 @@ public class CreateCardUseCaseTest {
 
         createCardUseCase.execute(input, output);
 
-        assertEquals(0, cardRepository
-                .findById(output.getCardId())
-                .getDomainEvents()
-                .size());
-
         assertEquals(workflowId, cardRepository
                 .findById(output.getCardId())
                 .getWorkflowId());
@@ -88,7 +83,7 @@ public class CreateCardUseCaseTest {
     public void cardEventHandlerError() {
 
         Card card = new Card("firstEvent", "0", "0");
-        cardRepository.save(card);
+        cardRepository.save(CardDTOConverter.toDTO(card));
 
     }
 }

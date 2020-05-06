@@ -3,7 +3,7 @@ package domain.usecase.repository;
 import domain.adapter.board.BoardInDatabaseRepository;
 import domain.model.board.Board;
 
-import domain.usecase.board.createBoard.BoardDTOConverter;
+import domain.usecase.board.BoardDTOConverter;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

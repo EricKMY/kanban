@@ -17,9 +17,10 @@ public class Card extends AggregateRoot {
         addDomainEvent(new CardCreated(cardName, id, laneId, workflowId));
     }
 
-    public Card(String cardName, String cardId) {
+    public Card(String cardName, String cardId, String laneId, String workflowId) {
         super(cardName, cardId);
-        addDomainEvent(new CardCreated(cardName, cardId, laneId, workflowId));
+        this.laneId = laneId;
+        this.workflowId = workflowId;
     }
 
     public String getWorkflowId(){

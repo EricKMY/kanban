@@ -1,6 +1,7 @@
 package domain.usecase.board.createBoard;
 
 import domain.model.board.Board;
+import domain.usecase.board.BoardDTOConverter;
 import domain.usecase.repository.IBoardRepository;
 
 public class CreateBoardUseCase {

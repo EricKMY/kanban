@@ -4,7 +4,7 @@ import domain.adapter.database.BoardTable;
 import domain.adapter.database.DatabaseConnector;
 import domain.adapter.database.WorkflowBoardTable;
 import domain.model.board.Board;
-import domain.usecase.board.createBoard.BoardDTO;
+import domain.usecase.board.BoardDTO;
 import domain.usecase.repository.IBoardRepository;
 
 import java.sql.Connection;

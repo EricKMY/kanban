@@ -1,7 +1,6 @@
 package domain.usecase.workflow.commitWorkflow;
-import domain.adapter.board.BoardInMemoryRepository;
 import domain.model.board.Board;
-import domain.usecase.board.createBoard.BoardDTOConverter;
+import domain.usecase.board.BoardDTOConverter;
 import domain.usecase.repository.IBoardRepository;
 
 public class CommitWorkflowUseCase {

@@ -14,7 +14,6 @@ public class Workflow extends AggregateRoot {
     public Workflow(String workflowName, String boardId, String workflowId) {
         super(workflowName, workflowId);
         this.boardId = boardId;
-        addDomainEvent(new WorkflowCreated(name, id, boardId));
     }
 
     public Workflow(String workflowName, String boardId) {
