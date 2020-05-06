@@ -1,6 +1,5 @@
 package domain.adapter.workflow;
 
-import domain.adapter.database.BoardTable;
 import domain.adapter.database.WorkflowTable;
 import domain.adapter.database.DatabaseConnector;
 import domain.usecase.repository.IWorkflowRepository;
@@ -15,8 +14,6 @@ import java.sql.Statement;
 public class WorkflowInDatabaseRepository implements IWorkflowRepository {
 
     private DatabaseConnector database;
-    private Connection connection = null;
-    private Statement statement = null;
 
     public WorkflowInDatabaseRepository() {
         database = new DatabaseConnector();
@@ -24,8 +21,8 @@ public class WorkflowInDatabaseRepository implements IWorkflowRepository {
 
     /* refactor Workflow to DTO */
     public void save(Workflow workflow) {
-        connection = database.connect();
-        statement = null;
+        Connection connection = database.connect();
+        Statement statement = null;
         String sql =
                 "INSERT INTO " + WorkflowTable.tableName + " " +
                     "(" + WorkflowTable.id + ", " +
@@ -48,7 +45,8 @@ public class WorkflowInDatabaseRepository implements IWorkflowRepository {
 
     /* refactor Workflow to DTO */
     public Workflow findById(String workflowId){
-        connection = database.connect();
+        Connection connection = database.connect();
+        Statement statement = null;
         ResultSet resultSet = null;
         String sql =
                 "SELECT * " +

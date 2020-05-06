@@ -1,6 +1,5 @@
 package domain.adapter.board;
 
-import domain.model.board.Board;
 import domain.usecase.board.BoardDTO;
 import domain.usecase.repository.IBoardRepository;
 

@@ -3,7 +3,6 @@ package domain.adapter.board;
 import domain.adapter.database.BoardTable;
 import domain.adapter.database.DatabaseConnector;
 import domain.adapter.database.WorkflowBoardTable;
-import domain.model.board.Board;
 import domain.usecase.board.BoardDTO;
 import domain.usecase.repository.IBoardRepository;
 
@@ -17,8 +16,6 @@ import java.util.List;
 public class BoardInDatabaseRepository implements IBoardRepository {
 
     private DatabaseConnector database;
-    private Connection connection = null;
-    private Statement statement = null;
 
     public BoardInDatabaseRepository() {
         this.database = new DatabaseConnector();
@@ -36,7 +33,8 @@ public class BoardInDatabaseRepository implements IBoardRepository {
 
     /* refactor Board to DTO */
     public BoardDTO findById(String boardId) {
-        connection = database.connect();
+        Connection connection = database.connect();
+        Statement statement = null;
         ResultSet resultSet = null;
         String sql =
                 "SELECT * " +
@@ -69,8 +67,8 @@ public class BoardInDatabaseRepository implements IBoardRepository {
     }
 
     private void addBoard(BoardDTO boardDTO) {
-        connection = database.connect();
-        statement = null;
+        Connection connection = database.connect();
+        Statement statement = null;
         String sql =
                 "INSERT INTO " + BoardTable.tableName + " " +
                         "(" + BoardTable.id + ", " +
@@ -92,8 +90,8 @@ public class BoardInDatabaseRepository implements IBoardRepository {
     }
 
     private boolean isBoardExist(String boardId) {
-        connection = database.connect();
-        statement = null;
+        Connection connection = database.connect();
+        Statement statement = null;
         ResultSet resultSet = null;
         boolean isBoardExist = false;
         String sql =
@@ -124,8 +122,8 @@ public class BoardInDatabaseRepository implements IBoardRepository {
     }
 
     private void addWorkflow(String boardId, String workflowId) {
-        connection = database.connect();
-        statement = null;
+        Connection connection = database.connect();
+        Statement statement = null;
         String sql =
                 "INSERT INTO " + WorkflowBoardTable.tableName + " " +
                         "(" + WorkflowBoardTable.workflowId + ", "
@@ -145,7 +143,8 @@ public class BoardInDatabaseRepository implements IBoardRepository {
     }
 
     private List<String> findWorkflowsByBoardId(String boardId) {
-        connection = database.connect();
+        Connection connection = database.connect();
+        Statement statement = null;
         ResultSet resultSet = null;
         String sql =
                 "SELECT " + WorkflowBoardTable.workflowId + " " +

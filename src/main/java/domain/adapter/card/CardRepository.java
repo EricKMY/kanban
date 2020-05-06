@@ -1,6 +1,5 @@
 package domain.adapter.card;
 
-import domain.model.card.Card;
 import domain.usecase.card.CardDTO;
 import domain.usecase.repository.ICardRepository;
 

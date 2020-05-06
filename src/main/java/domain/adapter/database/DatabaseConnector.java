@@ -1,14 +1,10 @@
 package domain.adapter.database;
 
-import com.sun.corba.se.spi.orbutil.threadpool.Work;
-
 import java.sql.*;
 
 public class DatabaseConnector {
 
     private String databaseName = "kanban";
-    private Connection connection = null;
-    private Statement statement = null;
 
     public DatabaseConnector() {
         createDatabase();
@@ -18,7 +14,7 @@ public class DatabaseConnector {
         createWorkflowBoardTable();
     }
 
-//    User: "root", Password: "" <== Don't change, if change notify.
+//    User: "root", Password: "" <== Don't change, if change please notify team member.
     public Connection connect() {
         String driver = "com.mysql.jdbc.Driver";
         String url = "jdbc:mysql://localhost:3306/" + databaseName + "?serverTimezone=UTC";
@@ -90,7 +86,7 @@ public class DatabaseConnector {
     }
 
     private void createBoardTable() {
-        connection = this.connect();
+        Connection connection = this.connect();
         Statement statement = null;
         String sql = "CREATE TABLE IF NOT EXISTS " + BoardTable.tableName +
                 "(" + BoardTable.id +  " VARCHAR(50) not NULL, " +
@@ -109,7 +105,8 @@ public class DatabaseConnector {
     }
 
     private void createWorkflowTable() {
-        connection = this.connect();
+        Connection connection = this.connect();
+        Statement statement = null;
         String sql = "CREATE TABLE IF NOT EXISTS " + WorkflowTable.tableName +
                 "(" + WorkflowTable.id  + " VARCHAR(50) not NULL, " +
                       WorkflowTable.name + " VARCHAR(50), " +
@@ -127,7 +124,8 @@ public class DatabaseConnector {
     }
 
     private void createCardTable() {
-        connection = this.connect();
+        Connection connection = this.connect();
+        Statement statement = null;
         String sql = "CREATE TABLE IF NOT EXISTS " + CardTable.tableName +
                 "(" + CardTable.id  + " VARCHAR(50) not NULL, " +
                       CardTable.name + " VARCHAR(50), " +
@@ -145,7 +143,7 @@ public class DatabaseConnector {
     }
 
     private void createWorkflowBoardTable() {
-        connection = this.connect();
+        Connection connection = this.connect();
         Statement statement = null;
         String sql = "CREATE TABLE IF NOT EXISTS " + WorkflowBoardTable.tableName +
                 "(" + WorkflowBoardTable.workflowId +  " VARCHAR(50) not NULL, " +
