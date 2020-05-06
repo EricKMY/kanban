@@ -8,7 +8,7 @@ import domain.usecase.board.createBoard.CreateBoardUseCase;
 import domain.usecase.repository.IBoardRepository;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class CreateBoardUseCaseTest {
     @Test
@@ -38,6 +38,8 @@ public class CreateBoardUseCaseTest {
 
         createBoardUseCase.execute(input, output);
 
-        assertEquals("kanban777", boardRepository.findById(output.getBoardId()).getUsername());
+        assertEquals("kanban777", boardRepository
+                                            .findById(output.getBoardId())
+                                            .getUsername());
     }
 }

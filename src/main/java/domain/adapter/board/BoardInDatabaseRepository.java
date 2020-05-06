@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BoardInDatabaseRepository implements IBoardRepository {
@@ -40,20 +41,20 @@ public class BoardInDatabaseRepository implements IBoardRepository {
         String sql =
                 "SELECT * " +
                 "FROM " + BoardTable.tableName + " " +
-                "WHERE boardId = '" + boardId + "'";
+                "WHERE " + BoardTable.id + " = '" + boardId + "'";
 
         BoardDTO boardDTO = null;
 
         try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
-
             while(resultSet.next()) {
                 boardDTO = new BoardDTO();
-                boardDTO.setId(BoardTable.id);
-                boardDTO.setName(BoardTable.name);
-                boardDTO.setUsername(BoardTable.userName);
-                boardDTO.setWorkflows(null);
+                boardDTO.setId(resultSet.getString(BoardTable.id));
+                boardDTO.setName(resultSet.getString(BoardTable.name));
+                boardDTO.setUsername(resultSet.getString(BoardTable.userName));
+//                boardDTO.setWorkflows(null);
+                boardDTO.setWorkflows(findWorkflowsByBoardId(resultSet.getString(BoardTable.id)));
             }
 
         } catch (SQLException e) {
@@ -98,7 +99,7 @@ public class BoardInDatabaseRepository implements IBoardRepository {
         String sql =
                 "SELECT " + BoardTable.name + " " +
                 "FROM " + BoardTable.tableName + " " +
-                "WHERE boardId = '" + boardId + "'";
+                "WHERE " + BoardTable.id + " = '" + boardId + "'";
 
         try {
             statement = connection.createStatement();
@@ -120,7 +121,6 @@ public class BoardInDatabaseRepository implements IBoardRepository {
         for(String workflowId : workflowIds) {
             addWorkflow(boardId, workflowId);
         }
-
     }
 
     private void addWorkflow(String boardId, String workflowId) {
@@ -142,5 +142,34 @@ public class BoardInDatabaseRepository implements IBoardRepository {
             database.closeStatement(statement);
             database.closeConnect(connection);
         }
+    }
+
+    private List<String> findWorkflowsByBoardId(String boardId) {
+        connection = database.connect();
+        ResultSet resultSet = null;
+        String sql =
+                "SELECT " + WorkflowBoardTable.workflowId + " " +
+                "FROM " + WorkflowBoardTable.tableName + " " +
+                "WHERE "+ WorkflowBoardTable.boardId + "= '" + boardId + "'";
+
+        List<String> workflows = new ArrayList<String>();
+
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+
+            while(resultSet.next()) {
+                workflows.add(resultSet.getString(WorkflowBoardTable.workflowId));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            database.closeResultSet(resultSet);
+            database.closeStatement(statement);
+            database.closeConnect(connection);
+        }
+
+        return workflows;
     }
 }
