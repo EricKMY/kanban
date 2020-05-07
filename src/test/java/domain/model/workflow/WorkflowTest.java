@@ -33,7 +33,7 @@ public class WorkflowTest {
     }
 
     @Test
-    public void workflowEventHandler() {
+    public void create_a_Workflow_should_generate_a_WorkFlowCreated_event() {
         Workflow workflow = new Workflow("defaultWorkflow", boardId);
         assertEquals(1, workflow.getDomainEvents().size());
         assertEquals("Workflow Created: defaultWorkflow", workflow.getDomainEvents().get(0).getDetail());

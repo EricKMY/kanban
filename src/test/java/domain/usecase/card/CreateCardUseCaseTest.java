@@ -45,7 +45,7 @@ public class CreateCardUseCaseTest {
     }
 
     @Test
-    public void createCard() {
+    public void create_a_Card() {
         CreateCardUseCase createCardUseCase = new CreateCardUseCase(cardRepository, eventBus);
 
         CreateCardInput input = new CreateCardInput();

@@ -2,14 +2,8 @@ package domain.usecase.card.createCard;
 
 import domain.model.DomainEventBus;
 import domain.model.card.Card;
-import domain.model.card.event.CardCreated;
-import domain.usecase.card.CardDTO;
 import domain.usecase.card.CardDTOConverter;
-import domain.usecase.card.commitCard.CommitCardInput;
-import domain.usecase.card.commitCard.CommitCardOutput;
-import domain.usecase.card.commitCard.CommitCardUseCase;
 import domain.usecase.repository.ICardRepository;
-import domain.usecase.repository.IWorkflowRepository;
 
 public class CreateCardUseCase {
     private ICardRepository cardRepository;

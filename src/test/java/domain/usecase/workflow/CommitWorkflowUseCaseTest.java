@@ -38,7 +38,7 @@ public class CommitWorkflowUseCaseTest {
     }
 
     @Test
-    public void commitWorkflow() {
+    public void commit_a_Workflow_to_Board_aggregate() {
         String workflowId = "W012345678";
         CommitWorkflowUseCase commitWorkflowUseCase = new CommitWorkflowUseCase(boardRepository);
         CommitWorkflowInput input = new CommitWorkflowInput();

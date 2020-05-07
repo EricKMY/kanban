@@ -42,7 +42,7 @@ public class CardTest {
     }
 
     @Test
-    public void cardEventHandler() {
+    public void create_a_Card_should_generate_a_CardCreated_event() {
 
         Card card = new Card("firstEvent", laneId, workflowId);
 
@@ -51,10 +51,13 @@ public class CardTest {
     }
 
     @Test
-    public void cardEventHandlerError() {
+    public void commit_a_Card_to_a_fake_Workflow_aggregate_should_throw_exception() {
 
-        Card card = new Card("firstEvent", "0", "0");
+        Card card = new Card("firstEvent", laneId, "fake");
         cardRepository.save(CardDTOConverter.toDTO(card));
+
+        // should throw exception here, but don't know how to handel.
+        // the exception will be catch by google's EventBus exception handler.
 //        eventBus.postAll(card);
     }
 }

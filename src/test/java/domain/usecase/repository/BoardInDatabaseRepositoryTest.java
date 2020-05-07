@@ -7,12 +7,11 @@ import domain.usecase.board.BoardDTOConverter;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class BoardInDatabaseRepositoryTest {
 
     @Test
-    public void save_a_new_board() {
+    public void new_a_Board_and_stored_in_database() {
         Board board = new Board("Kanban_Project", "Tina");
         IBoardRepository boardRepository = new BoardInDatabaseRepository();
 

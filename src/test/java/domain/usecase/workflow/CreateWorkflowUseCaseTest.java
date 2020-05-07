@@ -37,7 +37,7 @@ public class CreateWorkflowUseCaseTest {
     }
 
     @Test
-    public void createWorkflow(){
+    public void create_a_Workflow(){
         CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository, eventBus);
         CreateWorkflowInput input = new CreateWorkflowInput();
         CreateWorkflowOutput output = new CreateWorkflowOutput();

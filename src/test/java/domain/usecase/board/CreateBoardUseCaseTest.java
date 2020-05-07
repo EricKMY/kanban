@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 
 public class CreateBoardUseCaseTest {
     @Test
-    public void createBoard(){
+    public void create_a_Board_and_stored_into_memory(){
         BoardInMemoryRepository boardInMemoryRepository = new BoardInMemoryRepository();
         CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardInMemoryRepository);
         CreateBoardInput input = new CreateBoardInput();
@@ -27,7 +27,7 @@ public class CreateBoardUseCaseTest {
     }
 
     @Test
-    public void createBoardInDB(){
+    public void create_a_Board(){
         IBoardRepository boardRepository = new BoardInDatabaseRepository();
         CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardRepository);
         CreateBoardInput input = new CreateBoardInput();

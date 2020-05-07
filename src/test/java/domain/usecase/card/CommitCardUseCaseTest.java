@@ -39,10 +39,9 @@ public class CommitCardUseCaseTest {
     }
 
     @Test
-    public void commitCard() {
+    public void commit_a_Card_to_Workflow_aggregate() {
         String cardId = "C012345678";
-        CommitCardUseCase commitCardUseCase = new CommitCardUseCase(
-                workflowRepository);
+        CommitCardUseCase commitCardUseCase = new CommitCardUseCase(workflowRepository);
 
         CommitCardInput input = new CommitCardInput();
         CommitCardOutput output = new CommitCardOutput();

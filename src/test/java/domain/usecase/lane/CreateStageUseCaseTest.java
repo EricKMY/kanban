@@ -40,7 +40,7 @@ public class CreateStageUseCaseTest {
     }
 
     @Test
-    public void createTopStage() {
+    public void create_a_top_Stage() {
         CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository);
         CreateStageInput input = new CreateStageInput();
         CreateStageOutput output = new CreateStageOutput();
@@ -59,7 +59,7 @@ public class CreateStageUseCaseTest {
     }
 
     @Test
-    public void createStageUnderTopStage() {
+    public void create_a_Stage_under_top_Stage() {
         String parenStageId = testUtility.createTopStage(workflowId, "Backlog");
 
         CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository);
@@ -84,7 +84,7 @@ public class CreateStageUseCaseTest {
     }
 
     @Test
-    public void createStageUnderStage() {
+    public void create_a_Stage_under_Stage() {
         String parenStageId = testUtility.createStage(workflowId, topStageId, "Developing");
 
         CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository);
@@ -114,7 +114,7 @@ public class CreateStageUseCaseTest {
     }
 
     @Test
-    public void createStageUnderSwimeLane() {
+    public void create_a_Stage_under_SwimLane() {
         String parenStageId = testUtility.createSwimLane(workflowId, topStageId, "Undo");
 
         CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository);
