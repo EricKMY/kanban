@@ -85,12 +85,12 @@ public class TestUtility {
         CreateSwimlaneInput input = new CreateSwimlaneInput();
         CreateSwimlaneOutput output = new CreateSwimlaneOutput();
 
-        input.setSwinlaneName(stageName);
+        input.setSwimlaneName(stageName);
         input.setWorkflowId(workflowId);
         input.setParentLaneId(parentId);
 
         createSwimlaneUseCase.execute(input, output);
 
-        return output.getSwinlaneId();
+        return output.getSwimlaneId();
     }
 }

@@ -1,6 +1,5 @@
 package domain.usecase.card;
 
-import domain.model.board.Board;
 import domain.model.card.Card;
 
 public class CardDTOConverter {

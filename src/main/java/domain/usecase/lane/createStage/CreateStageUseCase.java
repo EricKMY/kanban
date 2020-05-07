@@ -1,6 +1,5 @@
 package domain.usecase.lane.createStage;
 
-import domain.adapter.board.BoardInMemoryRepository;
 import domain.model.workflow.Workflow;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.IWorkflowRepository;

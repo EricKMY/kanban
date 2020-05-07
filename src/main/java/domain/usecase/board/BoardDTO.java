@@ -1,6 +1,5 @@
 package domain.usecase.board;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BoardDTO {

@@ -1,7 +1,6 @@
 package domain.model.workflow;
 
 import domain.model.AggregateRoot;
-import domain.model.Entity;
 import domain.model.workflow.event.WorkflowCreated;
 
 import java.util.HashMap;
@@ -9,7 +8,7 @@ import java.util.Map;
 
 public class Workflow extends AggregateRoot {
     private String boardId;
-    Map<String, Lane> laneList = new HashMap<String, Lane>();
+    Map<String, Lane> laneMap = new HashMap<String, Lane>();
 
     public Workflow(String workflowName, String boardId, String workflowId) {
         super(workflowName, workflowId);
@@ -28,7 +27,7 @@ public class Workflow extends AggregateRoot {
 
     public String createStage(String stageName) {
         Lane lane = new Stage(stageName);
-        laneList.put(lane.getId(), lane);
+        laneMap.put(lane.getId(), lane);
         return lane.getId();
     }
 
@@ -39,19 +38,19 @@ public class Workflow extends AggregateRoot {
         return lane.getId();
     }
 
-    public String createSwinlane(String swinlaneName, String parentLaneId) {
-        Lane lane = new SwimLane(swinlaneName);
+    public String createSwimlane(String swimlaneName, String parentLaneId) {
+        Lane lane = new SwimLane(swimlaneName);
         Lane parentLane = findLaneById(parentLaneId);
         parentLane.addLane(lane);
         return lane.getId();
     }
 
     public Lane findLaneById(String laneId) {
-        if (laneList.containsKey(laneId)){
-            return laneList.get(laneId);
+        if (laneMap.containsKey(laneId)){
+            return laneMap.get(laneId);
         }
         Lane result;
-        for (Lane lane : laneList.values()){
+        for (Lane lane : laneMap.values()){
             if ((result = findLaneById(lane, laneId)) != null){
                 return result;
             }
@@ -78,7 +77,7 @@ public class Workflow extends AggregateRoot {
     }
 
     public Lane findLaneByCardId(String cardId) {
-        for (Lane lane : laneList.values()){
+        for (Lane lane : laneMap.values()){
             if (lane.isCardContained(cardId)){
                 return lane;
             }

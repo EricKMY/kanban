@@ -1,13 +1,13 @@
 package domain.usecase.lane.createSwimlane;
 
 public class CreateSwimlaneOutput {
-    private String swinlaneId;
+    private String swimlaneId;
 
-    public String getSwinlaneId() {
-        return swinlaneId;
+    public String getSwimlaneId() {
+        return swimlaneId;
     }
 
-    public void setSwinlaneId(String swinlaneId) {
-        this.swinlaneId = swinlaneId;
+    public void setSwimlaneId(String swimlaneId) {
+        this.swimlaneId = swimlaneId;
     }
 }

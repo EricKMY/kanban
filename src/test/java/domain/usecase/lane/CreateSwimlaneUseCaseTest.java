@@ -44,7 +44,7 @@ public class CreateSwimlaneUseCaseTest {
         CreateSwimlaneInput input = new CreateSwimlaneInput();
         CreateSwimlaneOutput output = new CreateSwimlaneOutput();
 
-        input.setSwinlaneName("Urgent");
+        input.setSwimlaneName("Urgent");
         input.setWorkflowId(workflowId);
         input.setParentLaneId(topStageId);
 
@@ -57,7 +57,7 @@ public class CreateSwimlaneUseCaseTest {
 
         assertEquals("Urgent", workflowRepository
                                         .findById(workflowId)
-                                        .findLaneById(output.getSwinlaneId())
+                                        .findLaneById(output.getSwimlaneId())
                                         .getName());
     }
 
@@ -69,7 +69,7 @@ public class CreateSwimlaneUseCaseTest {
         CreateSwimlaneInput input = new CreateSwimlaneInput();
         CreateSwimlaneOutput output = new CreateSwimlaneOutput();
 
-        input.setSwinlaneName("Urgent");
+        input.setSwimlaneName("Urgent");
         input.setWorkflowId(workflowId);
         input.setParentLaneId(parenStageId);
 
@@ -85,7 +85,7 @@ public class CreateSwimlaneUseCaseTest {
                                         .findById(workflowId)
                                         .findLaneById(topStageId)
                                         .findById(parenStageId)
-                                        .findById(output.getSwinlaneId())
+                                        .findById(output.getSwimlaneId())
                                         .getName());
 
     }
@@ -99,7 +99,7 @@ public class CreateSwimlaneUseCaseTest {
         CreateSwimlaneInput input = new CreateSwimlaneInput();
         CreateSwimlaneOutput output = new CreateSwimlaneOutput();
 
-        input.setSwinlaneName("Urgent");
+        input.setSwimlaneName("Urgent");
         input.setWorkflowId(workflowId);
         input.setParentLaneId(parenStageId);
 
@@ -115,7 +115,7 @@ public class CreateSwimlaneUseCaseTest {
                                         .findById(workflowId)
                                         .findLaneById(topStageId)
                                         .findById(parenStageId)
-                                        .findById(output.getSwinlaneId())
+                                        .findById(output.getSwimlaneId())
                                         .getName());
     }
 }

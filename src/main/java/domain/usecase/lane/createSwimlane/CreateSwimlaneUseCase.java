@@ -17,10 +17,10 @@ public class CreateSwimlaneUseCase {
 
     public void execute(CreateSwimlaneInput input, CreateSwimlaneOutput output) {
         workflow = workflowRepository.findById(input.getWorkflowId());
-        String swinlaneId = workflow.createSwinlane(input.getSwinlaneName(), input.getParentLaneId());
+        String swinlaneId = workflow.createSwimlane(input.getSwimlaneName(), input.getParentLaneId());
 
         workflowRepository.save(workflow);
 
-        output.setSwinlaneId(swinlaneId);
+        output.setSwimlaneId(swinlaneId);
     }
 }
