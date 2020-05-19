@@ -5,12 +5,8 @@
  */
 package domain.ui;
 
-import domain.adapter.Controller;
 import domain.ui.board.BoardPanel;
 import domain.ui.user.UserPanel;
-import domain.usecase.board.BoardDTO;
-import java.util.ArrayList;
-import java.util.List;
 /**
  *
  * @author lab1321
@@ -18,17 +14,13 @@ import java.util.List;
 public class MainFrame extends javax.swing.JFrame {
     private UserPanel userPanel;
     private BoardPanel boardPanel;
-    private Controller controller;
-    private List<BoardDTO> boardDTOList;
 
     /**
      * Creates new form Main
      */
     public MainFrame() {
-        controller = new Controller();
-        boardDTOList = new ArrayList<BoardDTO>();
-        userPanel = new UserPanel(this, controller, boardDTOList);
-        boardPanel = new BoardPanel(this, controller);
+        userPanel = new UserPanel(this);
+        boardPanel = new BoardPanel(this);
         userPanel.setVisible(true);
 //        boardPanel.setVisible(false);
         this.add(userPanel);

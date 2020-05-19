@@ -1,13 +1,7 @@
 package domain.usecase.board.createBoard;
 
-public class CreateBoardOutput {
-    private String boardId;
+public interface CreateBoardOutput {
+    String getBoardId();
 
-    public String getBoardId() {
-        return boardId;
-    }
-
-    public void setBoardId(String boardId) {
-        this.boardId = boardId;
-    }
+    void setBoardId(String boardId);
 }

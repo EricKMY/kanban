@@ -5,31 +5,28 @@
  */
 package domain.ui.board;
 
-import domain.adapter.Controller;
+import domain.adapter.board.FindBoardByIdViewModel;
 import domain.ui.MainFrame;
-import domain.usecase.board.BoardDTO;
 
 /**
  *
  * @author lab1321
  */
 public class BoardPanel extends javax.swing.JPanel {
-    private Controller controller;
-    private BoardDTO boardDTO;
+    private FindBoardByIdViewModel findBoardByIdViewModel;
     private MainFrame mainFrame;
     /**
      * Creates new form BoardPanel
      */
-    public BoardPanel(MainFrame mainFrame, Controller controller) {
-        this.controller = controller;
+    public BoardPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         this.setBounds(0, 0, 1024, 768);
         initComponents();
         this.setVisible(false);
     }
     
-    public void setBoardDTO(BoardDTO boardDTO) {
-        this.boardDTO = boardDTO;
+    public void setFindBoardByIdViewModel(FindBoardByIdViewModel findBoardByIdViewModel) {
+        this.findBoardByIdViewModel = findBoardByIdViewModel;
     }
 
     /**
@@ -86,7 +83,7 @@ public class BoardPanel extends javax.swing.JPanel {
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // TODO add your handling code here:
-        titleLabel.setText(boardDTO.getName());
+        titleLabel.setText(findBoardByIdViewModel.getName());
     }//GEN-LAST:event_formComponentShown
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed

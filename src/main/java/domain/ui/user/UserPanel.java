@@ -5,30 +5,31 @@
  */
 package domain.ui.user;
 
-import domain.adapter.Controller;
+import domain.adapter.board.CreateBoardController;
+import domain.adapter.board.CreateBoardViewModel;
+import domain.adapter.board.FindBoardByIdController;
+import domain.adapter.board.FindBoardByIdViewModel;
 import domain.ui.MainFrame;
-import domain.usecase.board.BoardDTO;
-import java.util.List;
 import javax.swing.DefaultListModel;
-import javax.swing.JPanel;
 
 /**
  *
  * @author lab1321
  */
 public class UserPanel extends javax.swing.JPanel {
-    
     private MainFrame mainFrame;
     private DefaultListModel defaultListModel;
-    private Controller controller;
-    private List<BoardDTO> boardDTOList;
+    private CreateBoardController createBoardController;
+    private CreateBoardViewModel createBoardViewModel;
+    private FindBoardByIdViewModel findBoardByIdViewModel;
+    private FindBoardByIdController findBoardByIdController;
 
     /**
      * Creates new form board
      */
-    public UserPanel(MainFrame mainFrame, Controller controller, List<BoardDTO> boardDTOList) {
-        this.controller = controller;
-        this.boardDTOList = boardDTOList;
+    public UserPanel(MainFrame mainFrame) {
+        this.createBoardController = new CreateBoardController();
+        this.findBoardByIdController = new FindBoardByIdController();
         this.mainFrame = mainFrame;
         this.setBounds(0, 0, 1024, 768);
         defaultListModel = new DefaultListModel();
@@ -121,15 +122,15 @@ public class UserPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         PopMenu popMenu = new PopMenu();
         myBoardList.setModel(defaultListModel);
-        boardDTOList.add(controller.createBoard(userLabel.getText(), popMenu.getIName()));
-        defaultListModel.addElement(boardDTOList.get(boardDTOList.size()-1).getName());
+        createBoardViewModel = createBoardController.createBoard(userLabel.getText(), popMenu.getIName());
+        findBoardByIdViewModel = findBoardByIdController.findBoardById(createBoardViewModel.getBoardId());
+        defaultListModel.addElement(findBoardByIdViewModel.getName());
     }//GEN-LAST:event_createBoardBtnActionPerformed
 
     private void myBoardListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_myBoardListMouseClicked
         // TODO add your handling code here:
         // switch panel
-//        System.out.println(boardDTOList.get(myBoardList.getSelectedIndex()).getName());
-        mainFrame.getBoardPanel().setBoardDTO(boardDTOList.get(myBoardList.getSelectedIndex()));
+        mainFrame.getBoardPanel().setFindBoardByIdViewModel(findBoardByIdViewModel);
         
         mainFrame.getContentPane().remove(this);
         mainFrame.getContentPane().add(mainFrame.getBoardPanel());

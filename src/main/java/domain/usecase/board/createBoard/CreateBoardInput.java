@@ -1,23 +1,12 @@
 package domain.usecase.board.createBoard;
 
-public class CreateBoardInput {
-    private String boardName;
-    private String username;
+public interface CreateBoardInput {
 
-    public String getBoardName() {
-        return boardName;
-    }
+    public String getBoardName();
 
-    public void setBoardName(String boardName) {
-        this.boardName = boardName;
-    }
+    public void setBoardName(String boardName);
 
-    public String getUsername() {
-        return username;
-    }
+    public String getUsername();
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
+    public void setUsername(String username);
 }

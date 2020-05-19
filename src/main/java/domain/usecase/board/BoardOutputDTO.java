@@ -2,7 +2,7 @@ package domain.usecase.board;
 
 import java.util.List;
 
-public class BoardDTO {
+public class BoardOutputDTO {
     private String name;
     private String id;
     private List<String> workflows;
@@ -39,5 +39,4 @@ public class BoardDTO {
     public String getUsername() {
         return username;
     }
-
 }

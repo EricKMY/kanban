@@ -1,5 +1,6 @@
 package domain.usecase;
 
+import domain.adapter.board.CreateBoardPresenter;
 import domain.model.DomainEventBus;
 import domain.usecase.board.createBoard.CreateBoardInput;
 import domain.usecase.board.createBoard.CreateBoardOutput;
@@ -29,8 +30,8 @@ public class TestUtility {
 
     public String createBoard(String username, String boardName) {
         CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardRepository);
-        CreateBoardInput input = new CreateBoardInput();
-        CreateBoardOutput output = new CreateBoardOutput();
+        CreateBoardInput input = createBoardUseCase;
+        CreateBoardOutput output = new CreateBoardPresenter();
 
         input.setUsername(username);
         input.setBoardName(boardName);
