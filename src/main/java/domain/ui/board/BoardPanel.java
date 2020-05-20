@@ -5,7 +5,7 @@
  */
 package domain.ui.board;
 
-import domain.adapter.board.FindBoardByIdViewModel;
+import domain.adapter.board.findBoardById.FindBoardByIdViewModel;
 import domain.ui.MainFrame;
 
 /**

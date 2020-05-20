@@ -1,4 +1,4 @@
-package domain.adapter.board;
+package domain.adapter.board.createBoard;
 
 import domain.ApplicationContext;
 import domain.usecase.board.createBoard.CreateBoardInput;

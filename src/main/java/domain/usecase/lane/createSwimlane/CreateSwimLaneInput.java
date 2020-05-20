@@ -1,16 +1,16 @@
-package domain.usecase.lane.createSwimlane;
+package domain.usecase.lane.createSwimLane;
 
-public class CreateSwimlaneInput {
-    private String swimlaneName;
+public class CreateSwimLaneInput {
+    private String swimLaneName;
     private String workflowId;
     private String parentLaneId;
 
-    public String getSwimlaneName() {
-        return swimlaneName;
+    public String getSwimLaneName() {
+        return swimLaneName;
     }
 
-    public void setSwimlaneName(String swimlaneName) {
-        this.swimlaneName = swimlaneName;
+    public void setSwimLaneName(String swimLaneName) {
+        this.swimLaneName = swimLaneName;
     }
 
     public void setWorkflowId(String workflowId) {

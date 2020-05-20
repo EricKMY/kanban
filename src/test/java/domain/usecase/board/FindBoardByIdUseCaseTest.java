@@ -1,8 +1,8 @@
 package domain.usecase.board;
 
 import domain.adapter.board.BoardInMemoryRepository;
-import domain.adapter.board.CreateBoardPresenter;
-import domain.adapter.board.FindBoardByIdPresenter;
+import domain.adapter.board.createBoard.CreateBoardPresenter;
+import domain.adapter.board.findBoardById.FindBoardByIdPresenter;
 import domain.usecase.board.createBoard.CreateBoardInput;
 import domain.usecase.board.createBoard.CreateBoardOutput;
 import domain.usecase.board.createBoard.CreateBoardUseCase;

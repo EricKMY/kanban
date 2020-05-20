@@ -39,8 +39,8 @@ public class Workflow extends AggregateRoot {
         return lane.getId();
     }
 
-    public String createSwimlane(String swimlaneName, String parentLaneId) {
-        Lane lane = new SwimLane(swimlaneName);
+    public String createSwimLane(String swimLaneName, String parentLaneId) {
+        Lane lane = new SwimLane(swimLaneName);
         Lane parentLane = findLaneById(parentLaneId);
         parentLane.addLane(lane);
         return lane.getId();

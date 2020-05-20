@@ -1,4 +1,4 @@
-package domain.adapter.board;
+package domain.adapter.board.findBoardById;
 
 public class FindBoardByIdViewModel {
     private String name;

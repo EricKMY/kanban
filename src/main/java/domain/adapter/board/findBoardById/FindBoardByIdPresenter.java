@@ -1,4 +1,4 @@
-package domain.adapter.board;
+package domain.adapter.board.findBoardById;
 
 import domain.usecase.board.BoardOutputDTO;
 import domain.usecase.board.findBoardById.FindBoardByIdOutput;

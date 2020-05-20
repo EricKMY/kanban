@@ -5,10 +5,10 @@
  */
 package domain.ui.user;
 
-import domain.adapter.board.CreateBoardController;
-import domain.adapter.board.CreateBoardViewModel;
-import domain.adapter.board.FindBoardByIdController;
-import domain.adapter.board.FindBoardByIdViewModel;
+import domain.adapter.board.createBoard.CreateBoardController;
+import domain.adapter.board.createBoard.CreateBoardViewModel;
+import domain.adapter.board.findBoardById.FindBoardByIdController;
+import domain.adapter.board.findBoardById.FindBoardByIdViewModel;
 import domain.ui.MainFrame;
 import javax.swing.DefaultListModel;
 
