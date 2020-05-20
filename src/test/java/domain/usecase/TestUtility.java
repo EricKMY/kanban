@@ -1,6 +1,7 @@
 package domain.usecase;
 
 import domain.adapter.board.createBoard.CreateBoardPresenter;
+import domain.adapter.workflow.createWorkflow.CreateWorkflowPresenter;
 import domain.model.DomainEventBus;
 import domain.usecase.board.createBoard.CreateBoardInput;
 import domain.usecase.board.createBoard.CreateBoardOutput;
@@ -43,8 +44,8 @@ public class TestUtility {
     public String createWorkflow(String boardId, String workflowName) {
         CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository, domainEventBus);
 
-        CreateWorkflowInput input = new CreateWorkflowInput();
-        CreateWorkflowOutput output = new CreateWorkflowOutput();
+        CreateWorkflowInput input = (CreateWorkflowInput) createWorkflowUseCase;
+        CreateWorkflowOutput output = new CreateWorkflowPresenter();
         input.setBoardId(boardId);
         input.setWorkflowName(workflowName);
 

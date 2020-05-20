@@ -1,21 +1,7 @@
 package domain.usecase.workflow.createWorkflow;
 
-public class CreateWorkflowOutput {
-    private String workflowId;
-    private String boardId;
+public interface CreateWorkflowOutput {
+    String getWorkflowId();
 
-    public String getWorkflowId() {
-        return workflowId;
-    }
-
-    public void setWorkflowId(String workflowId) {
-        this.workflowId = workflowId;
-    }
-
-    public String getBoardId() {
-        return boardId;
-    }
-    public void setBoardId(String boardId) {
-        this.boardId = boardId;
-    }
+    void setWorkflowId(String workflowId);
 }

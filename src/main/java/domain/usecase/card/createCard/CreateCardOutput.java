@@ -1,13 +1,7 @@
 package domain.usecase.card.createCard;
 
-public class CreateCardOutput {
-    private String cardId;
+public interface CreateCardOutput {
+    String getCardId();
 
-    public String getCardId() {
-        return cardId;
-    }
-
-    public void setCardId(String cardId) {
-        this.cardId = cardId;
-    }
+    void setCardId(String cardId);
 }

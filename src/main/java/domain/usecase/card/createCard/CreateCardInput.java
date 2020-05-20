@@ -1,31 +1,15 @@
 package domain.usecase.card.createCard;
 
-public class CreateCardInput {
-    private String cardName;
-    private String workflowId;
-    private String laneId;
+public interface CreateCardInput {
+    String getCardName();
 
-    public String getCardName() {
-        return cardName;
-    }
+    void setCardName(String cardName);
 
-    public void setCardName(String cardName) {
-        this.cardName = cardName;
-    }
+    String getWorkflowId();
 
-    public String getWorkflowId() {
-        return workflowId;
-    }
+    void setWorkflowId(String workflowId);
 
-    public void setWorkflowId(String workflowId) {
-        this.workflowId = workflowId;
-    }
+    String getLaneId();
 
-    public String getLaneId() {
-        return laneId;
-    }
-
-    public void setLaneId(String stageId) {
-        this.laneId = stageId;
-    }
+    void setLaneId(String stageId);
 }

@@ -2,8 +2,8 @@ package domain.usecase.workflow;
 
 import domain.adapter.board.BoardInMemoryRepository;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
+import domain.adapter.workflow.createWorkflow.CreateWorkflowPresenter;
 import domain.model.DomainEventBus;
-import domain.model.workflow.Workflow;
 import domain.usecase.DomainEventHandler;
 import domain.usecase.TestUtility;
 import domain.usecase.repository.IBoardRepository;
@@ -39,8 +39,8 @@ public class CreateWorkflowUseCaseTest {
     @Test
     public void create_a_Workflow(){
         CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository, eventBus);
-        CreateWorkflowInput input = new CreateWorkflowInput();
-        CreateWorkflowOutput output = new CreateWorkflowOutput();
+        CreateWorkflowInput input = (CreateWorkflowInput) createWorkflowUseCase;
+        CreateWorkflowOutput output = new CreateWorkflowPresenter();
 
         input.setBoardId(boardId);
         input.setWorkflowName("defaultWorkflow");

@@ -2,6 +2,7 @@ package domain.usecase.card;
 
 import domain.adapter.board.BoardInMemoryRepository;
 import domain.adapter.card.CardRepository;
+import domain.adapter.card.createCard.CreateCardPresenter;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.model.DomainEventBus;
 import domain.model.card.Card;
@@ -48,8 +49,8 @@ public class CreateCardUseCaseTest {
     public void create_a_Card() {
         CreateCardUseCase createCardUseCase = new CreateCardUseCase(cardRepository, eventBus);
 
-        CreateCardInput input = new CreateCardInput();
-        CreateCardOutput output = new CreateCardOutput();
+        CreateCardInput input = (CreateCardInput)createCardUseCase;
+        CreateCardOutput output = new CreateCardPresenter();
 
         input.setCardName("firstEvent");
         input.setWorkflowId(workflowId);
