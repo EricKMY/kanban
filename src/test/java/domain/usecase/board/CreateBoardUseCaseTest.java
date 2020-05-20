@@ -31,7 +31,7 @@ public class CreateBoardUseCaseTest {
     public void create_a_Board(){
         IBoardRepository boardRepository = new BoardInDatabaseRepository();
         CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardRepository);
-        CreateBoardInput input = createBoardUseCase;
+        CreateBoardInput input = (CreateBoardInput) createBoardUseCase;
         CreateBoardOutput output = new CreateBoardPresenter();
 
         input.setUsername("kanban777");

@@ -2,11 +2,11 @@ package domain.usecase.board.createBoard;
 
 public interface CreateBoardInput {
 
-    public String getBoardName();
+    String getBoardName();
 
-    public void setBoardName(String boardName);
+    void setBoardName(String boardName);
 
-    public String getUsername();
+    String getUsername();
 
-    public void setUsername(String username);
+    void setUsername(String username);
 }

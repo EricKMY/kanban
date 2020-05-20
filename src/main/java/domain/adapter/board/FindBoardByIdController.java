@@ -8,10 +8,12 @@ public class FindBoardByIdController {
     public FindBoardByIdViewModel findBoardById(String boardId){
 
         FindBoardByIdUseCase findBoardByIdUseCase = ApplicationContext.getInstance().getFindBoardByIdUseCase();
-        FindBoardByIdInput findBoardByIdInput = (FindBoardByIdInput) findBoardByIdUseCase;
+        FindBoardByIdInput findBoardByIdInput = (FindBoardByIdInput)findBoardByIdUseCase;
         findBoardByIdInput.setBoardId(boardId);
         FindBoardByIdPresenter findBoardByIdPresenter = new FindBoardByIdPresenter();
+
         findBoardByIdUseCase.execute(findBoardByIdInput, findBoardByIdPresenter);
+
         FindBoardByIdViewModel findBoardByIdViewModel = findBoardByIdPresenter.build();
 
         return findBoardByIdViewModel;

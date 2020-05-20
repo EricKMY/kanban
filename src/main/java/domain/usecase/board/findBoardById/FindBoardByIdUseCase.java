@@ -5,7 +5,6 @@ import domain.usecase.board.BoardOutputDTO;
 import domain.usecase.board.BoardOutputDTOConverter;
 import domain.usecase.board.BoardRepositoryDTOConverter;
 import domain.usecase.board.BoardRepositoryDTO;
-import domain.usecase.board.createBoard.CreateBoardOutput;
 import domain.usecase.repository.IBoardRepository;
 
 public class FindBoardByIdUseCase implements FindBoardByIdInput{

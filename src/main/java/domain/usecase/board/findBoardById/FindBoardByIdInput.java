@@ -1,7 +1,7 @@
 package domain.usecase.board.findBoardById;
 
 public interface FindBoardByIdInput {
-    public String getBoardId();
+    String getBoardId();
 
-    public void setBoardId(String boardId);
+    void setBoardId(String boardId);
 }
