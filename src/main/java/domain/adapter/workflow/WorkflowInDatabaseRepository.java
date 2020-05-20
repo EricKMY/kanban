@@ -4,6 +4,7 @@ import domain.adapter.database.WorkflowTable;
 import domain.adapter.database.DatabaseConnector;
 import domain.usecase.repository.IWorkflowRepository;
 import domain.model.workflow.Workflow;
+import domain.usecase.workflow.WorkflowDTO;
 
 import java.sql.Connection;
 
@@ -20,7 +21,7 @@ public class WorkflowInDatabaseRepository implements IWorkflowRepository {
     }
 
     /* refactor Workflow to DTO */
-    public void save(Workflow workflow) {
+    public void save(WorkflowDTO workflowDTO) {
         Connection connection = database.connect();
         Statement statement = null;
         String sql =
@@ -28,9 +29,9 @@ public class WorkflowInDatabaseRepository implements IWorkflowRepository {
                     "(" + WorkflowTable.id + ", " +
                           WorkflowTable.name + ", " +
                           WorkflowTable.boardId + ") " +
-                "VALUES (" + "'" + workflow.getId() + "', " +
-                             "'" + workflow.getName() + "', " +
-                             "'" + workflow.getBoardId() + "')";
+                "VALUES (" + "'" + workflowDTO.getId() + "', " +
+                             "'" + workflowDTO.getName() + "', " +
+                             "'" + workflowDTO.getBoardId() + "')";
 
         try {
             statement = connection.createStatement();
@@ -44,7 +45,7 @@ public class WorkflowInDatabaseRepository implements IWorkflowRepository {
     }
 
     /* refactor Workflow to DTO */
-    public Workflow findById(String workflowId){
+    public WorkflowDTO findById(String workflowId){
         Connection connection = database.connect();
         Statement statement = null;
         ResultSet resultSet = null;
@@ -53,17 +54,15 @@ public class WorkflowInDatabaseRepository implements IWorkflowRepository {
                 "FROM " + WorkflowTable.tableName + " " +
                 "WHERE workflowId = '" + workflowId + "'";
 
-        Workflow workflow = null;
+        WorkflowDTO workflowDTO = new WorkflowDTO();
 
         try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             while(resultSet.next()) {
-                workflow = new Workflow(
-                        resultSet.getString("workflowName"),
-                        resultSet.getString("boardId"),
-                        resultSet.getString("workflowId")
-                );
+                workflowDTO.setName(resultSet.getString("workflowName"));
+                workflowDTO.setBoardId(resultSet.getString("boardId"));
+                workflowDTO.setId(resultSet.getString("workflowId"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -73,6 +72,6 @@ public class WorkflowInDatabaseRepository implements IWorkflowRepository {
             database.closeConnect(connection);
         }
 
-        return workflow;
+        return workflowDTO;
     }
 }

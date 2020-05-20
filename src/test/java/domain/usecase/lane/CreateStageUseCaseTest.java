@@ -10,6 +10,7 @@ import domain.usecase.lane.createStage.CreateStageOutput;
 import domain.usecase.lane.createStage.CreateStageUseCase;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.IWorkflowRepository;
+import domain.usecase.workflow.WorkflowDTOConverter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -52,8 +53,7 @@ public class CreateStageUseCaseTest {
         createStageUseCase.execute(input, output);
 
         assertNotNull(output.getStageId());
-        assertEquals("Backlog", workflowRepository
-                                        .findById(workflowId)
+        assertEquals("Backlog", WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId))
                                         .findLaneById(output.getStageId())
                                         .getName());
     }
@@ -72,13 +72,11 @@ public class CreateStageUseCaseTest {
 
         createStageUseCase.execute(input, output);
 
-        assertEquals(1, workflowRepository
-                                .findById(workflowId)
+        assertEquals(1, WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId))
                                 .findLaneById(parenStageId)
                                 .getChildAmount());
 
-        assertEquals("Developing", workflowRepository
-                                            .findById(workflowId)
+        assertEquals("Developing", WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId))
                                             .findLaneById(output.getStageId())
                                             .getName());
     }
@@ -97,15 +95,13 @@ public class CreateStageUseCaseTest {
 
         createStageUseCase.execute(input, output);
 
-        assertEquals(1, workflowRepository
-                                .findById(workflowId)
+        assertEquals(1, WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId))
                                 .findLaneById(topStageId)
                                 .findById(parenStageId)
                                 .getChildAmount());
 
 
-        assertEquals("Team_1", workflowRepository
-                                        .findById(workflowId)
+        assertEquals("Team_1", WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId))
                                         .findLaneById(topStageId)
                                         .findById(parenStageId)
                                         .findById(output.getStageId())
@@ -127,15 +123,13 @@ public class CreateStageUseCaseTest {
 
         createStageUseCase.execute(input, output);
 
-        assertEquals(1, workflowRepository
-                                .findById(workflowId)
+        assertEquals(1, WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId))
                                 .findLaneById(topStageId)
                                 .findById(parenStageId)
                                 .getChildAmount());
 
 
-        assertEquals("Team_1", workflowRepository
-                                        .findById(workflowId)
+        assertEquals("Team_1", WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId))
                                         .findLaneById(topStageId)
                                         .findById(parenStageId)
                                         .findById(output.getStageId())

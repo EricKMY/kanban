@@ -5,24 +5,31 @@ import domain.model.Entity;
 import java.util.*;
 
 public abstract class Lane extends Entity {
-    protected String workflowId;
-    protected Map<String, Lane> laneList = new HashMap<String, Lane>();
+    protected Map<String, Lane> laneMap = new HashMap<String, Lane>();
     protected List<String> cardList = new ArrayList<String>();
+    protected LaneDirection laneDirection;
 
-    public Lane(String laneName) {
+    public Lane(String laneName, LaneDirection laneDirection) {
         super(laneName);
+        this.laneDirection = laneDirection;
+    }
+
+    public Lane(String laneName, LaneDirection laneDirection, String laneId, List<String> cardList) {
+        super(laneName, laneId);
+        this.laneDirection = laneDirection;
+        this.cardList = cardList;
     }
 
     public void addLane(Lane lane) {
-        laneList.put(lane.getId(), lane);
+        laneMap.put(lane.getId(), lane);
     }
 
     public int getChildAmount() {
-        return laneList.size();
+        return laneMap.size();
     }
 
     public Lane findById(String laneId) {
-        return laneList.get(laneId);
+        return laneMap.get(laneId);
     }
 
     public void addCard(String cardId) {
@@ -30,11 +37,18 @@ public abstract class Lane extends Entity {
     }
 
     public Map<String, Lane> getChildMap(){
-        return Collections.unmodifiableMap(laneList);
+        return Collections.unmodifiableMap(laneMap);
     }
 
     public boolean isCardContained(String cardId) {
         return cardList.contains(cardId);
     }
 
+    public List<String> getCardList() {
+        return cardList;
+    }
+
+    public LaneDirection getLaneDirection() {
+        return laneDirection;
+    }
 }
