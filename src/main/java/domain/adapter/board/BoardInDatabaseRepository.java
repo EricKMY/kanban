@@ -151,14 +151,14 @@ public class BoardInDatabaseRepository implements IBoardRepository {
                 "FROM " + WorkflowBoardTable.tableName + " " +
                 "WHERE "+ WorkflowBoardTable.boardId + "= '" + boardId + "'";
 
-        List<String> workflows = new ArrayList<String>();
+        List<String> workflowList = new ArrayList<String>();
 
         try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
 
             while(resultSet.next()) {
-                workflows.add(resultSet.getString(WorkflowBoardTable.workflowId));
+                workflowList.add(resultSet.getString(WorkflowBoardTable.workflowId));
             }
 
         } catch (SQLException e) {
@@ -169,6 +169,6 @@ public class BoardInDatabaseRepository implements IBoardRepository {
             database.closeConnect(connection);
         }
 
-        return workflows;
+        return workflowList;
     }
 }

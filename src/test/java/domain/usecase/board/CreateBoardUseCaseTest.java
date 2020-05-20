@@ -28,7 +28,7 @@ public class CreateBoardUseCaseTest {
     }
 
     @Test
-    public void create_a_Board(){
+    public void create_a_Board_and_stored_into_database(){
         IBoardRepository boardRepository = new BoardInDatabaseRepository();
         CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardRepository);
         CreateBoardInput input = (CreateBoardInput) createBoardUseCase;

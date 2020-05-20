@@ -1,9 +1,9 @@
 package domain.usecase.repository;
 
-import domain.model.workflow.Workflow;
+import domain.usecase.workflow.WorkflowDTO;
 
 public interface IWorkflowRepository {
-    void save(Workflow workflow);
-    Workflow findById(String id);
+    void save(WorkflowDTO workflow);
+    WorkflowDTO findById(String id);
 }
 

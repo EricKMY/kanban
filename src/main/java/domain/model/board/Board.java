@@ -9,12 +9,12 @@ public class Board extends Entity {
 
     private String username;
 
-    List<String> workflows = new ArrayList<String>();
+    List<String> workflowList = new ArrayList<String>();
 
-    public Board(String boardName, String username, String boardId, List<String> workflows){
+    public Board(String boardName, String username, String boardId, List<String> workflowList){
         super(boardName, boardId);
         this.username = username;
-        this.workflows.addAll(workflows);
+        this.workflowList.addAll(workflowList);
     }
 
     public Board(String boardName, String username) {
@@ -35,14 +35,14 @@ public class Board extends Entity {
     }
 
     public void addWorkflow(String workflowId) {
-        workflows.add(workflowId);
+        workflowList.add(workflowId);
     }
 
     public boolean isWorkflowContained(String workflowId) {
-        return workflows.contains(workflowId);
+        return workflowList.contains(workflowId);
     }
 
-    public List<String> getWorkflows() {
-        return workflows;
+    public List<String> getWorkflowList() {
+        return workflowList;
     }
 }

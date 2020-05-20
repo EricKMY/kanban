@@ -3,6 +3,7 @@ package domain.usecase.lane.createStage;
 import domain.model.workflow.Workflow;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.IWorkflowRepository;
+import domain.usecase.workflow.WorkflowDTOConverter;
 
 public class CreateStageUseCase {
     private IWorkflowRepository workflowRepository;
@@ -16,7 +17,7 @@ public class CreateStageUseCase {
 
     public void execute(CreateStageInput input, CreateStageOutput output) {
 
-        workflow = workflowRepository.findById(input.getWorkflowId());
+        workflow = WorkflowDTOConverter.toEntity(workflowRepository.findById(input.getWorkflowId()));
         String stageId;
         if (input.getParentLaneId() == null){
             stageId = workflow.createStage(input.getStageName());
@@ -24,7 +25,7 @@ public class CreateStageUseCase {
             stageId = workflow.createStage(input.getStageName(), input.getParentLaneId());
         }
 
-        workflowRepository.save(workflow);
+        workflowRepository.save(WorkflowDTOConverter.toDTO(workflow));
 
         output.setStageId(stageId);
     }

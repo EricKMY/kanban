@@ -10,6 +10,7 @@ import domain.usecase.lane.createSwimlane.CreateSwimlaneOutput;
 import domain.usecase.lane.createSwimlane.CreateSwimlaneUseCase;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.IWorkflowRepository;
+import domain.usecase.workflow.WorkflowDTOConverter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -50,13 +51,11 @@ public class CreateSwimlaneUseCaseTest {
 
         createSwimlaneUseCase.execute(input, output);
 
-        assertEquals(1, workflowRepository
-                                .findById(workflowId)
+        assertEquals(1, WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId))
                                 .findLaneById(topStageId)
                                 .getChildAmount());
 
-        assertEquals("Urgent", workflowRepository
-                                        .findById(workflowId)
+        assertEquals("Urgent", WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId))
                                         .findLaneById(output.getSwimlaneId())
                                         .getName());
     }
@@ -75,14 +74,12 @@ public class CreateSwimlaneUseCaseTest {
 
         createSwimlaneUseCase.execute(input, output);
 
-        assertEquals(1, workflowRepository
-                                .findById(workflowId)
+        assertEquals(1, WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId))
                                 .findLaneById(topStageId)
                                 .findById(parenStageId)
                                 .getChildAmount());
 
-        assertEquals("Urgent", workflowRepository
-                                        .findById(workflowId)
+        assertEquals("Urgent", WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId))
                                         .findLaneById(topStageId)
                                         .findById(parenStageId)
                                         .findById(output.getSwimlaneId())
@@ -105,14 +102,12 @@ public class CreateSwimlaneUseCaseTest {
 
         createSwimlaneUseCase.execute(input, output);
 
-        assertEquals(1, workflowRepository
-                                .findById(workflowId)
+        assertEquals(1, WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId))
                                 .findLaneById(topStageId)
                                 .findById(parenStageId)
                                 .getChildAmount());
 
-        assertEquals("Urgent", workflowRepository
-                                        .findById(workflowId)
+        assertEquals("Urgent", WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId))
                                         .findLaneById(topStageId)
                                         .findById(parenStageId)
                                         .findById(output.getSwimlaneId())

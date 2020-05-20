@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class Workflow extends AggregateRoot {
     private String boardId;
+
     Map<String, Lane> laneMap = new HashMap<String, Lane>();
 
     public Workflow(String workflowName, String boardId, String workflowId) {
@@ -76,6 +77,10 @@ public class Workflow extends AggregateRoot {
         lane.addCard(cardId);
     }
 
+    public Map<String, Lane> getLaneMap() {
+        return laneMap;
+    }
+
     public Lane findLaneByCardId(String cardId) {
         for (Lane lane : laneMap.values()){
             if (lane.isCardContained(cardId)){
@@ -84,5 +89,10 @@ public class Workflow extends AggregateRoot {
         }
         return null;
     }
-
+    public void addToLaneMap(Lane lane) {
+        laneMap.put(lane.getId(), lane);
+    }
+    public Map<String, Lane> getLanes() {
+        return laneMap;
+    }
 }

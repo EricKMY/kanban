@@ -10,6 +10,7 @@ import domain.usecase.card.commitCard.CommitCardOutput;
 import domain.usecase.card.commitCard.CommitCardUseCase;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.IWorkflowRepository;
+import domain.usecase.workflow.WorkflowDTOConverter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -51,6 +52,6 @@ public class CommitCardUseCaseTest {
         input.setCardId(cardId);
 
         commitCardUseCase.execute(input, output);
-        assertEquals(laneId, workflowRepository.findById(workflowId).findLaneByCardId(cardId).getId());
+        assertEquals(laneId, WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId)).findLaneByCardId(cardId).getId());
     }
 }

@@ -3,6 +3,7 @@ package domain.usecase.lane.createSwimlane;
 import domain.model.workflow.Workflow;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.IWorkflowRepository;
+import domain.usecase.workflow.WorkflowDTOConverter;
 
 public class CreateSwimlaneUseCase {
     private IWorkflowRepository workflowRepository;
@@ -16,10 +17,10 @@ public class CreateSwimlaneUseCase {
     }
 
     public void execute(CreateSwimlaneInput input, CreateSwimlaneOutput output) {
-        workflow = workflowRepository.findById(input.getWorkflowId());
+        workflow = WorkflowDTOConverter.toEntity(workflowRepository.findById(input.getWorkflowId()));
         String swinlaneId = workflow.createSwimlane(input.getSwimlaneName(), input.getParentLaneId());
 
-        workflowRepository.save(workflow);
+        workflowRepository.save(WorkflowDTOConverter.toDTO(workflow));
 
         output.setSwimlaneId(swinlaneId);
     }

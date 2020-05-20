@@ -7,7 +7,7 @@ public class BoardOutputDTOConverter {
         BoardOutputDTO boardOutputDTO = new BoardOutputDTO();
         boardOutputDTO.setId(board.getId());
         boardOutputDTO.setName(board.getName());
-        boardOutputDTO.setWorkflows(board.getWorkflows());
+        boardOutputDTO.setWorkflows(board.getWorkflowList());
         boardOutputDTO.setUsername(board.getUsername());
         return boardOutputDTO;
     }
