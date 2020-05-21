@@ -4,8 +4,12 @@ import domain.adapter.board.BoardInMemoryRepository;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.adapter.workflow.createWorkflow.CreateWorkflowPresenter;
 import domain.model.DomainEventBus;
+import domain.model.board.Board;
+import domain.model.workflow.Workflow;
 import domain.usecase.DomainEventHandler;
 import domain.usecase.TestUtility;
+import domain.usecase.board.BoardRepositoryDTO;
+import domain.usecase.board.BoardRepositoryDTOConverter;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.IWorkflowRepository;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowInput;
@@ -30,7 +34,7 @@ public class CreateWorkflowUseCaseTest {
         workflowRepository = new WorkflowInMemoryRepository();
 
         eventBus = new DomainEventBus();
-        eventBus.register(new DomainEventHandler(boardRepository, workflowRepository));
+        eventBus.register(new DomainEventHandler(boardRepository, workflowRepository, eventBus));
         testUtility = new TestUtility(boardRepository, workflowRepository, eventBus);
 
         boardId = testUtility.createBoard("kanban777", "kanbanSystem");
@@ -50,4 +54,27 @@ public class CreateWorkflowUseCaseTest {
         assertEquals(boardId, workflowRepository.findById(output.getWorkflowId()).getBoardId());
     }
 
+    @Test
+    public void create_a_Workflow_should_commit_to_its_Board(){
+        Board board = BoardRepositoryDTOConverter.toEntity(boardRepository.findById(boardId));
+        assertEquals(0, board.getWorkflowList().size());
+
+        CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository, eventBus);
+        CreateWorkflowInput input = (CreateWorkflowInput) createWorkflowUseCase;
+        CreateWorkflowOutput output = new CreateWorkflowPresenter();
+
+        input.setBoardId(boardId);
+        input.setWorkflowName("defaultWorkflow");
+
+        createWorkflowUseCase.execute(input, output);
+
+        board = BoardRepositoryDTOConverter.toEntity(boardRepository.findById(boardId));
+        assertEquals(1, board.getWorkflowList().size());
+
+        Workflow workflow = WorkflowDTOConverter.toEntity(
+                workflowRepository.findById(output.getWorkflowId())
+        );
+
+        assertEquals("defaultWorkflow", workflow.getName());
+    }
 }

@@ -15,7 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class CreateStageUseCaseTest {
     private IBoardRepository boardRepository;
@@ -32,7 +31,7 @@ public class CreateStageUseCaseTest {
         workflowRepository = new WorkflowInMemoryRepository();
 
         eventBus = new DomainEventBus();
-        eventBus.register(new DomainEventHandler(boardRepository, workflowRepository));
+        eventBus.register(new DomainEventHandler(boardRepository, workflowRepository, eventBus));
         testUtility = new TestUtility(boardRepository, workflowRepository, eventBus);
 
         String boardId = testUtility.createBoard("kanban777", "kanban");
@@ -52,10 +51,9 @@ public class CreateStageUseCaseTest {
 
         createStageUseCase.execute(input, output);
 
-        assertNotNull(output.getStageId());
-//        assertEquals("Backlog", WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId))
-//                                        .findLaneById(output.getStageId())
-//                                        .getName());
+        assertEquals("Backlog", WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId))
+                                        .findLaneById(output.getStageId())
+                                        .getName());
     }
 
     @Test

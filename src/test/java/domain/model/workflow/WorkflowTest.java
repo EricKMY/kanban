@@ -26,7 +26,7 @@ public class WorkflowTest {
         workflowRepository = new WorkflowInMemoryRepository();
 
         eventBus = new DomainEventBus();
-        eventBus.register(new DomainEventHandler(boardRepository, workflowRepository));
+        eventBus.register(new DomainEventHandler(boardRepository, workflowRepository, eventBus));
         testUtility = new TestUtility(boardRepository, workflowRepository, eventBus);
 
         boardId = testUtility.createBoard("kanban777", "kanbanSystem");

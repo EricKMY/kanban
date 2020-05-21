@@ -8,7 +8,7 @@ public class BoardRepositoryDTOConverter {
         boardRepositoryDTO.setId(board.getId());
         boardRepositoryDTO.setName(board.getName());
         boardRepositoryDTO.setWorkflows(board.getWorkflowList());
-        boardRepositoryDTO.setUsername(board.getUsername());
+        boardRepositoryDTO.setUsername(board.getUserName());
         return boardRepositoryDTO;
     }
 

@@ -1,22 +1,11 @@
 package domain.usecase.workflow.commitWorkflow;
 
-public class CommitWorkflowInput {
-    private String workflowId;
-    private String boardId;
+public interface CommitWorkflowInput {
+    String getWorkflowId();
 
-    public String getWorkflowId() {
-        return workflowId;
-    }
+    void setWorkflowId(String workflowId);
 
-    public void setWorkflowId(String workflowId) {
-        this.workflowId = workflowId;
-    }
+    String getBoardId();
 
-    public String getBoardId() {
-        return boardId;
-    }
-
-    public void setBoardId(String boardId) {
-        this.boardId = boardId;
-    }
+    void setBoardId(String boardId);
 }

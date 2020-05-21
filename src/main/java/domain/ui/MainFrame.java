@@ -5,8 +5,11 @@
  */
 package domain.ui;
 
+import domain.adapter.board.BoardInMemoryRepository;
 import domain.ui.board.BoardPanel;
 import domain.ui.user.UserPanel;
+import domain.usecase.repository.IBoardRepository;
+
 /**
  *
  * @author lab1321
@@ -14,13 +17,15 @@ import domain.ui.user.UserPanel;
 public class MainFrame extends javax.swing.JFrame {
     private UserPanel userPanel;
     private BoardPanel boardPanel;
+    private IBoardRepository boardRepository;
 
     /**
      * Creates new form Main
      */
     public MainFrame() {
-        userPanel = new UserPanel(this);
-        boardPanel = new BoardPanel(this);
+        boardRepository = new BoardInMemoryRepository();
+        userPanel = new UserPanel(this, boardRepository);
+        boardPanel = new BoardPanel(this, boardRepository);
         userPanel.setVisible(true);
 //        boardPanel.setVisible(false);
         this.add(userPanel);

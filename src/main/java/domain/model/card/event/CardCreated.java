@@ -24,7 +24,7 @@ public class CardCreated implements DomainEvent {
         return cardName;
     }
 
-    public String getId() {
+    public String getCardId() {
         return cardId;
     }
 

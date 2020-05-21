@@ -10,6 +10,8 @@ import domain.adapter.board.createBoard.CreateBoardViewModel;
 import domain.adapter.board.findBoardById.FindBoardByIdController;
 import domain.adapter.board.findBoardById.FindBoardByIdViewModel;
 import domain.ui.MainFrame;
+import domain.usecase.repository.IBoardRepository;
+
 import javax.swing.DefaultListModel;
 
 /**
@@ -23,11 +25,13 @@ public class UserPanel extends javax.swing.JPanel {
     private CreateBoardViewModel createBoardViewModel;
     private FindBoardByIdViewModel findBoardByIdViewModel;
     private FindBoardByIdController findBoardByIdController;
+    private IBoardRepository boardRepository;
 
     /**
      * Creates new form board
      */
-    public UserPanel(MainFrame mainFrame) {
+    public UserPanel(MainFrame mainFrame, IBoardRepository boardRepository) {
+        this.boardRepository = boardRepository;
         this.createBoardController = new CreateBoardController();
         this.findBoardByIdController = new FindBoardByIdController();
         this.mainFrame = mainFrame;
@@ -122,8 +126,8 @@ public class UserPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         PopMenu popMenu = new PopMenu();
         myBoardList.setModel(defaultListModel);
-        createBoardViewModel = createBoardController.createBoard(userLabel.getText(), popMenu.getIName());
-        findBoardByIdViewModel = findBoardByIdController.findBoardById(createBoardViewModel.getBoardId());
+        createBoardViewModel = createBoardController.createBoard(userLabel.getText(), popMenu.getIName(), boardRepository);
+        findBoardByIdViewModel = findBoardByIdController.findBoardById(createBoardViewModel.getBoardId(), boardRepository);
         defaultListModel.addElement(findBoardByIdViewModel.getName());
     }//GEN-LAST:event_createBoardBtnActionPerformed
 

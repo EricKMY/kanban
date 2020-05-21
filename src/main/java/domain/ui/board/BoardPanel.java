@@ -7,6 +7,7 @@ package domain.ui.board;
 
 import domain.adapter.board.findBoardById.FindBoardByIdViewModel;
 import domain.ui.MainFrame;
+import domain.usecase.repository.IBoardRepository;
 
 /**
  *
@@ -15,11 +16,13 @@ import domain.ui.MainFrame;
 public class BoardPanel extends javax.swing.JPanel {
     private FindBoardByIdViewModel findBoardByIdViewModel;
     private MainFrame mainFrame;
+    private IBoardRepository boardRepository;
     /**
      * Creates new form BoardPanel
      */
-    public BoardPanel(MainFrame mainFrame) {
+    public BoardPanel(MainFrame mainFrame, IBoardRepository boardRepository) {
         this.mainFrame = mainFrame;
+        this.boardRepository = boardRepository;
         this.setBounds(0, 0, 1024, 768);
         initComponents();
         this.setVisible(false);

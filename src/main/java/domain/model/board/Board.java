@@ -1,41 +1,38 @@
 package domain.model.board;
 
-import domain.model.Entity;
+import domain.model.AggregateRoot;
+import domain.model.board.event.BoardCreated;
+import domain.model.board.event.WorkflowCommitted;
+import domain.model.workflow.event.WorkflowCreated;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Board extends Entity {
+public class Board extends AggregateRoot {
 
-    private String username;
+    private String userName;
 
     List<String> workflowList = new ArrayList<String>();
 
-    public Board(String boardName, String username, String boardId, List<String> workflowList){
+    public Board(String boardName, String userName, String boardId, List<String> workflowList){
         super(boardName, boardId);
-        this.username = username;
+        this.userName = userName;
         this.workflowList.addAll(workflowList);
     }
 
-    public Board(String boardName, String username) {
+    public Board(String boardName, String userName) {
         super(boardName);
-        this.username = username;
+        this.userName = userName;
+        addDomainEvent(new BoardCreated(userName, id, boardName));
     }
 
-//    public void setBoardName(String boardName) {
-//        this.boardName = boardName;
-//    }
-//
-//    public String getBoardName() {
-//        return boardName;
-//    }
-
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
     public void addWorkflow(String workflowId) {
         workflowList.add(workflowId);
+        addDomainEvent(new WorkflowCommitted(id, workflowId));
     }
 
     public boolean isWorkflowContained(String workflowId) {

@@ -33,7 +33,7 @@ public class CardTest {
         cardRepository = new CardRepository();
 
         eventBus = new DomainEventBus();
-        eventBus.register(new DomainEventHandler(boardRepository, workflowRepository));
+        eventBus.register(new DomainEventHandler(boardRepository, workflowRepository, eventBus));
         testUtility = new TestUtility(boardRepository, workflowRepository, eventBus);
 
         String boardId = testUtility.createBoard("kanban777", "kanban");
@@ -50,14 +50,14 @@ public class CardTest {
         assertEquals("Card Created: firstEvent", card.getDomainEvents().get(0).getDetail());
     }
 
-    @Test
-    public void commit_a_Card_to_a_fake_Workflow_aggregate_should_throw_exception() {
-
-        Card card = new Card("firstEvent", laneId, "fake");
-        cardRepository.save(CardDTOConverter.toDTO(card));
+//    @Test
+//    public void commit_a_Card_to_a_fake_Workflow_aggregate_should_throw_exception() {
+//
+//        Card card = new Card("firstEvent", laneId, "fake");
+//        cardRepository.save(CardDTOConverter.toDTO(card));
 
         // should throw exception here, but don't know how to handel.
         // the exception will be catch by google's EventBus exception handler.
 //        eventBus.postAll(card);
-    }
+//    }
 }

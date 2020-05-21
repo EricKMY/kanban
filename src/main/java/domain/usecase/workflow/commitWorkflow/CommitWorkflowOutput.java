@@ -1,4 +1,7 @@
 package domain.usecase.workflow.commitWorkflow;
 
-public class CommitWorkflowOutput {
+public interface CommitWorkflowOutput {
+    String getWorkflowId();
+
+    void setWorkflowId(String workflowId);
 }

@@ -21,6 +21,6 @@ public class BoardInDatabaseRepositoryTest {
 
         assertEquals(board.getId(), returnBoard.getId());
         assertEquals(board.getName(), returnBoard.getName());
-        assertEquals(board.getUsername(), returnBoard.getUsername());
+        assertEquals(board.getUserName(), returnBoard.getUserName());
     }
 }
