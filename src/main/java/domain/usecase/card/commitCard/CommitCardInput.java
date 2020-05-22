@@ -1,31 +1,16 @@
 package domain.usecase.card.commitCard;
 
-public class CommitCardInput {
-    private String cardId;
-    private String workflowId;
-    private String laneId;
+public interface CommitCardInput {
 
-    public String getCardId() {
-        return cardId;
-    }
+    String getCardId();
 
-    public void setCardId(String cardName) {
-        this.cardId = cardName;
-    }
+    void setCardId(String cardName);
 
-    public String getWorkflowId() {
-        return workflowId;
-    }
+    String getWorkflowId();
 
-    public void setWorkflowId(String workflowId) {
-        this.workflowId = workflowId;
-    }
+    void setWorkflowId(String workflowId);
 
-    public String getLaneId() {
-        return laneId;
-    }
+    String getLaneId();
 
-    public void setLaneId(String stageId) {
-        this.laneId = stageId;
-    }
+    void setLaneId(String stageId);
 }

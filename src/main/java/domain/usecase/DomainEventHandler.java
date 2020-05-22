@@ -1,6 +1,7 @@
 package domain.usecase;
 
 import com.google.common.eventbus.Subscribe;
+import domain.adapter.card.commitCard.CommitCardPresenter;
 import domain.adapter.workflow.commitWorkflow.CommitWorkflowPresenter;
 import domain.model.DomainEventBus;
 import domain.model.card.event.CardCreated;
@@ -43,11 +44,11 @@ public class DomainEventHandler {
     @Subscribe
     public void handleEvent(CardCreated cardCreated) {
         CommitCardUseCase commitCardUseCase = new CommitCardUseCase(workflowRepository);
-        CommitCardInput commitCardInput = new CommitCardInput();
+        CommitCardInput commitCardInput = (CommitCardInput) commitCardUseCase;
         commitCardInput.setCardId(cardCreated.getCardId());
         commitCardInput.setLaneId(cardCreated.getLaneId());
         commitCardInput.setWorkflowId(cardCreated.getWorkflowId());
-        CommitCardOutput commitCardOutput = new CommitCardOutput();
+        CommitCardOutput commitCardOutput = new CommitCardPresenter();
 
         commitCardUseCase.execute(commitCardInput, commitCardOutput);
     }

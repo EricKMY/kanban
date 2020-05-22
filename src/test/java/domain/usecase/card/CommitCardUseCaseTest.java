@@ -1,6 +1,7 @@
 package domain.usecase.card;
 
 import domain.adapter.board.BoardInMemoryRepository;
+import domain.adapter.card.commitCard.CommitCardPresenter;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.model.DomainEventBus;
 import domain.usecase.DomainEventHandler;
@@ -44,8 +45,8 @@ public class CommitCardUseCaseTest {
         String cardId = "C012345678";
         CommitCardUseCase commitCardUseCase = new CommitCardUseCase(workflowRepository);
 
-        CommitCardInput input = new CommitCardInput();
-        CommitCardOutput output = new CommitCardOutput();
+        CommitCardInput input = (CommitCardInput) commitCardUseCase;
+        CommitCardOutput output = new CommitCardPresenter();
 
         input.setWorkflowId(workflowId);
         input.setLaneId(laneId);

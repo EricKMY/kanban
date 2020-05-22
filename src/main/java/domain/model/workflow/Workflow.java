@@ -1,6 +1,7 @@
 package domain.model.workflow;
 
 import domain.model.AggregateRoot;
+import domain.model.workflow.event.CardCommitted;
 import domain.model.workflow.event.StageCreated;
 import domain.model.workflow.event.WorkflowCreated;
 
@@ -78,6 +79,7 @@ public class Workflow extends AggregateRoot {
     public void commitCard(String cardId, String laneId) {
         Lane lane = findLaneById(laneId);
         lane.addCard(cardId);
+        addDomainEvent(new CardCommitted(id, cardId, laneId));
     }
 
     public Lane findLaneByCardId(String cardId) {
