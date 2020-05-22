@@ -13,7 +13,7 @@ public class WorkflowDTOConverter {
         workflowDTO.setBoardId(workflow.getBoardId());
         workflowDTO.setName(workflow.getName());
 
-        for (Lane topLane : workflow.getLanes().values()){
+        for (Lane topLane : workflow.getLaneMap().values()){
             workflowDTO.getLanes().add(LaneDTOConverter.toDTO(topLane));
         }
         return workflowDTO;

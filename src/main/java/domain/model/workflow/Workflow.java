@@ -1,6 +1,7 @@
 package domain.model.workflow;
 
 import domain.model.AggregateRoot;
+import domain.model.workflow.event.StageCreated;
 import domain.model.workflow.event.WorkflowCreated;
 
 import java.util.HashMap;
@@ -29,6 +30,7 @@ public class Workflow extends AggregateRoot {
     public String createStage(String stageName) {
         Lane lane = new Stage(stageName);
         laneMap.put(lane.getId(), lane);
+        addDomainEvent(new StageCreated(stageName, id));
         return lane.getId();
     }
 
@@ -36,6 +38,7 @@ public class Workflow extends AggregateRoot {
         Lane lane = new Stage(stageName);
         Lane parentLane = findLaneById(parentLaneId);
         parentLane.addLane(lane);
+        addDomainEvent(new StageCreated(stageName, id, parentLaneId));
         return lane.getId();
     }
 
@@ -77,10 +80,6 @@ public class Workflow extends AggregateRoot {
         lane.addCard(cardId);
     }
 
-    public Map<String, Lane> getLaneMap() {
-        return laneMap;
-    }
-
     public Lane findLaneByCardId(String cardId) {
         for (Lane lane : laneMap.values()){
             if (lane.isCardContained(cardId)){
@@ -92,7 +91,8 @@ public class Workflow extends AggregateRoot {
     public void addToLaneMap(Lane lane) {
         laneMap.put(lane.getId(), lane);
     }
-    public Map<String, Lane> getLanes() {
+
+    public Map<String, Lane> getLaneMap() {
         return laneMap;
     }
 }

@@ -27,6 +27,9 @@ public class CreateWorkflowUseCaseTest {
     private String boardId;
     private DomainEventBus eventBus;
     private TestUtility testUtility;
+    private CreateWorkflowInput input;
+    private CreateWorkflowOutput output;
+    private CreateWorkflowUseCase createWorkflowUseCase;
 
     @Before
     public void setup() {
@@ -42,9 +45,9 @@ public class CreateWorkflowUseCaseTest {
 
     @Test
     public void create_a_Workflow(){
-        CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository, eventBus);
-        CreateWorkflowInput input = (CreateWorkflowInput) createWorkflowUseCase;
-        CreateWorkflowOutput output = new CreateWorkflowPresenter();
+        createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository, eventBus);
+        input = (CreateWorkflowInput) createWorkflowUseCase;
+        output = new CreateWorkflowPresenter();
 
         input.setBoardId(boardId);
         input.setWorkflowName("defaultWorkflow");
@@ -59,14 +62,7 @@ public class CreateWorkflowUseCaseTest {
         Board board = BoardRepositoryDTOConverter.toEntity(boardRepository.findById(boardId));
         assertEquals(0, board.getWorkflowList().size());
 
-        CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository, eventBus);
-        CreateWorkflowInput input = (CreateWorkflowInput) createWorkflowUseCase;
-        CreateWorkflowOutput output = new CreateWorkflowPresenter();
-
-        input.setBoardId(boardId);
-        input.setWorkflowName("defaultWorkflow");
-
-        createWorkflowUseCase.execute(input, output);
+        create_a_Workflow();
 
         board = BoardRepositoryDTOConverter.toEntity(boardRepository.findById(boardId));
         assertEquals(1, board.getWorkflowList().size());
