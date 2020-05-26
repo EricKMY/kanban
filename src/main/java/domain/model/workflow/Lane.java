@@ -36,6 +36,10 @@ public abstract class Lane extends Entity {
         cardList.add(cardId);
     }
 
+    public void removeCard(String cardId) {
+        cardList.remove(cardId);
+    }
+
     public Map<String, Lane> getChildMap(){
         return Collections.unmodifiableMap(laneMap);
     }
@@ -51,4 +55,5 @@ public abstract class Lane extends Entity {
     public LaneDirection getLaneDirection() {
         return laneDirection;
     }
+
 }

@@ -22,11 +22,15 @@ public class MoveCardUseCase implements MoveCardInput {
     }
 
     public void execute(MoveCardInput input, MoveCardOutput output) {
-//        Workflow workflow = WorkflowDTOConverter.toEntity(workflowRepository.findById(input.getWorkflowId()));
-//        workflow.commitCard(input.getCardId(), input.getLaneId());
-//
-//        workflowRepository.save(WorkflowDTOConverter.toDTO(workflow));
-//        eventBus.postAll(workflow);
+        Workflow workflow = WorkflowDTOConverter.toEntity(workflowRepository.findById(input.getWorkflowId()));
+
+        workflow.moveCard(input.getCardId(),
+                                input.getLaneId(),
+                                input.getTargetLaneId());
+
+        workflowRepository.save(WorkflowDTOConverter.toDTO(workflow));
+        eventBus.postAll(workflow);
+//        output.setCardId(input.getCardId());
     }
 
     @Override
