@@ -19,11 +19,11 @@ public class CreateCardUseCase implements CreateCardInput {
 
     public void execute(CreateCardInput input, CreateCardOutput output) {
         Card card = new Card(input.getCardName(), input.getLaneId(), input.getWorkflowId());
+
         cardRepository.save(CardDTOConverter.toDTO(card));
+        eventBus.postAll(card);
 
         output.setCardId(card.getId());
-        eventBus.postAll(card);
-        
     }
 
     @Override

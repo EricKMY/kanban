@@ -1,11 +1,15 @@
 package domain.usecase;
 
 import domain.adapter.board.createBoard.CreateBoardPresenter;
+import domain.adapter.card.createCard.CreateCardPresenter;
 import domain.adapter.workflow.createWorkflow.CreateWorkflowPresenter;
 import domain.model.DomainEventBus;
 import domain.usecase.board.createBoard.CreateBoardInput;
 import domain.usecase.board.createBoard.CreateBoardOutput;
 import domain.usecase.board.createBoard.CreateBoardUseCase;
+import domain.usecase.card.CardDTOConverter;
+import domain.usecase.card.createCard.CreateCardInput;
+import domain.usecase.card.createCard.CreateCardUseCase;
 import domain.usecase.lane.createStage.CreateStageInput;
 import domain.usecase.lane.createStage.CreateStageOutput;
 import domain.usecase.lane.createStage.CreateStageUseCase;
@@ -18,19 +22,22 @@ import domain.usecase.workflow.createWorkflow.CreateWorkflowInput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowOutput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowUseCase;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 public class TestUtility {
     private IBoardRepository boardRepository;
     private IWorkflowRepository workflowRepository;
-    private DomainEventBus domainEventBus;
+    private DomainEventBus eventBus;
 
-    public TestUtility(IBoardRepository boardRepository, IWorkflowRepository workflowRepository, DomainEventBus domainEventBus) {
+    public TestUtility(IBoardRepository boardRepository, IWorkflowRepository workflowRepository, DomainEventBus eventBus) {
         this.boardRepository = boardRepository;
         this.workflowRepository = workflowRepository;
-        this.domainEventBus = domainEventBus;
+        this.eventBus = eventBus;
     }
 
     public String createBoard(String username, String boardName) {
-        CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardRepository);
+        CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardRepository, eventBus);
         CreateBoardInput input = createBoardUseCase;
         CreateBoardOutput output = new CreateBoardPresenter();
 
@@ -42,7 +49,7 @@ public class TestUtility {
     }
 
     public String createWorkflow(String boardId, String workflowName) {
-        CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository, domainEventBus);
+        CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository, eventBus);
 
         CreateWorkflowInput input = (CreateWorkflowInput) createWorkflowUseCase;
         CreateWorkflowOutput output = new CreateWorkflowPresenter();
@@ -55,7 +62,7 @@ public class TestUtility {
     }
 
     public String createTopStage(String workflowId, String stageName) {
-        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository);
+        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository, eventBus);
         CreateStageInput input = new CreateStageInput();
         CreateStageOutput output = new CreateStageOutput();
 
@@ -68,7 +75,7 @@ public class TestUtility {
     }
 
     public String createStage(String workflowId, String parentId, String stageName) {
-        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository);
+        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository, eventBus);
         CreateStageInput input = new CreateStageInput();
         CreateStageOutput output = new CreateStageOutput();
 
@@ -83,7 +90,7 @@ public class TestUtility {
 
     public String createSwimLane(String workflowId, String parentId, String stageName) {
 
-        CreateSwimLaneUseCase createSwimLaneUseCase = new CreateSwimLaneUseCase(workflowRepository, boardRepository);
+        CreateSwimLaneUseCase createSwimLaneUseCase = new CreateSwimLaneUseCase(workflowRepository, boardRepository, eventBus);
         CreateSwimLaneInput input = new CreateSwimLaneInput();
         CreateSwimLaneOutput output = new CreateSwimLaneOutput();
 
@@ -95,4 +102,5 @@ public class TestUtility {
 
         return output.getSwimLaneId();
     }
+
 }

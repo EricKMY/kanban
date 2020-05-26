@@ -6,15 +6,21 @@
 package domain.ui;
 
 import domain.adapter.board.BoardInMemoryRepository;
+import domain.adapter.workflow.WorkflowInMemoryRepository;
+import domain.model.DomainEventBus;
 import domain.ui.board.BoardPanel;
 import domain.ui.user.UserPanel;
+import domain.usecase.DomainEventHandler;
 import domain.usecase.repository.IBoardRepository;
+import domain.usecase.repository.IWorkflowRepository;
 
 /**
  *
  * @author lab1321
  */
 public class MainFrame extends javax.swing.JFrame {
+    private DomainEventBus eventBus;
+    private IWorkflowRepository workflowRepository;
     private UserPanel userPanel;
     private BoardPanel boardPanel;
     private IBoardRepository boardRepository;
@@ -24,8 +30,13 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame() {
         boardRepository = new BoardInMemoryRepository();
-        userPanel = new UserPanel(this, boardRepository);
-        boardPanel = new BoardPanel(this, boardRepository);
+        workflowRepository = new WorkflowInMemoryRepository();
+
+        eventBus = new DomainEventBus();
+        eventBus.register(new DomainEventHandler(boardRepository, workflowRepository, eventBus));
+
+        userPanel = new UserPanel(this, boardRepository, eventBus);
+        boardPanel = new BoardPanel(this, boardRepository, eventBus);
         userPanel.setVisible(true);
 //        boardPanel.setVisible(false);
         this.add(userPanel);

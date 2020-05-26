@@ -18,6 +18,7 @@ public class CreateWorkflowUseCase implements CreateWorkflowInput {
 
     public void execute(CreateWorkflowInput input, CreateWorkflowOutput output) {
         Workflow workflow = new Workflow(input.getWorkflowName(), input.getBoardId());
+
         workflowRepository.save(WorkflowDTOConverter.toDTO(workflow));
         eventBus.postAll(workflow);
 

@@ -41,7 +41,7 @@ public class CreateStageUseCaseTest {
 
     @Test
     public void create_a_top_Stage() {
-        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository);
+        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository, eventBus);
         CreateStageInput input = new CreateStageInput();
         CreateStageOutput output = new CreateStageOutput();
 
@@ -60,7 +60,7 @@ public class CreateStageUseCaseTest {
     public void create_a_Stage_under_top_Stage() {
         String parenStageId = testUtility.createTopStage(workflowId, "Backlog");
 
-        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository);
+        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository, eventBus);
         CreateStageInput input = new CreateStageInput();
         CreateStageOutput output = new CreateStageOutput();
 
@@ -83,7 +83,7 @@ public class CreateStageUseCaseTest {
     public void create_a_Stage_under_Stage() {
         String parenStageId = testUtility.createStage(workflowId, topStageId, "Developing");
 
-        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository);
+        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository, eventBus);
         CreateStageInput input = new CreateStageInput();
         CreateStageOutput output = new CreateStageOutput();
 
@@ -111,7 +111,7 @@ public class CreateStageUseCaseTest {
     public void create_a_Stage_under_SwimLane() {
         String parenStageId = testUtility.createSwimLane(workflowId, topStageId, "Undo");
 
-        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository);
+        CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository, eventBus);
         CreateStageInput input = new CreateStageInput();
         CreateStageOutput output = new CreateStageOutput();
 

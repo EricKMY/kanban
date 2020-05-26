@@ -66,6 +66,7 @@ public class CreateWorkflowUseCaseTest {
 
         board = BoardRepositoryDTOConverter.toEntity(boardRepository.findById(boardId));
         assertEquals(1, board.getWorkflowList().size());
+        assertEquals(output.getWorkflowId(), board.getWorkflowList().get(0));
 
         Workflow workflow = WorkflowDTOConverter.toEntity(
                 workflowRepository.findById(output.getWorkflowId())

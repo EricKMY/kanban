@@ -6,6 +6,7 @@
 package domain.ui.board;
 
 import domain.adapter.board.findBoardById.FindBoardByIdViewModel;
+import domain.model.DomainEventBus;
 import domain.ui.MainFrame;
 import domain.usecase.repository.IBoardRepository;
 
@@ -14,15 +15,17 @@ import domain.usecase.repository.IBoardRepository;
  * @author lab1321
  */
 public class BoardPanel extends javax.swing.JPanel {
+    private DomainEventBus eventBus;
     private FindBoardByIdViewModel findBoardByIdViewModel;
     private MainFrame mainFrame;
     private IBoardRepository boardRepository;
     /**
      * Creates new form BoardPanel
      */
-    public BoardPanel(MainFrame mainFrame, IBoardRepository boardRepository) {
+    public BoardPanel(MainFrame mainFrame, IBoardRepository boardRepository, DomainEventBus eventBus) {
         this.mainFrame = mainFrame;
         this.boardRepository = boardRepository;
+        this.eventBus = eventBus;
         this.setBounds(0, 0, 1024, 768);
         initComponents();
         this.setVisible(false);
