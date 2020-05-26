@@ -5,14 +5,14 @@ import domain.model.DomainEvent;
 
 import java.util.Date;
 
-public class CardCommitted implements DomainEvent {
+public class CardUncommitted implements DomainEvent {
 
     private Date OccurredOn;
     private String workflowId;
     private String cardId;
     private String laneId;
 
-    public CardCommitted(String workflowId, String cardId, String laneId){
+    public CardUncommitted(String workflowId, String cardId, String laneId){
         this.workflowId = workflowId;
         this.cardId = cardId;
         this.laneId = laneId;
@@ -32,7 +32,7 @@ public class CardCommitted implements DomainEvent {
     }
 
     public String getDetail() {
-        return "Card Committed " + cardId + " to Lane " + laneId;
+        return "Card Uncommitted " + cardId + " from Lane " + laneId;
     }
 
     public Date getOccurredOn() {

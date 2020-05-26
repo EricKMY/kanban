@@ -3,12 +3,17 @@ package domain.usecase;
 import com.google.common.eventbus.Subscribe;
 import domain.adapter.card.commitCard.CommitCardPresenter;
 import domain.adapter.workflow.commitWorkflow.CommitWorkflowPresenter;
+import domain.adapter.card.uncommitCard.UncommitCardPresenter;
 import domain.model.DomainEventBus;
 import domain.model.card.event.CardCreated;
+import domain.model.card.event.CardMoved;
 import domain.model.workflow.event.WorkflowCreated;
 import domain.usecase.card.commitCard.CommitCardInput;
 import domain.usecase.card.commitCard.CommitCardOutput;
 import domain.usecase.card.commitCard.CommitCardUseCase;
+import domain.usecase.card.uncommitCard.UncommitCardInput;
+import domain.usecase.card.uncommitCard.UncommitCardOutput;
+import domain.usecase.card.uncommitCard.UncommitCardUseCase;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.IWorkflowRepository;
 import domain.usecase.workflow.commitWorkflow.CommitWorkflowInput;
@@ -48,6 +53,27 @@ public class DomainEventHandler {
         commitCardInput.setCardId(cardCreated.getCardId());
         commitCardInput.setLaneId(cardCreated.getLaneId());
         commitCardInput.setWorkflowId(cardCreated.getWorkflowId());
+        CommitCardOutput commitCardOutput = new CommitCardPresenter();
+
+        commitCardUseCase.execute(commitCardInput, commitCardOutput);
+    }
+
+    @Subscribe
+    public void handleEvent(CardMoved cardMoved) {
+        UncommitCardUseCase uncommitCardUseCase = new UncommitCardUseCase(workflowRepository, eventBus);
+        UncommitCardInput uncommitCardInput = (UncommitCardInput) uncommitCardUseCase;
+        uncommitCardInput.setCardId(cardMoved.getCardId());
+        uncommitCardInput.setLaneId(cardMoved.getOriginalLaneId());
+        uncommitCardInput.setWorkflowId(cardMoved.getWorkflowId());
+        UncommitCardOutput uncommitCardOutput = new UncommitCardPresenter();
+
+        uncommitCardUseCase.execute(uncommitCardInput, uncommitCardOutput);
+
+        CommitCardUseCase commitCardUseCase = new CommitCardUseCase(workflowRepository, eventBus);
+        CommitCardInput commitCardInput = (CommitCardInput) commitCardUseCase;
+        commitCardInput.setCardId(cardMoved.getCardId());
+        commitCardInput.setLaneId(cardMoved.getTargetLaneId());
+        commitCardInput.setWorkflowId(cardMoved.getWorkflowId());
         CommitCardOutput commitCardOutput = new CommitCardPresenter();
 
         commitCardUseCase.execute(commitCardInput, commitCardOutput);

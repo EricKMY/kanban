@@ -2,6 +2,7 @@ package domain.model.workflow;
 
 import domain.model.AggregateRoot;
 import domain.model.workflow.event.CardCommitted;
+import domain.model.workflow.event.CardUncommitted;
 import domain.model.workflow.event.StageCreated;
 import domain.model.workflow.event.WorkflowCreated;
 
@@ -82,10 +83,10 @@ public class Workflow extends AggregateRoot {
         addDomainEvent(new CardCommitted(id, cardId, laneId));
     }
 
-    public void unCommitCard(String cardId, String laneId) {
+    public void uncommitCard(String cardId, String laneId) {
         Lane lane = findLaneById(laneId);
         lane.removeCard(cardId);
-        addDomainEvent(new CardCommitted(id, cardId, laneId));
+        addDomainEvent(new CardUncommitted(id, cardId, laneId));
     }
 
     public Lane findLaneByCardId(String cardId) {
@@ -95,11 +96,6 @@ public class Workflow extends AggregateRoot {
             }
         }
         return null;
-    }
-
-    public void moveCard(String cardId, String originStageId, String newStageId) {
-        unCommitCard(cardId, originStageId);
-        commitCard(cardId, newStageId);
     }
 
     public void addToLaneMap(Lane lane) {

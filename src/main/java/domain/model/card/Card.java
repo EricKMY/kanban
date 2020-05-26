@@ -2,6 +2,7 @@ package domain.model.card;
 
 import domain.model.AggregateRoot;
 import domain.model.card.event.CardCreated;
+import domain.model.card.event.CardMoved;
 
 public class Card extends AggregateRoot {
 
@@ -31,4 +32,9 @@ public class Card extends AggregateRoot {
         return laneId;
     }
 
+    public void moveCard(String workflowId, String targetLaneId) {
+        String originalLaneId = this.laneId;
+        this.laneId = targetLaneId;
+        addDomainEvent(new CardMoved(workflowId, id, originalLaneId, targetLaneId));
+    }
 }
