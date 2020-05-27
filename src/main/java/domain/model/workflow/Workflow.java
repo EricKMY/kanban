@@ -4,12 +4,13 @@ import domain.model.AggregateRoot;
 import domain.model.workflow.event.*;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Workflow extends AggregateRoot {
     private String boardId;
 
-    Map<String, Lane> laneMap = new HashMap<String, Lane>();
+    Map<String, Lane> laneMap = new LinkedHashMap<>();
 
     public Workflow(String workflowName, String boardId, String workflowId) {
         super(workflowName, workflowId);

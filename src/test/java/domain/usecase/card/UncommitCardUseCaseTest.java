@@ -1,6 +1,8 @@
 package domain.usecase.card;
 
+import domain.adapter.FlowEventInMemoryRepository;
 import domain.adapter.board.BoardInMemoryRepository;
+import domain.adapter.card.CardInMemoryRepository;
 import domain.adapter.card.commitCard.CommitCardPresenter;
 import domain.adapter.card.uncommitCard.UncommitCardPresenter;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
@@ -13,7 +15,9 @@ import domain.usecase.card.commitCard.CommitCardUseCase;
 import domain.usecase.card.uncommitCard.UncommitCardInput;
 import domain.usecase.card.uncommitCard.UncommitCardOutput;
 import domain.usecase.card.uncommitCard.UncommitCardUseCase;
+import domain.usecase.flowEvent.repository.IFlowEventRepository;
 import domain.usecase.repository.IBoardRepository;
+import domain.usecase.repository.ICardRepository;
 import domain.usecase.repository.IWorkflowRepository;
 import domain.usecase.workflow.WorkflowDTOConverter;
 import org.junit.Before;
@@ -29,15 +33,20 @@ public class UncommitCardUseCaseTest {
     private String cardId;
     private DomainEventBus eventBus;
     private TestUtility testUtility;
+    private IFlowEventRepository flowEventRepository;
+    private ICardRepository cardRepository;
 
 
     @Before
     public void setup() {
         boardRepository = new BoardInMemoryRepository();
         workflowRepository = new WorkflowInMemoryRepository();
+        cardRepository = new CardInMemoryRepository();
+        flowEventRepository = new FlowEventInMemoryRepository();
+
 
         eventBus = new DomainEventBus();
-        testUtility = new TestUtility(boardRepository, workflowRepository, eventBus);
+        testUtility = new TestUtility(boardRepository, workflowRepository, cardRepository, flowEventRepository, eventBus);
 
         String boardId = testUtility.createBoard("kanban777", "kanban");
         workflowId = testUtility.createWorkflow(boardId, "defaultWorkflow");

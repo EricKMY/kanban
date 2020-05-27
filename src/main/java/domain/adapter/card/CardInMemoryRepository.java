@@ -6,7 +6,7 @@ import domain.usecase.repository.ICardRepository;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CardRepository implements ICardRepository {
+public class CardInMemoryRepository implements ICardRepository {
     Map<String, CardDTO> cardDTOMap = new HashMap<String, CardDTO>();
 
     public void save(CardDTO cardDTO) {

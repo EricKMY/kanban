@@ -1,6 +1,8 @@
 package domain.usecase.workflow;
 
+import domain.adapter.FlowEventInMemoryRepository;
 import domain.adapter.board.BoardInMemoryRepository;
+import domain.adapter.card.CardInMemoryRepository;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.adapter.workflow.createWorkflow.CreateWorkflowPresenter;
 import domain.model.DomainEventBus;
@@ -10,7 +12,9 @@ import domain.usecase.DomainEventHandler;
 import domain.usecase.TestUtility;
 import domain.usecase.board.BoardRepositoryDTO;
 import domain.usecase.board.BoardRepositoryDTOConverter;
+import domain.usecase.flowEvent.repository.IFlowEventRepository;
 import domain.usecase.repository.IBoardRepository;
+import domain.usecase.repository.ICardRepository;
 import domain.usecase.repository.IWorkflowRepository;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowInput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowOutput;
@@ -30,15 +34,20 @@ public class CreateWorkflowUseCaseTest {
     private CreateWorkflowInput input;
     private CreateWorkflowOutput output;
     private CreateWorkflowUseCase createWorkflowUseCase;
+    private IFlowEventRepository flowEventRepository;
+    private ICardRepository cardRepository;
 
     @Before
     public void setup() {
         boardRepository = new BoardInMemoryRepository();
         workflowRepository = new WorkflowInMemoryRepository();
+        cardRepository = new CardInMemoryRepository();
+        flowEventRepository = new FlowEventInMemoryRepository();
+
 
         eventBus = new DomainEventBus();
         eventBus.register(new DomainEventHandler(boardRepository, workflowRepository, eventBus));
-        testUtility = new TestUtility(boardRepository, workflowRepository, eventBus);
+        testUtility = new TestUtility(boardRepository, workflowRepository, cardRepository, flowEventRepository, eventBus);
 
         boardId = testUtility.createBoard("kanban777", "kanbanSystem");
     }

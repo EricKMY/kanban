@@ -1,14 +1,18 @@
 package domain.usecase.lane;
 
+import domain.adapter.FlowEventInMemoryRepository;
 import domain.adapter.board.BoardInMemoryRepository;
+import domain.adapter.card.CardInMemoryRepository;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.model.DomainEventBus;
 import domain.usecase.DomainEventHandler;
 import domain.usecase.TestUtility;
+import domain.usecase.flowEvent.repository.IFlowEventRepository;
 import domain.usecase.lane.createStage.CreateStageInput;
 import domain.usecase.lane.createStage.CreateStageOutput;
 import domain.usecase.lane.createStage.CreateStageUseCase;
 import domain.usecase.repository.IBoardRepository;
+import domain.usecase.repository.ICardRepository;
 import domain.usecase.repository.IWorkflowRepository;
 import domain.usecase.workflow.WorkflowDTOConverter;
 import org.junit.Before;
@@ -23,16 +27,20 @@ public class CreateStageUseCaseTest {
     private String topStageId;
     private DomainEventBus eventBus;
     private TestUtility testUtility;
+    private IFlowEventRepository flowEventRepository;
+    private ICardRepository cardRepository;
 
 
     @Before
     public void setup() {
         boardRepository = new BoardInMemoryRepository();
         workflowRepository = new WorkflowInMemoryRepository();
+        cardRepository = new CardInMemoryRepository();
+        flowEventRepository = new FlowEventInMemoryRepository();
 
         eventBus = new DomainEventBus();
         eventBus.register(new DomainEventHandler(boardRepository, workflowRepository, eventBus));
-        testUtility = new TestUtility(boardRepository, workflowRepository, eventBus);
+        testUtility = new TestUtility(boardRepository, workflowRepository, cardRepository, flowEventRepository, eventBus);
 
         String boardId = testUtility.createBoard("kanban777", "kanban");
         workflowId = testUtility.createWorkflow(boardId, "defaultWorkflow");

@@ -1,12 +1,13 @@
 package domain.model.card;
 
+import domain.adapter.FlowEventInMemoryRepository;
 import domain.adapter.board.BoardInMemoryRepository;
-import domain.adapter.card.CardRepository;
+import domain.adapter.card.CardInMemoryRepository;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.model.DomainEventBus;
 import domain.usecase.DomainEventHandler;
 import domain.usecase.TestUtility;
-import domain.usecase.card.CardDTOConverter;
+import domain.usecase.flowEvent.repository.IFlowEventRepository;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.ICardRepository;
 import domain.usecase.repository.IWorkflowRepository;
@@ -24,17 +25,19 @@ public class CardTest {
     private String laneId;
     private DomainEventBus eventBus;
     private TestUtility testUtility;
+    private IFlowEventRepository flowEventRepository;
 
 
     @Before
     public void setup() {
         boardRepository = new BoardInMemoryRepository();
         workflowRepository = new WorkflowInMemoryRepository();
-        cardRepository = new CardRepository();
+        cardRepository = new CardInMemoryRepository();
+        flowEventRepository = new FlowEventInMemoryRepository();
 
         eventBus = new DomainEventBus();
         eventBus.register(new DomainEventHandler(boardRepository, workflowRepository, eventBus));
-        testUtility = new TestUtility(boardRepository, workflowRepository, eventBus);
+        testUtility = new TestUtility(boardRepository, workflowRepository, cardRepository, flowEventRepository, eventBus);
 
         String boardId = testUtility.createBoard("kanban777", "kanban");
         workflowId = testUtility.createWorkflow(boardId, "defaultWorkflow");

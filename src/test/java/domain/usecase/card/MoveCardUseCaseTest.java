@@ -1,12 +1,12 @@
 package domain.usecase.card;
 
+import domain.adapter.FlowEventInMemoryRepository;
 import domain.adapter.board.BoardInMemoryRepository;
-import domain.adapter.card.CardRepository;
+import domain.adapter.card.CardInMemoryRepository;
 import domain.adapter.card.createCard.CreateCardPresenter;
 import domain.adapter.card.moveCard.MoveCardPresenter;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.model.DomainEventBus;
-import domain.model.workflow.Lane;
 import domain.model.workflow.Workflow;
 import domain.usecase.DomainEventHandler;
 import domain.usecase.TestUtility;
@@ -16,6 +16,7 @@ import domain.usecase.card.createCard.CreateCardUseCase;
 import domain.usecase.card.moveCard.MoveCardInput;
 import domain.usecase.card.moveCard.MoveCardOutput;
 import domain.usecase.card.moveCard.MoveCardUseCase;
+import domain.usecase.flowEvent.repository.IFlowEventRepository;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.ICardRepository;
 import domain.usecase.repository.IWorkflowRepository;
@@ -37,16 +38,18 @@ public class MoveCardUseCaseTest {
     private String planningLaneId;
     private String cardName;
     private String cardId;
+    private IFlowEventRepository flowEventRepository;
 
     @Before
     public void setup() {
         boardRepository = new BoardInMemoryRepository();
         workflowRepository = new WorkflowInMemoryRepository();
-        cardRepository = new CardRepository();
+        cardRepository = new CardInMemoryRepository();
+        flowEventRepository = new FlowEventInMemoryRepository();
 
         eventBus = new DomainEventBus();
         eventBus.register(new DomainEventHandler(boardRepository, workflowRepository, eventBus));
-        testUtility = new TestUtility(boardRepository, workflowRepository, eventBus);
+        testUtility = new TestUtility(boardRepository, workflowRepository, cardRepository, flowEventRepository, eventBus);
 
         String boardId = testUtility.createBoard("kanban777", "kanban");
         workflowId = testUtility.createWorkflow(boardId, "defaultWorkflow");
