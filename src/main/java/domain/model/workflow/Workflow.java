@@ -1,10 +1,7 @@
 package domain.model.workflow;
 
 import domain.model.AggregateRoot;
-import domain.model.workflow.event.CardCommitted;
-import domain.model.workflow.event.CardUncommitted;
-import domain.model.workflow.event.StageCreated;
-import domain.model.workflow.event.WorkflowCreated;
+import domain.model.workflow.event.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,6 +45,8 @@ public class Workflow extends AggregateRoot {
         Lane lane = new SwimLane(swimLaneName);
         Lane parentLane = findLaneById(parentLaneId);
         parentLane.addLane(lane);
+
+        addDomainEvent(new SwimlaneCreated(swimLaneName, id, parentLaneId));
         return lane.getId();
     }
 

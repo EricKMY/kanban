@@ -5,6 +5,7 @@ import domain.adapter.card.CardRepository;
 import domain.adapter.card.createCard.CreateCardPresenter;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.model.DomainEventBus;
+import domain.model.card.Card;
 import domain.model.workflow.Lane;
 import domain.usecase.DomainEventHandler;
 import domain.usecase.TestUtility;
@@ -64,25 +65,19 @@ public class CreateCardUseCaseTest {
 
         createCardUseCase.execute(input, output);
 
-        assertEquals(workflowId, CardDTOConverter.toEntity(cardRepository
-                .findById(output.getCardId()))
-                .getWorkflowId());
+        Card card = CardDTOConverter.toEntity(cardRepository
+                .findById(output.getCardId()));
 
-        assertEquals(laneId,CardDTOConverter.toEntity(cardRepository
-                .findById(output.getCardId()))
-                .getLaneId());
-
-        assertNotNull(CardDTOConverter.toEntity(cardRepository
-                .findById(output.getCardId()))
-                .getId());
+        assertEquals(workflowId, card.getWorkflowId());
+        assertEquals(laneId, card.getLaneId());
+        assertNotNull(card.getId());
     }
 
     @Test
     public void create_a_Card_should_commit_to_its_Lane() {
         Lane lane = WorkflowDTOConverter
                 .toEntity(workflowRepository.findById(workflowId))
-                .getLaneMap()
-                .get(laneId);
+                .findLaneById(laneId);
 
         assertEquals(0, lane.getCardList().size());
 
@@ -90,21 +85,9 @@ public class CreateCardUseCaseTest {
 
         lane = WorkflowDTOConverter
                 .toEntity(workflowRepository.findById(workflowId))
-                .getLaneMap()
-                .get(laneId);
+                .findLaneById(laneId);
 
         assertEquals(1, lane.getCardList().size());
-
-        assertEquals(cardName, CardDTOConverter
-                .toEntity(cardRepository.findById(lane.getCardList().get(0)))
-                .getName());
-
-        assertEquals(laneId, CardDTOConverter
-                .toEntity(cardRepository.findById(lane.getCardList().get(0)))
-                .getLaneId());
-
-        assertEquals(workflowId, CardDTOConverter
-                .toEntity(cardRepository.findById(lane.getCardList().get(0)))
-                .getWorkflowId());
+        assertTrue(lane.isCardContained(output.getCardId()));
     }
  }

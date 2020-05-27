@@ -7,6 +7,7 @@ import domain.adapter.card.moveCard.MoveCardPresenter;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.model.DomainEventBus;
 import domain.model.workflow.Lane;
+import domain.model.workflow.Workflow;
 import domain.usecase.DomainEventHandler;
 import domain.usecase.TestUtility;
 import domain.usecase.card.createCard.CreateCardInput;
@@ -68,13 +69,9 @@ public class MoveCardUseCaseTest {
         input.setTargetLaneId(planningLaneId);
         input.setCardId(cardId);
 
-        assertTrue(WorkflowDTOConverter
-                .toEntity(workflowRepository.findById(workflowId))
-                .findLaneById(backlogLaneId).isCardContained(cardId));
-
-        assertFalse(WorkflowDTOConverter
-                .toEntity(workflowRepository.findById(workflowId))
-                .findLaneById(planningLaneId).isCardContained(cardId));
+        Workflow workflow = WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId));
+        assertTrue(workflow.findLaneById(backlogLaneId).isCardContained(cardId));
+        assertFalse(workflow.findLaneById(planningLaneId).isCardContained(cardId));
 
         moveCardUseCase.execute(input, output);
 
@@ -82,13 +79,9 @@ public class MoveCardUseCaseTest {
                 .toEntity(cardRepository.findById(cardId))
                 .getLaneId());
 
-        assertFalse(WorkflowDTOConverter
-                .toEntity(workflowRepository.findById(workflowId))
-                .findLaneById(backlogLaneId).isCardContained(cardId));
-
-        assertTrue(WorkflowDTOConverter
-                .toEntity(workflowRepository.findById(workflowId))
-                .findLaneById(planningLaneId).isCardContained(cardId));
+        workflow = WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId));
+        assertFalse(workflow.findLaneById(backlogLaneId).isCardContained(cardId));
+        assertTrue(workflow.findLaneById(planningLaneId).isCardContained(cardId));
     }
 
 

@@ -4,6 +4,7 @@ import domain.adapter.board.BoardInMemoryRepository;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.adapter.workflow.commitWorkflow.CommitWorkflowPresenter;
 import domain.model.DomainEventBus;
+import domain.model.board.Board;
 import domain.usecase.DomainEventHandler;
 import domain.usecase.TestUtility;
 import domain.usecase.board.BoardRepositoryDTOConverter;
@@ -15,8 +16,7 @@ import domain.usecase.workflow.commitWorkflow.CommitWorkflowUseCase;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class CommitWorkflowUseCaseTest {
 
@@ -31,7 +31,6 @@ public class CommitWorkflowUseCaseTest {
         eventBus = new DomainEventBus();
 
         IWorkflowRepository workflowRepository = new WorkflowInMemoryRepository();
-        eventBus.register(new DomainEventHandler(boardRepository, workflowRepository, eventBus));
         testUtility = new TestUtility(boardRepository, workflowRepository, eventBus);
 
         boardId = testUtility.createBoard("kanban777", "kanbanSystem");
@@ -46,9 +45,17 @@ public class CommitWorkflowUseCaseTest {
 
         input.setWorkflowId(workflowId);
         input.setBoardId(boardId);
+
+        Board board = BoardRepositoryDTOConverter.toEntity(boardRepository.findById(boardId));
+
+        assertEquals(0, board.getWorkflowList().size());
+        assertFalse(board.isWorkflowContained("W012345678"));
+
         commitWorkflowUseCase.execute(input, output);
 
-        assertTrue(BoardRepositoryDTOConverter.toEntity(
-                boardRepository.findById(boardId)).isWorkflowContained("W012345678"));
+        board = BoardRepositoryDTOConverter.toEntity(boardRepository.findById(boardId));
+
+        assertEquals(1, board.getWorkflowList().size());
+        assertTrue(board.isWorkflowContained("W012345678"));
     }
 }

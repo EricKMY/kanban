@@ -18,7 +18,7 @@ import domain.usecase.workflow.createWorkflow.CreateWorkflowUseCase;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class CreateWorkflowUseCaseTest {
 
@@ -54,24 +54,26 @@ public class CreateWorkflowUseCaseTest {
 
         createWorkflowUseCase.execute(input, output);
 
-        assertEquals(boardId, workflowRepository.findById(output.getWorkflowId()).getBoardId());
+        Workflow workflow = WorkflowDTOConverter.toEntity(
+                workflowRepository.findById(output.getWorkflowId())
+        );
+
+        assertEquals(boardId, workflow.getBoardId());
+        assertEquals("defaultWorkflow", workflow.getName());
     }
 
     @Test
     public void create_a_Workflow_should_commit_to_its_Board(){
         Board board = BoardRepositoryDTOConverter.toEntity(boardRepository.findById(boardId));
+
         assertEquals(0, board.getWorkflowList().size());
 
         create_a_Workflow();
 
         board = BoardRepositoryDTOConverter.toEntity(boardRepository.findById(boardId));
+
         assertEquals(1, board.getWorkflowList().size());
-        assertEquals(output.getWorkflowId(), board.getWorkflowList().get(0));
+        assertTrue(board.isWorkflowContained(output.getWorkflowId()));
 
-        Workflow workflow = WorkflowDTOConverter.toEntity(
-                workflowRepository.findById(output.getWorkflowId())
-        );
-
-        assertEquals("defaultWorkflow", workflow.getName());
     }
 }
