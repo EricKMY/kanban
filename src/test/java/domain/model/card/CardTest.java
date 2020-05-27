@@ -6,7 +6,9 @@ import domain.adapter.card.CardInMemoryRepository;
 import domain.adapter.workflow.WorkflowInMemoryRepository;
 import domain.model.DomainEventBus;
 import domain.usecase.DomainEventHandler;
+import domain.usecase.DomainEventSaveHandler;
 import domain.usecase.TestUtility;
+import domain.usecase.domainEvent.repository.IDomainEventRepository;
 import domain.usecase.flowEvent.repository.IFlowEventRepository;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.ICardRepository;
@@ -26,6 +28,7 @@ public class CardTest {
     private DomainEventBus eventBus;
     private TestUtility testUtility;
     private IFlowEventRepository flowEventRepository;
+    private IDomainEventRepository domainEventRepository;
 
 
     @Before
@@ -37,6 +40,7 @@ public class CardTest {
 
         eventBus = new DomainEventBus();
         eventBus.register(new DomainEventHandler(boardRepository, workflowRepository, eventBus));
+        eventBus.register(new DomainEventSaveHandler(domainEventRepository));
         testUtility = new TestUtility(boardRepository, workflowRepository, cardRepository, flowEventRepository, eventBus);
 
         String boardId = testUtility.createBoard("kanban777", "kanban");

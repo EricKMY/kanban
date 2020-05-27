@@ -82,7 +82,7 @@ public class CalculateCycleTimeInLaneTest {
     }
 
     @Test
-    public void calculate_cycleTime_should_be_correct_without_moving_card() throws ParseException {
+    public void calculate_cycleTime_should_count_lead_time_without_moving_card() throws ParseException {
 
         DateProvider.setDate(dateFormat.parse("2020/5/27 20:54:00"));
 
@@ -104,7 +104,7 @@ public class CalculateCycleTimeInLaneTest {
     }
 
     @Test
-    public void Calculate_CycleTime_Should_Be_Correct_With_Moving_Card() throws ParseException {
+    public void calculate_cycleTime_should_count_lead_time_with_moving_card() throws ParseException {
         DateProvider.setDate(dateFormat.parse("2020/5/27 20:54:00"));
         testUtility.moveCard(workflowId, cardId, readyLaneId, analysisLaneId);
         CycleTime cycleTime = testUtility.calculateCycleTime(workflowId, cardId, readyLaneId, analysisLaneId);
