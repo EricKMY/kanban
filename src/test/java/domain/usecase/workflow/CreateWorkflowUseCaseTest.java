@@ -1,17 +1,20 @@
 package domain.usecase.workflow;
 
-import domain.adapter.FlowEventInMemoryRepository;
-import domain.adapter.board.BoardInMemoryRepository;
-import domain.adapter.card.CardInMemoryRepository;
-import domain.adapter.workflow.WorkflowInMemoryRepository;
-import domain.adapter.workflow.createWorkflow.CreateWorkflowPresenter;
+import domain.adapter.repository.domainEvent.DomainEventInMemoryRepository;
+import domain.adapter.repository.flowEvent.FlowEventInMemoryRepository;
+import domain.adapter.repository.board.BoardInMemoryRepository;
+import domain.adapter.repository.card.CardInMemoryRepository;
+import domain.adapter.repository.workflow.WorkflowInMemoryRepository;
+import domain.adapter.presenter.workflow.create.CreateWorkflowPresenter;
+import domain.adapter.repository.workflow.converter.WorkflowRepositoryDTOConverter;
 import domain.model.DomainEventBus;
-import domain.model.board.Board;
-import domain.model.workflow.Workflow;
+import domain.model.aggregate.board.Board;
+import domain.model.aggregate.workflow.Workflow;
 import domain.usecase.DomainEventHandler;
+import domain.usecase.DomainEventSaveHandler;
 import domain.usecase.TestUtility;
-import domain.usecase.board.BoardRepositoryDTO;
-import domain.usecase.board.BoardRepositoryDTOConverter;
+import domain.adapter.repository.board.converter.BoardRepositoryDTOConverter;
+import domain.usecase.domainEvent.repository.IDomainEventRepository;
 import domain.usecase.flowEvent.repository.IFlowEventRepository;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.ICardRepository;
@@ -31,11 +34,9 @@ public class CreateWorkflowUseCaseTest {
     private String boardId;
     private DomainEventBus eventBus;
     private TestUtility testUtility;
-    private CreateWorkflowInput input;
-    private CreateWorkflowOutput output;
-    private CreateWorkflowUseCase createWorkflowUseCase;
     private IFlowEventRepository flowEventRepository;
     private ICardRepository cardRepository;
+    private IDomainEventRepository domainEventRepository;
 
     @Before
     public void setup() {
@@ -43,32 +44,38 @@ public class CreateWorkflowUseCaseTest {
         workflowRepository = new WorkflowInMemoryRepository();
         cardRepository = new CardInMemoryRepository();
         flowEventRepository = new FlowEventInMemoryRepository();
+        domainEventRepository = new DomainEventInMemoryRepository();
 
 
         eventBus = new DomainEventBus();
         eventBus.register(new DomainEventHandler(boardRepository, workflowRepository, eventBus));
+        eventBus.register(new DomainEventSaveHandler(domainEventRepository));
+
         testUtility = new TestUtility(boardRepository, workflowRepository, cardRepository, flowEventRepository, eventBus);
 
         boardId = testUtility.createBoard("kanban777", "kanbanSystem");
     }
 
     @Test
-    public void create_a_Workflow(){
-        createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository, eventBus);
-        input = (CreateWorkflowInput) createWorkflowUseCase;
-        output = new CreateWorkflowPresenter();
+    public void create_a_Workflow_should_return_a_workflowId(){
+        CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository, eventBus);
+        CreateWorkflowInput input = createWorkflowUseCase;
+        CreateWorkflowOutput output = new CreateWorkflowPresenter();
 
         input.setBoardId(boardId);
         input.setWorkflowName("defaultWorkflow");
 
         createWorkflowUseCase.execute(input, output);
 
-        Workflow workflow = WorkflowDTOConverter.toEntity(
-                workflowRepository.findById(output.getWorkflowId())
-        );
+        Workflow workflow = WorkflowRepositoryDTOConverter
+                .toEntity(workflowRepository.findById(output.getWorkflowId()));
+
+        assertNotNull(output.getWorkflowId());
 
         assertEquals(boardId, workflow.getBoardId());
         assertEquals("defaultWorkflow", workflow.getName());
+        assertEquals(output.getWorkflowId(), workflow.getId());
+        assertEquals(0, workflow.getLaneMap().size());
     }
 
     @Test
@@ -77,12 +84,12 @@ public class CreateWorkflowUseCaseTest {
 
         assertEquals(0, board.getWorkflowList().size());
 
-        create_a_Workflow();
+        String workflowId = testUtility.createWorkflow(board.getId(), "defaultWorkflow");
 
         board = BoardRepositoryDTOConverter.toEntity(boardRepository.findById(boardId));
 
         assertEquals(1, board.getWorkflowList().size());
-        assertTrue(board.isWorkflowContained(output.getWorkflowId()));
+        assertTrue(board.isWorkflowContained(workflowId));
 
     }
 }

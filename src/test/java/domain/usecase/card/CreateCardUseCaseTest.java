@@ -1,18 +1,22 @@
 package domain.usecase.card;
 
-import domain.adapter.FlowEventInMemoryRepository;
-import domain.adapter.board.BoardInMemoryRepository;
-import domain.adapter.card.CardInMemoryRepository;
-import domain.adapter.card.createCard.CreateCardPresenter;
-import domain.adapter.workflow.WorkflowInMemoryRepository;
+import domain.adapter.repository.domainEvent.DomainEventInMemoryRepository;
+import domain.adapter.repository.flowEvent.FlowEventInMemoryRepository;
+import domain.adapter.repository.board.BoardInMemoryRepository;
+import domain.adapter.repository.card.CardInMemoryRepository;
+import domain.adapter.presenter.card.create.CreateCardPresenter;
+import domain.adapter.repository.workflow.WorkflowInMemoryRepository;
+import domain.adapter.repository.workflow.converter.WorkflowRepositoryDTOConverter;
 import domain.model.DomainEventBus;
-import domain.model.card.Card;
-import domain.model.workflow.Lane;
+import domain.model.aggregate.card.Card;
+import domain.model.aggregate.workflow.Lane;
 import domain.usecase.DomainEventHandler;
+import domain.usecase.DomainEventSaveHandler;
 import domain.usecase.TestUtility;
 import domain.usecase.card.createCard.CreateCardInput;
 import domain.usecase.card.createCard.CreateCardOutput;
 import domain.usecase.card.createCard.CreateCardUseCase;
+import domain.usecase.domainEvent.repository.IDomainEventRepository;
 import domain.usecase.flowEvent.repository.IFlowEventRepository;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.ICardRepository;
@@ -32,11 +36,9 @@ public class CreateCardUseCaseTest {
     private String laneId;
     private DomainEventBus eventBus;
     private TestUtility testUtility;
-    private CreateCardUseCase createCardUseCase;
-    private CreateCardInput input;
-    private CreateCardOutput output;
     private String cardName;
     private IFlowEventRepository flowEventRepository;
+    private IDomainEventRepository domainEventRepository;
 
 
     @Before
@@ -45,9 +47,12 @@ public class CreateCardUseCaseTest {
         workflowRepository = new WorkflowInMemoryRepository();
         cardRepository = new CardInMemoryRepository();
         flowEventRepository = new FlowEventInMemoryRepository();
+        domainEventRepository = new DomainEventInMemoryRepository();
 
         eventBus = new DomainEventBus();
         eventBus.register(new DomainEventHandler(boardRepository, workflowRepository, eventBus));
+        eventBus.register(new DomainEventSaveHandler(domainEventRepository));
+
         testUtility = new TestUtility(boardRepository, workflowRepository, cardRepository, flowEventRepository, eventBus);
 
         String boardId = testUtility.createBoard("kanban777", "kanban");
@@ -57,11 +62,10 @@ public class CreateCardUseCaseTest {
     }
 
     @Test
-    public void create_a_Card() {
-        createCardUseCase = new CreateCardUseCase(cardRepository, eventBus);
-
-        input = (CreateCardInput)createCardUseCase;
-        output = new CreateCardPresenter();
+    public void create_a_Card_should_return_its_id() {
+        CreateCardUseCase createCardUseCase = new CreateCardUseCase(cardRepository, eventBus);
+        CreateCardInput input = createCardUseCase;
+        CreateCardOutput output = new CreateCardPresenter();
 
         input.setCardName(cardName);
         input.setWorkflowId(workflowId);
@@ -69,29 +73,31 @@ public class CreateCardUseCaseTest {
 
         createCardUseCase.execute(input, output);
 
+        assertNotNull(output.getCardId());
+
         Card card = CardDTOConverter.toEntity(cardRepository
                 .findById(output.getCardId()));
 
         assertEquals(workflowId, card.getWorkflowId());
         assertEquals(laneId, card.getLaneId());
-        assertNotNull(card.getId());
+        assertEquals(output.getCardId(), card.getId());
+        assertEquals(cardName, card.getName());
     }
 
     @Test
     public void create_a_Card_should_commit_to_its_Lane() {
-        Lane lane = WorkflowDTOConverter
+        Lane lane = WorkflowRepositoryDTOConverter
                 .toEntity(workflowRepository.findById(workflowId))
                 .findLaneById(laneId);
 
         assertEquals(0, lane.getCardList().size());
 
-        create_a_Card();
+        create_a_Card_should_return_its_id();
 
-        lane = WorkflowDTOConverter
+        lane = WorkflowRepositoryDTOConverter
                 .toEntity(workflowRepository.findById(workflowId))
                 .findLaneById(laneId);
 
         assertEquals(1, lane.getCardList().size());
-        assertTrue(lane.isCardContained(output.getCardId()));
     }
  }

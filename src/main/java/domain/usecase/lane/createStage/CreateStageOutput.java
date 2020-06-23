@@ -1,13 +1,8 @@
 package domain.usecase.lane.createStage;
 
-public class CreateStageOutput {
-    private String stageId;
+public interface CreateStageOutput {
 
-    public String getStageId() {
-        return stageId;
-    }
+    public String getStageId();
 
-    public void setStageId(String stageId) {
-        this.stageId = stageId;
-    }
+    public void setStageId(String stageId);
 }

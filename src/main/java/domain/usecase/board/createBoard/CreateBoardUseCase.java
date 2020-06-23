@@ -1,13 +1,13 @@
 package domain.usecase.board.createBoard;
 
 import domain.model.DomainEventBus;
-import domain.model.board.Board;
-import domain.usecase.board.BoardRepositoryDTOConverter;
+import domain.model.aggregate.board.Board;
+import domain.adapter.repository.board.converter.BoardRepositoryDTOConverter;
 import domain.usecase.repository.IBoardRepository;
 
 public class CreateBoardUseCase implements CreateBoardInput{
     private String boardName;
-    private String username;
+    private String userId;
     private IBoardRepository boardRepository;
     private DomainEventBus eventBus;
 
@@ -17,7 +17,7 @@ public class CreateBoardUseCase implements CreateBoardInput{
     }
 
     public void execute(CreateBoardInput input, CreateBoardOutput output) {
-        Board board = new Board(input.getBoardName(), input.getUsername());
+        Board board = new Board(input.getBoardName(), input.getUserId());
 
         boardRepository.save(BoardRepositoryDTOConverter.toDTO(board));
         eventBus.postAll(board);
@@ -36,12 +36,12 @@ public class CreateBoardUseCase implements CreateBoardInput{
     }
 
     @Override
-    public String getUsername() {
-        return username;
+    public String getUserId() {
+        return userId;
     }
 
     @Override
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

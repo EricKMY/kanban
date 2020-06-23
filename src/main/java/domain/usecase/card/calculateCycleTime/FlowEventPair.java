@@ -1,6 +1,6 @@
 package domain.usecase.card.calculateCycleTime;
 
-import domain.common.DateProvider;
+import domain.model.common.DateProvider;
 import domain.model.FlowEvent;
 
 import java.util.Date;

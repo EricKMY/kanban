@@ -5,8 +5,8 @@
  */
 package domain.ui;
 
-import domain.adapter.board.BoardInMemoryRepository;
-import domain.adapter.workflow.WorkflowInMemoryRepository;
+import domain.adapter.repository.board.BoardInMemoryRepository;
+import domain.adapter.repository.workflow.WorkflowInMemoryRepository;
 import domain.model.DomainEventBus;
 import domain.ui.board.BoardPanel;
 import domain.ui.user.UserPanel;

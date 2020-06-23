@@ -1,6 +1,6 @@
 package domain.usecase.repository;
 
-import domain.usecase.board.BoardRepositoryDTO;
+import domain.adapter.repository.board.dto.BoardRepositoryDTO;
 
 public interface IBoardRepository {
     void save(BoardRepositoryDTO boardRepositoryDTO);

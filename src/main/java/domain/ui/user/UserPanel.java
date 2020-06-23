@@ -5,10 +5,10 @@
  */
 package domain.ui.user;
 
-import domain.adapter.board.createBoard.CreateBoardController;
-import domain.adapter.board.createBoard.CreateBoardViewModel;
-import domain.adapter.board.findBoardById.FindBoardByIdController;
-import domain.adapter.board.findBoardById.FindBoardByIdViewModel;
+import domain.adapter.controller.board.create.CreateBoardController;
+import domain.adapter.presenter.board.create.CreateBoardViewModel;
+import domain.adapter.controller.board.findById.FindBoardByIdController;
+import domain.adapter.presenter.board.findById.FindBoardByIdViewModel;
 import domain.model.DomainEventBus;
 import domain.ui.MainFrame;
 import domain.usecase.repository.IBoardRepository;

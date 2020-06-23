@@ -1,9 +1,8 @@
 package domain.usecase.card.uncommitCard;
 
+import domain.adapter.repository.workflow.converter.WorkflowRepositoryDTOConverter;
 import domain.model.DomainEventBus;
-import domain.model.workflow.Workflow;
-import domain.usecase.card.uncommitCard.UncommitCardInput;
-import domain.usecase.card.uncommitCard.UncommitCardOutput;
+import domain.model.aggregate.workflow.Workflow;
 import domain.usecase.repository.IWorkflowRepository;
 import domain.usecase.workflow.WorkflowDTOConverter;
 
@@ -20,11 +19,12 @@ public class UncommitCardUseCase implements UncommitCardInput {
     }
 
     public void execute(UncommitCardInput input, UncommitCardOutput output) {
-        Workflow workflow = WorkflowDTOConverter.toEntity(workflowRepository.findById(input.getWorkflowId()));
+        Workflow workflow = WorkflowRepositoryDTOConverter.toEntity(workflowRepository.findById(input.getWorkflowId()));
         workflow.uncommitCard(input.getCardId(), input.getLaneId());
 
-        workflowRepository.save(WorkflowDTOConverter.toDTO(workflow));
+        workflowRepository.save(WorkflowRepositoryDTOConverter.toDTO(workflow));
         eventBus.postAll(workflow);
+        output.setCardId(input.getCardId());
     }
 
     public String getCardId() {

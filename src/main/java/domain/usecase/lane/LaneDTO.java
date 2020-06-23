@@ -1,6 +1,6 @@
 package domain.usecase.lane;
 
-import domain.model.workflow.LaneDirection;
+import domain.model.aggregate.workflow.LaneDirection;
 
 import java.util.ArrayList;
 import java.util.List;

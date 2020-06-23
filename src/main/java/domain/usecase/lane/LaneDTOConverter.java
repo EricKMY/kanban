@@ -1,8 +1,8 @@
 package domain.usecase.lane;
 
-import domain.model.workflow.Lane;
-import domain.model.workflow.Stage;
-import domain.model.workflow.SwimLane;
+import domain.model.aggregate.workflow.Lane;
+import domain.model.aggregate.workflow.Stage;
+import domain.model.aggregate.workflow.SwimLane;
 
 
 public class LaneDTOConverter {

@@ -5,7 +5,7 @@
  */
 package domain.ui.board;
 
-import domain.adapter.board.findBoardById.FindBoardByIdViewModel;
+import domain.adapter.presenter.board.findById.FindBoardByIdViewModel;
 import domain.model.DomainEventBus;
 import domain.ui.MainFrame;
 import domain.usecase.repository.IBoardRepository;

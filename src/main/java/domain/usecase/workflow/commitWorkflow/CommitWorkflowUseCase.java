@@ -1,7 +1,7 @@
 package domain.usecase.workflow.commitWorkflow;
 import domain.model.DomainEventBus;
-import domain.model.board.Board;
-import domain.usecase.board.BoardRepositoryDTOConverter;
+import domain.model.aggregate.board.Board;
+import domain.adapter.repository.board.converter.BoardRepositoryDTOConverter;
 import domain.usecase.repository.IBoardRepository;
 
 public class CommitWorkflowUseCase implements CommitWorkflowInput {
@@ -19,7 +19,7 @@ public class CommitWorkflowUseCase implements CommitWorkflowInput {
 
     public void execute(CommitWorkflowInput input, CommitWorkflowOutput output) {
         Board board = BoardRepositoryDTOConverter.toEntity(boardRepository.findById(input.getBoardId()));
-        board.addWorkflow(input.getWorkflowId());
+        board.commitWorkflow(input.getWorkflowId());
 
         boardRepository.save(BoardRepositoryDTOConverter.toDTO(board));
         eventBus.postAll(board);

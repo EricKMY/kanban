@@ -1,7 +1,7 @@
 package domain.usecase.workflow;
 
-import domain.model.workflow.Lane;
-import domain.model.workflow.Workflow;
+import domain.model.aggregate.workflow.Lane;
+import domain.model.aggregate.workflow.Workflow;
 import domain.usecase.lane.LaneDTO;
 import domain.usecase.lane.LaneDTOConverter;
 

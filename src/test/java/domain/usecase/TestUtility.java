@@ -1,22 +1,22 @@
 package domain.usecase;
 
-import domain.adapter.board.createBoard.CreateBoardPresenter;
-import domain.adapter.card.calculateCycleTime.CalculateCycleTimePresenter;
-import domain.adapter.card.createCard.CreateCardPresenter;
-import domain.adapter.card.moveCard.MoveCardPresenter;
-import domain.adapter.workflow.createWorkflow.CreateWorkflowPresenter;
+import domain.adapter.presenter.board.create.CreateBoardPresenter;
+import domain.adapter.presenter.card.create.CreateCardPresenter;
+import domain.adapter.presenter.card.cycleTime.CalculateCycleTimePresenter;
+import domain.adapter.presenter.card.move.MoveCardPresenter;
+import domain.adapter.presenter.lane.stage.create.CreateStagePresenter;
+import domain.adapter.presenter.workflow.create.CreateWorkflowPresenter;
 import domain.model.DomainEventBus;
-import domain.model.workflow.Workflow;
 import domain.usecase.board.createBoard.CreateBoardInput;
 import domain.usecase.board.createBoard.CreateBoardOutput;
 import domain.usecase.board.createBoard.CreateBoardUseCase;
-import domain.usecase.card.CardDTOConverter;
 import domain.usecase.card.calculateCycleTime.CalculateCycleTimeInput;
 import domain.usecase.card.calculateCycleTime.CalculateCycleTimeOutput;
 import domain.usecase.card.calculateCycleTime.CalculateCycleTimeUseCase;
+import domain.usecase.card.calculateCycleTime.CycleTimeModel;
 import domain.usecase.card.createCard.CreateCardInput;
+import domain.usecase.card.createCard.CreateCardOutput;
 import domain.usecase.card.createCard.CreateCardUseCase;
-import domain.usecase.card.cycleTime.CycleTime;
 import domain.usecase.card.moveCard.MoveCardInput;
 import domain.usecase.card.moveCard.MoveCardOutput;
 import domain.usecase.card.moveCard.MoveCardUseCase;
@@ -30,12 +30,10 @@ import domain.usecase.lane.createSwimLane.CreateSwimLaneUseCase;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.ICardRepository;
 import domain.usecase.repository.IWorkflowRepository;
-import domain.usecase.workflow.WorkflowDTOConverter;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowInput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowOutput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowUseCase;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 
 public class TestUtility {
@@ -53,12 +51,12 @@ public class TestUtility {
         this.eventBus = eventBus;
     }
 
-    public String createBoard(String username, String boardName) {
+    public String createBoard(String userId, String boardName) {
         CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardRepository, eventBus);
         CreateBoardInput input = createBoardUseCase;
         CreateBoardOutput output = new CreateBoardPresenter();
 
-        input.setUsername(username);
+        input.setUserId(userId);
         input.setBoardName(boardName);
 
         createBoardUseCase.execute(input, output);
@@ -80,8 +78,8 @@ public class TestUtility {
 
     public String createTopStage(String workflowId, String stageName) {
         CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository, eventBus);
-        CreateStageInput input = new CreateStageInput();
-        CreateStageOutput output = new CreateStageOutput();
+        CreateStageInput input = createStageUseCase;
+        CreateStageOutput output = new CreateStagePresenter();
 
         input.setWorkflowId(workflowId);
         input.setStageName(stageName);
@@ -93,8 +91,8 @@ public class TestUtility {
 
     public String createStage(String workflowId, String parentId, String stageName) {
         CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository, eventBus);
-        CreateStageInput input = new CreateStageInput();
-        CreateStageOutput output = new CreateStageOutput();
+        CreateStageInput input = createStageUseCase;
+        CreateStageOutput output = new CreateStagePresenter();
 
         input.setWorkflowId(workflowId);
         input.setParentLaneId(parentId);
@@ -107,7 +105,7 @@ public class TestUtility {
 
     public String createSwimLane(String workflowId, String parentId, String stageName) {
 
-        CreateSwimLaneUseCase createSwimLaneUseCase = new CreateSwimLaneUseCase(workflowRepository, boardRepository, eventBus);
+        CreateSwimLaneUseCase createSwimLaneUseCase = new CreateSwimLaneUseCase(workflowRepository, eventBus);
         CreateSwimLaneInput input = new CreateSwimLaneInput();
         CreateSwimLaneOutput output = new CreateSwimLaneOutput();
 
@@ -123,7 +121,7 @@ public class TestUtility {
     public void moveCard(String workflowId, String cardId, String laneId, String targetLaneId) {
         MoveCardUseCase moveCardUseCase = new MoveCardUseCase(workflowRepository, cardRepository, eventBus);
 
-        MoveCardInput input = (MoveCardInput) moveCardUseCase;
+        MoveCardInput input = moveCardUseCase;
         MoveCardOutput output = new MoveCardPresenter();
 
         input.setWorkflowId(workflowId);
@@ -134,8 +132,8 @@ public class TestUtility {
         moveCardUseCase.execute(input, output);
     }
 
-    public CycleTime calculateCycleTime(String workflowId, String cardId, String beginningLaneId, String endingLaneId){
-        CalculateCycleTimeUseCase calculateCycleTimeUseCase = new CalculateCycleTimeUseCase(workflowRepository, flowEventRepository);
+    public CycleTimeModel calculateCycleTime(String workflowId, String cardId, String beginningLaneId, String endingLaneId){
+        CalculateCycleTimeUseCase calculateCycleTimeUseCase = new CalculateCycleTimeUseCase(workflowRepository, flowEventRepository, eventBus);
         CalculateCycleTimeInput input = calculateCycleTimeUseCase;
         input.setWorkflowId(workflowId);
         input.setCardId(cardId);
@@ -144,7 +142,21 @@ public class TestUtility {
         CalculateCycleTimeOutput output = new CalculateCycleTimePresenter();
 
         calculateCycleTimeUseCase.execute(input, output);
-        return output.getCycleTime();
+        return output.getCycleTimeModel();
+    }
+
+    public String createCard(String cardName, String workflowId, String laneId) {
+        CreateCardUseCase createCardUseCase = new CreateCardUseCase(cardRepository, eventBus);
+        CreateCardInput input = createCardUseCase;
+        CreateCardOutput output = new CreateCardPresenter();
+
+        input.setCardName(cardName);
+        input.setWorkflowId(workflowId);
+        input.setLaneId(laneId);
+
+        createCardUseCase.execute(input, output);
+
+        return output.getCardId();
     }
 
 }

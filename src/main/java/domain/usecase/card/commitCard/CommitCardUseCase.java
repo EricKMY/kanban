@@ -1,10 +1,10 @@
 package domain.usecase.card.commitCard;
 
+import domain.adapter.repository.workflow.converter.WorkflowRepositoryDTOConverter;
 import domain.model.DomainEventBus;
-import domain.model.workflow.Workflow;
+import domain.model.aggregate.workflow.Workflow;
 import domain.usecase.repository.IWorkflowRepository;
 import domain.usecase.workflow.WorkflowDTOConverter;
-import domain.usecase.workflow.commitWorkflow.CommitWorkflowInput;
 
 public class CommitCardUseCase implements CommitCardInput {
     private IWorkflowRepository workflowRepository;
@@ -19,11 +19,13 @@ public class CommitCardUseCase implements CommitCardInput {
     }
 
     public void execute(CommitCardInput input, CommitCardOutput output) {
-        Workflow workflow = WorkflowDTOConverter.toEntity(workflowRepository.findById(input.getWorkflowId()));
+        Workflow workflow = WorkflowRepositoryDTOConverter.toEntity(workflowRepository.findById(input.getWorkflowId()));
         workflow.commitCard(input.getCardId(), input.getLaneId());
 
-        workflowRepository.save(WorkflowDTOConverter.toDTO(workflow));
+        workflowRepository.save(WorkflowRepositoryDTOConverter.toDTO(workflow));
         eventBus.postAll(workflow);
+
+        output.setCardId(input.getCardId());
     }
 
     public String getCardId() {

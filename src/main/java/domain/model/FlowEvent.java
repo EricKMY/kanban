@@ -1,6 +1,6 @@
 package domain.model;
 
-import domain.common.DateProvider;
+import domain.model.common.DateProvider;
 
 import java.util.Date;
 

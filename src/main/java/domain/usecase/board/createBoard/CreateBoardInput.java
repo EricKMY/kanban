@@ -6,7 +6,7 @@ public interface CreateBoardInput {
 
     void setBoardName(String boardName);
 
-    String getUsername();
+    String getUserId();
 
-    void setUsername(String username);
+    void setUserId(String username);
 }

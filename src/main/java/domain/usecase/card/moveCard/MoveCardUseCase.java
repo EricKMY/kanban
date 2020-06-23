@@ -1,12 +1,10 @@
 package domain.usecase.card.moveCard;
 
 import domain.model.DomainEventBus;
-import domain.model.card.Card;
-import domain.model.workflow.Workflow;
+import domain.model.aggregate.card.Card;
 import domain.usecase.card.CardDTOConverter;
 import domain.usecase.repository.ICardRepository;
 import domain.usecase.repository.IWorkflowRepository;
-import domain.usecase.workflow.WorkflowDTOConverter;
 
 public class MoveCardUseCase implements MoveCardInput {
     private IWorkflowRepository workflowRepository;
@@ -30,6 +28,8 @@ public class MoveCardUseCase implements MoveCardInput {
 
         cardRepository.save(CardDTOConverter.toDTO(card));
         eventBus.postAll(card);
+
+        output.setCardId(card.getId());
     }
 
     @Override

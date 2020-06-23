@@ -1,17 +1,17 @@
 package domain.usecase.card.calculateCycleTime;
 
+import domain.adapter.repository.workflow.converter.WorkflowRepositoryDTOConverter;
+import domain.model.DomainEventBus;
 import domain.model.FlowEvent;
-import domain.model.workflow.Lane;
-import domain.model.workflow.Workflow;
-import domain.usecase.card.cycleTime.CycleTime;
+import domain.model.aggregate.workflow.Lane;
+import domain.model.aggregate.workflow.Workflow;
+import domain.model.service.cycleTime.CycleTimeCalculator;
 import domain.usecase.flowEvent.repository.IFlowEventRepository;
 import domain.usecase.repository.IWorkflowRepository;
-import domain.usecase.workflow.WorkflowDTOConverter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 
 public class CalculateCycleTimeUseCase implements CalculateCycleTimeInput {
     private String workflowId;
@@ -21,63 +21,49 @@ public class CalculateCycleTimeUseCase implements CalculateCycleTimeInput {
 
     private IWorkflowRepository workflowRepository;
     private IFlowEventRepository flowEventRepository;
-    private List<FlowEventPair> flowEventPairs;
+    private DomainEventBus domainEventBus;
 
-    public CalculateCycleTimeUseCase(IWorkflowRepository workflowRepository, IFlowEventRepository flowEventRepository) {
+    public CalculateCycleTimeUseCase(IWorkflowRepository workflowRepository, IFlowEventRepository flowEventRepository, DomainEventBus domainEventBus) {
         this.workflowRepository = workflowRepository;
         this.flowEventRepository = flowEventRepository;
-        flowEventPairs = new ArrayList<>();
+        this.domainEventBus = domainEventBus;
     }
 
     public void execute(CalculateCycleTimeInput input, CalculateCycleTimeOutput output) {
-        Stack<FlowEvent> stack = new Stack<>();
+        List<String> cycleLaneIds = getCycleLaneIds();
 
-        for(FlowEvent flowEvent: flowEventRepository.getAll()) {
-            if(!flowEvent.getCardId().equals(input.getCardId())) {
-                continue;
-            }
-            if(stack.empty()) {
-                stack.push(flowEvent);
-            }else {
-                FlowEvent committed = stack.pop();
-                flowEventPairs.add(new FlowEventPair(committed, flowEvent));
-            }
-        }
+        List<FlowEvent> flowEvents = flowEventRepository.getAll();
 
-        if(!stack.empty()){
-            flowEventPairs.add(new FlowEventPair(stack.pop()));
-        }
+        CycleTimeCalculator cycleTimeCalculator =
+                new CycleTimeCalculator(
+                        cycleLaneIds,
+                        flowEvents,
+                        input.getCardId());
 
-        Workflow workflow = WorkflowDTOConverter.toEntity(
-                workflowRepository.findById(input.getWorkflowId()));
-        boolean isInCycle = false;
+        CycleTimeModel cycleTimeModel = new CycleTimeModel(cycleTimeCalculator.process());
+
+        domainEventBus.postAll(cycleTimeCalculator);
+        output.setCycleTimeModel(cycleTimeModel);
+    }
+
+    private List<String> getCycleLaneIds() {
         List<String> laneIds = new ArrayList();
+        Workflow workflow = WorkflowRepositoryDTOConverter
+                .toEntity(workflowRepository.findById(workflowId));
+        boolean isInCycle = false;
+
         for(Map.Entry<String, Lane> entry: workflow.getLaneMap().entrySet()){
-            if(entry.getValue().getId().equals(input.getBeginningLaneId())){
+            if(entry.getValue().getId().equals(getBeginningLaneId())){
                 isInCycle = true;
-            }else if(entry.getValue().getId().equals(input.getEndingLaneId())){
+            }else if(entry.getValue().getId().equals(getEndingLaneId())){
                 laneIds.add(entry.getValue().getId());
                 break;
             }
             if(isInCycle) {
                 laneIds.add(entry.getValue().getId());
             }
-
         }
-
-        long time = 0;
-        for(String laneId: laneIds){
-            for(FlowEventPair flowEventPair: flowEventPairs){
-                if(flowEventPair.getCycleTimeInLane().getLaneId().equals(laneId)){
-                    time += flowEventPair.getCycleTimeInLane().getDiff();
-                }
-            }
-        }
-
-        CycleTime cycleTime = new CycleTime(time);
-
-        output.setCycleTime(cycleTime);
-
+        return laneIds;
     }
 
     @Override

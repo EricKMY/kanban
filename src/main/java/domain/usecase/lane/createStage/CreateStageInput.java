@@ -1,31 +1,15 @@
 package domain.usecase.lane.createStage;
 
-public class CreateStageInput {
-    private String stageName;
-    private String workflowId;
-    private String parentLaneId;
+public interface CreateStageInput {
+    String getStageName();
 
-    public String getStageName() {
-        return stageName;
-    }
+    void setStageName(String stageName);
 
-    public void setStageName(String stageName) {
-        this.stageName = stageName;
-    }
+    void setWorkflowId(String workflowId);
 
-    public void setWorkflowId(String workflowId) {
-        this.workflowId = workflowId;
-    }
+    String getWorkflowId();
 
-    public String getWorkflowId() {
-        return workflowId;
-    }
+    String getParentLaneId();
 
-    public String getParentLaneId() {
-        return parentLaneId;
-    }
-
-    public void setParentLaneId(String parentLaneId) {
-        this.parentLaneId = parentLaneId;
-    }
+    void setParentLaneId(String parentLaneId);
 }

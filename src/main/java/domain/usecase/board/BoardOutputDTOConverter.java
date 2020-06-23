@@ -1,6 +1,6 @@
 package domain.usecase.board;
 
-import domain.model.board.Board;
+import domain.model.aggregate.board.Board;
 
 public class BoardOutputDTOConverter {
     public static BoardOutputDTO toDTO(Board board){
@@ -8,7 +8,7 @@ public class BoardOutputDTOConverter {
         boardOutputDTO.setId(board.getId());
         boardOutputDTO.setName(board.getName());
         boardOutputDTO.setWorkflows(board.getWorkflowList());
-        boardOutputDTO.setUsername(board.getUserName());
+        boardOutputDTO.setUsername(board.getUserId());
         return boardOutputDTO;
     }
 }

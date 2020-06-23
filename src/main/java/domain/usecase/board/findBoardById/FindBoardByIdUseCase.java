@@ -1,11 +1,11 @@
 package domain.usecase.board.findBoardById;
 
 import domain.model.DomainEventBus;
-import domain.model.board.Board;
+import domain.model.aggregate.board.Board;
 import domain.usecase.board.BoardOutputDTO;
 import domain.usecase.board.BoardOutputDTOConverter;
-import domain.usecase.board.BoardRepositoryDTOConverter;
-import domain.usecase.board.BoardRepositoryDTO;
+import domain.adapter.repository.board.converter.BoardRepositoryDTOConverter;
+import domain.adapter.repository.board.dto.BoardRepositoryDTO;
 import domain.usecase.repository.IBoardRepository;
 
 public class FindBoardByIdUseCase implements FindBoardByIdInput{

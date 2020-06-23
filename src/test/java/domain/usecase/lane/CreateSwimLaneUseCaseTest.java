@@ -1,12 +1,16 @@
 package domain.usecase.lane;
 
-import domain.adapter.FlowEventInMemoryRepository;
-import domain.adapter.board.BoardInMemoryRepository;
-import domain.adapter.card.CardInMemoryRepository;
-import domain.adapter.workflow.WorkflowInMemoryRepository;
+import domain.adapter.repository.domainEvent.DomainEventInMemoryRepository;
+import domain.adapter.repository.flowEvent.FlowEventInMemoryRepository;
+import domain.adapter.repository.board.BoardInMemoryRepository;
+import domain.adapter.repository.card.CardInMemoryRepository;
+import domain.adapter.repository.workflow.WorkflowInMemoryRepository;
+import domain.adapter.repository.workflow.converter.WorkflowRepositoryDTOConverter;
 import domain.model.DomainEventBus;
 import domain.usecase.DomainEventHandler;
+import domain.usecase.DomainEventSaveHandler;
 import domain.usecase.TestUtility;
+import domain.usecase.domainEvent.repository.IDomainEventRepository;
 import domain.usecase.flowEvent.repository.IFlowEventRepository;
 import domain.usecase.lane.createSwimLane.CreateSwimLaneInput;
 import domain.usecase.lane.createSwimLane.CreateSwimLaneOutput;
@@ -14,7 +18,6 @@ import domain.usecase.lane.createSwimLane.CreateSwimLaneUseCase;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.ICardRepository;
 import domain.usecase.repository.IWorkflowRepository;
-import domain.usecase.workflow.WorkflowDTOConverter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,6 +32,7 @@ public class CreateSwimLaneUseCaseTest {
     private TestUtility testUtility;
     private IFlowEventRepository flowEventRepository;
     private ICardRepository cardRepository;
+    private IDomainEventRepository domainEventRepository;
 
 
     @Before
@@ -37,9 +41,12 @@ public class CreateSwimLaneUseCaseTest {
         workflowRepository = new WorkflowInMemoryRepository();
         cardRepository = new CardInMemoryRepository();
         flowEventRepository = new FlowEventInMemoryRepository();
+        domainEventRepository = new DomainEventInMemoryRepository();
 
         eventBus = new DomainEventBus();
         eventBus.register(new DomainEventHandler(boardRepository, workflowRepository, eventBus));
+        eventBus.register(new DomainEventSaveHandler(domainEventRepository));
+
         testUtility = new TestUtility(boardRepository, workflowRepository, cardRepository, flowEventRepository, eventBus);
 
         String boardId = testUtility.createBoard("kanban777", "kanban");
@@ -49,7 +56,7 @@ public class CreateSwimLaneUseCaseTest {
 
     @Test
     public void create_a_SwimLane_under_top_Stage() {
-        CreateSwimLaneUseCase createSwimLaneUseCase = new CreateSwimLaneUseCase(workflowRepository, boardRepository, eventBus);
+        CreateSwimLaneUseCase createSwimLaneUseCase = new CreateSwimLaneUseCase(workflowRepository, eventBus);
         CreateSwimLaneInput input = new CreateSwimLaneInput();
         CreateSwimLaneOutput output = new CreateSwimLaneOutput();
 
@@ -59,11 +66,11 @@ public class CreateSwimLaneUseCaseTest {
 
         createSwimLaneUseCase.execute(input, output);
 
-        assertEquals(1, WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId))
+        assertEquals(1, WorkflowRepositoryDTOConverter.toEntity(workflowRepository.findById(workflowId))
                                 .findLaneById(topStageId)
                                 .getChildAmount());
 
-        assertEquals("Urgent", WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId))
+        assertEquals("Urgent", WorkflowRepositoryDTOConverter.toEntity(workflowRepository.findById(workflowId))
                                         .findLaneById(output.getSwimLaneId())
                                         .getName());
     }
@@ -72,7 +79,7 @@ public class CreateSwimLaneUseCaseTest {
     public void create_a_SwimLane_under_Stage() {
         String parenStageId = testUtility.createStage(workflowId, topStageId, "Developing");
 
-        CreateSwimLaneUseCase createSwimLaneUseCase = new CreateSwimLaneUseCase(workflowRepository, boardRepository, eventBus);
+        CreateSwimLaneUseCase createSwimLaneUseCase = new CreateSwimLaneUseCase(workflowRepository, eventBus);
         CreateSwimLaneInput input = new CreateSwimLaneInput();
         CreateSwimLaneOutput output = new CreateSwimLaneOutput();
 
@@ -82,12 +89,12 @@ public class CreateSwimLaneUseCaseTest {
 
         createSwimLaneUseCase.execute(input, output);
 
-        assertEquals(1, WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId))
+        assertEquals(1, WorkflowRepositoryDTOConverter.toEntity(workflowRepository.findById(workflowId))
                                 .findLaneById(topStageId)
                                 .findById(parenStageId)
                                 .getChildAmount());
 
-        assertEquals("Urgent", WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId))
+        assertEquals("Urgent", WorkflowRepositoryDTOConverter.toEntity(workflowRepository.findById(workflowId))
                                         .findLaneById(topStageId)
                                         .findById(parenStageId)
                                         .findById(output.getSwimLaneId())
@@ -100,7 +107,7 @@ public class CreateSwimLaneUseCaseTest {
 
         String parenStageId = testUtility.createSwimLane(workflowId, topStageId, "Undo");
 
-        CreateSwimLaneUseCase createSwimLaneUseCase = new CreateSwimLaneUseCase(workflowRepository, boardRepository, eventBus);
+        CreateSwimLaneUseCase createSwimLaneUseCase = new CreateSwimLaneUseCase(workflowRepository, eventBus);
         CreateSwimLaneInput input = new CreateSwimLaneInput();
         CreateSwimLaneOutput output = new CreateSwimLaneOutput();
 
@@ -110,12 +117,12 @@ public class CreateSwimLaneUseCaseTest {
 
         createSwimLaneUseCase.execute(input, output);
 
-        assertEquals(1, WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId))
+        assertEquals(1, WorkflowRepositoryDTOConverter.toEntity(workflowRepository.findById(workflowId))
                                 .findLaneById(topStageId)
                                 .findById(parenStageId)
                                 .getChildAmount());
 
-        assertEquals("Urgent", WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId))
+        assertEquals("Urgent", WorkflowRepositoryDTOConverter.toEntity(workflowRepository.findById(workflowId))
                                         .findLaneById(topStageId)
                                         .findById(parenStageId)
                                         .findById(output.getSwimLaneId())

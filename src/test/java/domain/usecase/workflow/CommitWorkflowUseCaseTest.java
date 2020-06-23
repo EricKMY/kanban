@@ -1,15 +1,17 @@
 package domain.usecase.workflow;
 
-import domain.adapter.FlowEventInMemoryRepository;
-import domain.adapter.board.BoardInMemoryRepository;
-import domain.adapter.card.CardInMemoryRepository;
-import domain.adapter.workflow.WorkflowInMemoryRepository;
-import domain.adapter.workflow.commitWorkflow.CommitWorkflowPresenter;
+import domain.adapter.repository.domainEvent.DomainEventInMemoryRepository;
+import domain.adapter.repository.flowEvent.FlowEventInMemoryRepository;
+import domain.adapter.repository.board.BoardInMemoryRepository;
+import domain.adapter.repository.card.CardInMemoryRepository;
+import domain.adapter.repository.workflow.WorkflowInMemoryRepository;
+import domain.adapter.presenter.workflow.commit.CommitWorkflowPresenter;
 import domain.model.DomainEventBus;
-import domain.model.board.Board;
-import domain.usecase.DomainEventHandler;
+import domain.model.aggregate.board.Board;
+import domain.usecase.DomainEventSaveHandler;
 import domain.usecase.TestUtility;
-import domain.usecase.board.BoardRepositoryDTOConverter;
+import domain.adapter.repository.board.converter.BoardRepositoryDTOConverter;
+import domain.usecase.domainEvent.repository.IDomainEventRepository;
 import domain.usecase.flowEvent.repository.IFlowEventRepository;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.ICardRepository;
@@ -30,13 +32,17 @@ public class CommitWorkflowUseCaseTest {
     private TestUtility testUtility;
     private IFlowEventRepository flowEventRepository;
     private ICardRepository cardRepository;
+    private IDomainEventRepository domainEventRepository;
 
     @Before
     public void setup() {
         boardRepository = new BoardInMemoryRepository();
         cardRepository = new CardInMemoryRepository();
         flowEventRepository = new FlowEventInMemoryRepository();
+        domainEventRepository = new DomainEventInMemoryRepository();
+
         eventBus = new DomainEventBus();
+        eventBus.register(new DomainEventSaveHandler(domainEventRepository));
 
         IWorkflowRepository workflowRepository = new WorkflowInMemoryRepository();
         testUtility = new TestUtility(boardRepository, workflowRepository, cardRepository, flowEventRepository, eventBus);
@@ -47,23 +53,25 @@ public class CommitWorkflowUseCaseTest {
     @Test
     public void commit_a_Workflow_to_Board_aggregate() {
         String workflowId = "W012345678";
+
+        Board board = BoardRepositoryDTOConverter.toEntity(boardRepository.findById(boardId));
+
+        assertEquals(0, board.getWorkflowList().size());
+
         CommitWorkflowUseCase commitWorkflowUseCase = new CommitWorkflowUseCase(boardRepository, eventBus);
-        CommitWorkflowInput input = (CommitWorkflowInput) commitWorkflowUseCase;
+        CommitWorkflowInput input = commitWorkflowUseCase;
         CommitWorkflowOutput output = new CommitWorkflowPresenter();
 
         input.setWorkflowId(workflowId);
         input.setBoardId(boardId);
 
-        Board board = BoardRepositoryDTOConverter.toEntity(boardRepository.findById(boardId));
-
-        assertEquals(0, board.getWorkflowList().size());
-        assertFalse(board.isWorkflowContained("W012345678"));
-
         commitWorkflowUseCase.execute(input, output);
+
+        assertNotNull(output.getWorkflowId());
 
         board = BoardRepositoryDTOConverter.toEntity(boardRepository.findById(boardId));
 
         assertEquals(1, board.getWorkflowList().size());
-        assertTrue(board.isWorkflowContained("W012345678"));
+        assertTrue(board.isWorkflowContained(workflowId));
     }
 }

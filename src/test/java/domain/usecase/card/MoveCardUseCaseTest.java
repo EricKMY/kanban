@@ -1,14 +1,17 @@
 package domain.usecase.card;
 
-import domain.adapter.FlowEventInMemoryRepository;
-import domain.adapter.board.BoardInMemoryRepository;
-import domain.adapter.card.CardInMemoryRepository;
-import domain.adapter.card.createCard.CreateCardPresenter;
-import domain.adapter.card.moveCard.MoveCardPresenter;
-import domain.adapter.workflow.WorkflowInMemoryRepository;
+import domain.adapter.repository.domainEvent.DomainEventInMemoryRepository;
+import domain.adapter.repository.flowEvent.FlowEventInMemoryRepository;
+import domain.adapter.repository.board.BoardInMemoryRepository;
+import domain.adapter.repository.card.CardInMemoryRepository;
+import domain.adapter.presenter.card.create.CreateCardPresenter;
+import domain.adapter.presenter.card.move.MoveCardPresenter;
+import domain.adapter.repository.workflow.WorkflowInMemoryRepository;
+import domain.adapter.repository.workflow.converter.WorkflowRepositoryDTOConverter;
 import domain.model.DomainEventBus;
-import domain.model.workflow.Workflow;
+import domain.model.aggregate.workflow.Workflow;
 import domain.usecase.DomainEventHandler;
+import domain.usecase.DomainEventSaveHandler;
 import domain.usecase.TestUtility;
 import domain.usecase.card.createCard.CreateCardInput;
 import domain.usecase.card.createCard.CreateCardOutput;
@@ -16,6 +19,7 @@ import domain.usecase.card.createCard.CreateCardUseCase;
 import domain.usecase.card.moveCard.MoveCardInput;
 import domain.usecase.card.moveCard.MoveCardOutput;
 import domain.usecase.card.moveCard.MoveCardUseCase;
+import domain.usecase.domainEvent.repository.IDomainEventRepository;
 import domain.usecase.flowEvent.repository.IFlowEventRepository;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.ICardRepository;
@@ -39,6 +43,7 @@ public class MoveCardUseCaseTest {
     private String cardName;
     private String cardId;
     private IFlowEventRepository flowEventRepository;
+    private IDomainEventRepository domainEventRepository;
 
     @Before
     public void setup() {
@@ -46,9 +51,12 @@ public class MoveCardUseCaseTest {
         workflowRepository = new WorkflowInMemoryRepository();
         cardRepository = new CardInMemoryRepository();
         flowEventRepository = new FlowEventInMemoryRepository();
+        domainEventRepository = new DomainEventInMemoryRepository();
 
         eventBus = new DomainEventBus();
         eventBus.register(new DomainEventHandler(boardRepository, workflowRepository, eventBus));
+        eventBus.register(new DomainEventSaveHandler(domainEventRepository));
+
         testUtility = new TestUtility(boardRepository, workflowRepository, cardRepository, flowEventRepository, eventBus);
 
         String boardId = testUtility.createBoard("kanban777", "kanban");
@@ -64,7 +72,7 @@ public class MoveCardUseCaseTest {
     public void move_card_from_backlog_stage_to_planning_stage() {
         MoveCardUseCase moveCardUseCase = new MoveCardUseCase(workflowRepository, cardRepository, eventBus);
 
-        MoveCardInput input = (MoveCardInput) moveCardUseCase;
+        MoveCardInput input = moveCardUseCase;
         MoveCardOutput output = new MoveCardPresenter();
 
         input.setWorkflowId(workflowId);
@@ -72,26 +80,26 @@ public class MoveCardUseCaseTest {
         input.setTargetLaneId(planningLaneId);
         input.setCardId(cardId);
 
-        Workflow workflow = WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId));
+        Workflow workflow = WorkflowRepositoryDTOConverter.toEntity(workflowRepository.findById(workflowId));
         assertTrue(workflow.findLaneById(backlogLaneId).isCardContained(cardId));
         assertFalse(workflow.findLaneById(planningLaneId).isCardContained(cardId));
 
         moveCardUseCase.execute(input, output);
 
+        assertNotNull(output.getCardId());
         assertEquals(planningLaneId, CardDTOConverter
                 .toEntity(cardRepository.findById(cardId))
                 .getLaneId());
 
-        workflow = WorkflowDTOConverter.toEntity(workflowRepository.findById(workflowId));
+        workflow = WorkflowRepositoryDTOConverter.toEntity(workflowRepository.findById(workflowId));
         assertFalse(workflow.findLaneById(backlogLaneId).isCardContained(cardId));
         assertTrue(workflow.findLaneById(planningLaneId).isCardContained(cardId));
     }
 
-
-    public String create_a_card_in_lane(String cardName, String laneId) {
+    private String create_a_card_in_lane(String cardName, String laneId) {
         CreateCardUseCase createCardUseCase = new CreateCardUseCase(cardRepository, eventBus);
 
-        CreateCardInput input = (CreateCardInput) createCardUseCase;
+        CreateCardInput input = createCardUseCase;
         CreateCardOutput output = new CreateCardPresenter();
 
         input.setCardName(cardName);

@@ -1,6 +1,6 @@
 package domain.usecase.card;
 
-import domain.model.card.Card;
+import domain.model.aggregate.card.Card;
 
 public class CardDTOConverter {
     public static CardDTO toDTO(Card card){

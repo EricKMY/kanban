@@ -1,5 +1,10 @@
 package domain.adapter.database;
 
+import domain.adapter.database.table.BoardTable;
+import domain.adapter.database.table.CardTable;
+import domain.adapter.database.table.WorkflowBoardTable;
+import domain.adapter.database.table.WorkflowTable;
+
 import java.sql.*;
 
 public class DatabaseConnector {

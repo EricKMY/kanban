@@ -1,7 +1,8 @@
 package domain.usecase.workflow.createWorkflow;
 
+import domain.adapter.repository.workflow.converter.WorkflowRepositoryDTOConverter;
 import domain.model.DomainEventBus;
-import domain.model.workflow.Workflow;
+import domain.model.aggregate.workflow.Workflow;
 import domain.usecase.repository.IWorkflowRepository;
 import domain.usecase.workflow.WorkflowDTOConverter;
 
@@ -19,7 +20,7 @@ public class CreateWorkflowUseCase implements CreateWorkflowInput {
     public void execute(CreateWorkflowInput input, CreateWorkflowOutput output) {
         Workflow workflow = new Workflow(input.getWorkflowName(), input.getBoardId());
 
-        workflowRepository.save(WorkflowDTOConverter.toDTO(workflow));
+        workflowRepository.save(WorkflowRepositoryDTOConverter.toDTO(workflow));
         eventBus.postAll(workflow);
 
         output.setWorkflowId(workflow.getId());
