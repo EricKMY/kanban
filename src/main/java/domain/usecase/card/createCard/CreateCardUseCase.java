@@ -1,8 +1,8 @@
 package domain.usecase.card.createCard;
 
+import domain.adapter.repository.card.converter.CardRepositoryDTOConverter;
 import domain.model.DomainEventBus;
 import domain.model.aggregate.card.Card;
-import domain.usecase.card.CardDTOConverter;
 import domain.usecase.repository.ICardRepository;
 
 public class CreateCardUseCase implements CreateCardInput {
@@ -20,7 +20,7 @@ public class CreateCardUseCase implements CreateCardInput {
     public void execute(CreateCardInput input, CreateCardOutput output) {
         Card card = new Card(input.getCardName(), input.getLaneId(), input.getWorkflowId());
 
-        cardRepository.save(CardDTOConverter.toDTO(card));
+        cardRepository.save(CardRepositoryDTOConverter.toDTO(card));
         eventBus.postAll(card);
 
         output.setCardId(card.getId());

@@ -11,11 +11,9 @@ import domain.usecase.repository.IBoardRepository;
 public class FindBoardByIdUseCase implements FindBoardByIdInput{
     private String boardId;
     private IBoardRepository boardRepository;
-    private DomainEventBus eventBus;
 
-    public FindBoardByIdUseCase(IBoardRepository boardRepository, DomainEventBus eventBus) {
+    public FindBoardByIdUseCase(IBoardRepository boardRepository) {
         this.boardRepository = boardRepository;
-        this.eventBus = eventBus;
     }
 
     @Override
@@ -32,8 +30,6 @@ public class FindBoardByIdUseCase implements FindBoardByIdInput{
         BoardRepositoryDTO boardRepositoryDTO = boardRepository.findById(input.getBoardId());
         Board board = BoardRepositoryDTOConverter.toEntity(boardRepositoryDTO);
         BoardOutputDTO boardOutputDTO = BoardOutputDTOConverter.toDTO(board);
-
-        eventBus.postAll(board);
 
         output.setBoardOutputDTO(boardOutputDTO);
     }

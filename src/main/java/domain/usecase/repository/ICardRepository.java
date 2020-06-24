@@ -1,8 +1,8 @@
 package domain.usecase.repository;
 
-import domain.usecase.card.CardDTO;
+import domain.adapter.repository.card.dto.CardRepositoryDTO;
 
 public interface ICardRepository {
-    void save(CardDTO card);
-    CardDTO findById(String id);
+    void save(CardRepositoryDTO cardRepositoryDTO);
+    CardRepositoryDTO findById(String id);
 }

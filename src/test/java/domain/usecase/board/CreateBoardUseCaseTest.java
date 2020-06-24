@@ -40,41 +40,26 @@ public class CreateBoardUseCaseTest {
     }
 
     @Test
-    public void create_a_Board_and_stored_into_memory(){
+    public void create_a_Board_should_succeed(){
         BoardInMemoryRepository boardInMemoryRepository = new BoardInMemoryRepository();
         CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardInMemoryRepository, eventBus);
+
         CreateBoardInput input = createBoardUseCase;
         CreateBoardOutput output = new CreateBoardPresenter();
 
-        input.setUserId("kanban777");
+        input.setUserId("user777");
         input.setBoardName("kanbanSystem");
 
         createBoardUseCase.execute(input, output);
 
-        Board board = BoardRepositoryDTOConverter.toEntity(boardInMemoryRepository.findById(output.getBoardId()));
-
         assertNotNull(output.getBoardId());
 
-        assertEquals("kanban777", board.getUserId());
+        Board board = BoardRepositoryDTOConverter.toEntity(boardInMemoryRepository.findById(output.getBoardId()));
+
+        assertNotNull(board);
+        assertEquals("user777", board.getUserId());
         assertEquals(output.getBoardId(), board.getId());
         assertEquals("kanbanSystem", board.getName());
         assertEquals(0, board.getWorkflowList().size());
     }
-
-//    @Test
-//    public void create_a_Board_and_stored_into_database(){
-//        IBoardRepository boardRepository = new BoardInDatabaseRepository();
-//        CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardRepository, eventBus);
-//        CreateBoardInput input = (CreateBoardInput) createBoardUseCase;
-//        CreateBoardOutput output = new CreateBoardPresenter();
-//
-//        input.setUserId("kanban777");
-//        input.setBoardName("kanbanSystem");
-//
-//        createBoardUseCase.execute(input, output);
-//
-//        assertEquals("kanban777", boardRepository
-//                                            .findById(output.getBoardId())
-//                                            .getUserId());
-//    }
 }

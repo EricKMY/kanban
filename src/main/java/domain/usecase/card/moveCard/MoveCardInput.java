@@ -10,9 +10,9 @@ public interface MoveCardInput {
 
     void setWorkflowId(String workflowId);
 
-    String getLaneId();
+    String getOriginLaneId();
 
-    void setLaneId(String stageId);
+    void setOriginLaneId(String stageId);
 
     String getTargetLaneId();
 

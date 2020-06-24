@@ -31,12 +31,12 @@ public class CreateWorkflowUseCaseTest {
 
     private IBoardRepository boardRepository;
     private IWorkflowRepository workflowRepository;
+    private ICardRepository cardRepository;
+    private IFlowEventRepository flowEventRepository;
+    private IDomainEventRepository domainEventRepository;
     private String boardId;
     private DomainEventBus eventBus;
     private TestUtility testUtility;
-    private IFlowEventRepository flowEventRepository;
-    private ICardRepository cardRepository;
-    private IDomainEventRepository domainEventRepository;
 
     @Before
     public void setup() {
@@ -53,11 +53,11 @@ public class CreateWorkflowUseCaseTest {
 
         testUtility = new TestUtility(boardRepository, workflowRepository, cardRepository, flowEventRepository, eventBus);
 
-        boardId = testUtility.createBoard("kanban777", "kanbanSystem");
+        boardId = testUtility.createBoard("user777", "kanbanSystem");
     }
 
     @Test
-    public void create_a_Workflow_should_return_a_workflowId(){
+    public void create_a_Workflow_should_succeed(){
         CreateWorkflowUseCase createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository, eventBus);
         CreateWorkflowInput input = createWorkflowUseCase;
         CreateWorkflowOutput output = new CreateWorkflowPresenter();

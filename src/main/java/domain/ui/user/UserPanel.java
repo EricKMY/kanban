@@ -130,7 +130,7 @@ public class UserPanel extends javax.swing.JPanel {
         PopMenu popMenu = new PopMenu();
         myBoardList.setModel(defaultListModel);
         createBoardViewModel = createBoardController.createBoard(userLabel.getText(), popMenu.getIName(), boardRepository, eventBus);
-        findBoardByIdViewModel = findBoardByIdController.findBoardById(createBoardViewModel.getBoardId(), boardRepository, eventBus);
+        findBoardByIdViewModel = findBoardByIdController.findBoardById(createBoardViewModel.getBoardId(), boardRepository);
         defaultListModel.addElement(findBoardByIdViewModel.getName());
     }//GEN-LAST:event_createBoardBtnActionPerformed
 

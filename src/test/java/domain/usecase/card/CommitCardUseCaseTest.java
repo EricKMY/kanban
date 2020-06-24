@@ -19,7 +19,6 @@ import domain.usecase.flowEvent.repository.IFlowEventRepository;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.ICardRepository;
 import domain.usecase.repository.IWorkflowRepository;
-import domain.usecase.workflow.WorkflowDTOConverter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,13 +27,13 @@ import static org.junit.Assert.*;
 public class CommitCardUseCaseTest {
     private IBoardRepository boardRepository;
     private IWorkflowRepository workflowRepository;
+    private ICardRepository cardRepository;
+    private IDomainEventRepository domainEventRepository;
+    private IFlowEventRepository flowEventRepository;
     private String workflowId;
     private String laneId;
     private DomainEventBus eventBus;
     private TestUtility testUtility;
-    private IDomainEventRepository domainEventRepository;
-    private IFlowEventRepository flowEventRepository;
-    private ICardRepository cardRepository;
 
 
     @Before
@@ -50,7 +49,7 @@ public class CommitCardUseCaseTest {
 
         testUtility = new TestUtility(boardRepository, workflowRepository, cardRepository, flowEventRepository, eventBus);
 
-        String boardId = testUtility.createBoard("kanban777", "kanban");
+        String boardId = testUtility.createBoard("user777", "kanban");
         workflowId = testUtility.createWorkflow(boardId, "defaultWorkflow");
         laneId = testUtility.createTopStage(workflowId, "developing");
     }
@@ -76,6 +75,11 @@ public class CommitCardUseCaseTest {
         commitCardUseCase.execute(input, output);
 
         assertNotNull(output.getCardId());
+
+        lane = WorkflowRepositoryDTOConverter
+                .toEntity(workflowRepository.findById(workflowId))
+                .findLaneById(laneId);
+
         assertEquals(1, lane.getCardList().size());
         assertTrue(lane.isCardContained(cardId));
     }

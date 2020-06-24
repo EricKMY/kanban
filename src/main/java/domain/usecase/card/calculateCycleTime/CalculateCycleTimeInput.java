@@ -9,11 +9,11 @@ public interface CalculateCycleTimeInput {
 
     void setCardId(String cardId);
 
-    String getBeginningLaneId();
+    String getBeginningStageId();
 
-    void setBeginningLaneId(String beginningLaneId);
+    void setBeginningStageId(String beginningStageId);
 
-    String getEndingLaneId();
+    String getEndingStageId();
 
-    void setEndingLaneId(String endingLaneId);
+    void setEndingStageId(String endingStageId);
 }

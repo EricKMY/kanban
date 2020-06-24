@@ -39,7 +39,7 @@ public class WorkflowTest {
         eventBus.register(new DomainEventHandler(boardRepository, workflowRepository, eventBus));
         testUtility = new TestUtility(boardRepository, workflowRepository, cardRepository, flowEventRepository, eventBus);
 
-        boardId = testUtility.createBoard("kanban777", "kanbanSystem");
+        boardId = testUtility.createBoard("user777", "kanbanSystem");
     }
 
     @Test

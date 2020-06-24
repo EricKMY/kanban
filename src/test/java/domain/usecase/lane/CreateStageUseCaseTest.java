@@ -30,13 +30,13 @@ import static org.junit.Assert.assertNotNull;
 public class CreateStageUseCaseTest {
     private IBoardRepository boardRepository;
     private IWorkflowRepository workflowRepository;
+    private ICardRepository cardRepository;
+    private IFlowEventRepository flowEventRepository;
+    private IDomainEventRepository domainEventRepository;
     private String workflowId;
     private String topStageId;
     private DomainEventBus eventBus;
     private TestUtility testUtility;
-    private IFlowEventRepository flowEventRepository;
-    private ICardRepository cardRepository;
-    private IDomainEventRepository domainEventRepository;
 
 
     @Before
@@ -53,13 +53,13 @@ public class CreateStageUseCaseTest {
 
         testUtility = new TestUtility(boardRepository, workflowRepository, cardRepository, flowEventRepository, eventBus);
 
-        String boardId = testUtility.createBoard("kanban777", "kanban");
+        String boardId = testUtility.createBoard("user777", "kanban");
         workflowId = testUtility.createWorkflow(boardId, "defaultWorkflow");
         topStageId = testUtility.createTopStage(workflowId, "Backlog");
     }
 
     @Test
-    public void create_a_top_Stage() {
+    public void create_a_top_Stage_should_succeed() {
         CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository, eventBus);
         CreateStageInput input = createStageUseCase;
         CreateStageOutput output = new CreateStagePresenter();
@@ -79,12 +79,12 @@ public class CreateStageUseCaseTest {
         assertEquals("Backlog", lane.getName());
         assertEquals(output.getStageId(), lane.getId());
         assertEquals(0, lane.getChildAmount());
-        assertEquals(LaneDirection.HORIZONTAL, lane.getLaneDirection());
+        assertEquals(LaneDirection.VERTICAL, lane.getLaneDirection());
     }
 
     @Test
     public void create_a_Stage_under_top_Stage() {
-        String parenStageId = testUtility.createTopStage(workflowId, "Backlog");
+        String parentStageId = testUtility.createTopStage(workflowId, "Backlog");
 
         CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository, eventBus);
         CreateStageInput input = createStageUseCase;
@@ -92,7 +92,7 @@ public class CreateStageUseCaseTest {
 
         input.setStageName("Developing");
         input.setWorkflowId(workflowId);
-        input.setParentLaneId(parenStageId);
+        input.setParentLaneId(parentStageId);
 
         createStageUseCase.execute(input, output);
 
@@ -100,7 +100,7 @@ public class CreateStageUseCaseTest {
 
         Lane parentLane = WorkflowRepositoryDTOConverter
                 .toEntity(workflowRepository.findById(workflowId))
-                .findLaneById(parenStageId);
+                .findLaneById(parentStageId);
 
         Lane childLane = parentLane.findById(output.getStageId());
 
@@ -108,12 +108,12 @@ public class CreateStageUseCaseTest {
         assertEquals(0, childLane.getChildAmount());
         assertEquals("Developing", childLane.getName());
         assertEquals(output.getStageId(), childLane.getId());
-        assertEquals(LaneDirection.HORIZONTAL, childLane.getLaneDirection());
+        assertEquals(LaneDirection.VERTICAL, childLane.getLaneDirection());
     }
 
     @Test
-    public void create_a_Stage_under_Stage() {
-        String parenStageId = testUtility.createStage(workflowId, topStageId, "Developing");
+    public void create_a_Stage_under_a_Stage() {
+        String parentStageId = testUtility.createStage(workflowId, topStageId, "Developing");
 
         CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository, eventBus);
         CreateStageInput input = createStageUseCase;
@@ -121,7 +121,7 @@ public class CreateStageUseCaseTest {
 
         input.setStageName("Team_1");
         input.setWorkflowId(workflowId);
-        input.setParentLaneId(parenStageId);
+        input.setParentLaneId(parentStageId);
 
         createStageUseCase.execute(input, output);
 
@@ -129,7 +129,7 @@ public class CreateStageUseCaseTest {
 
         Lane parentLane = WorkflowRepositoryDTOConverter
                 .toEntity(workflowRepository.findById(workflowId))
-                .findLaneById(parenStageId);
+                .findLaneById(parentStageId);
 
         Lane childLane = parentLane.findById(output.getStageId());
 
@@ -138,11 +138,11 @@ public class CreateStageUseCaseTest {
         assertEquals(0, childLane.getChildAmount());
         assertEquals("Team_1", childLane.getName());
         assertEquals(output.getStageId(), childLane.getId());
-        assertEquals(LaneDirection.HORIZONTAL, childLane.getLaneDirection());
+        assertEquals(LaneDirection.VERTICAL, childLane.getLaneDirection());
     }
 
     @Test
-    public void create_a_Stage_under_SwimLane() {
+    public void create_a_Stage_under_a_SwimLane() {
         String parentSwimLaneId = testUtility.createSwimLane(workflowId, topStageId, "Undo");
 
         CreateStageUseCase createStageUseCase = new CreateStageUseCase(workflowRepository, boardRepository, eventBus);
@@ -167,8 +167,6 @@ public class CreateStageUseCaseTest {
         assertEquals(0, childLane.getChildAmount());
         assertEquals("Team_1", childLane.getName());
         assertEquals(output.getStageId(), childLane.getId());
-        assertEquals(LaneDirection.HORIZONTAL, childLane.getLaneDirection());
-
+        assertEquals(LaneDirection.VERTICAL, childLane.getLaneDirection());
     }
-
 }

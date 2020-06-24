@@ -5,7 +5,6 @@ import domain.adapter.repository.flowEvent.FlowEventInMemoryRepository;
 import domain.adapter.repository.board.BoardInMemoryRepository;
 import domain.adapter.repository.card.CardInMemoryRepository;
 import domain.adapter.presenter.card.cycleTime.CalculateCycleTimePresenter;
-import domain.adapter.presenter.card.create.CreateCardPresenter;
 import domain.adapter.repository.workflow.WorkflowInMemoryRepository;
 import domain.model.common.DateProvider;
 import domain.model.DomainEventBus;
@@ -17,9 +16,6 @@ import domain.usecase.card.calculateCycleTime.CalculateCycleTimeInput;
 import domain.usecase.card.calculateCycleTime.CalculateCycleTimeOutput;
 import domain.usecase.card.calculateCycleTime.CalculateCycleTimeUseCase;
 import domain.usecase.card.calculateCycleTime.CycleTimeModel;
-import domain.usecase.card.createCard.CreateCardInput;
-import domain.usecase.card.createCard.CreateCardOutput;
-import domain.usecase.card.createCard.CreateCardUseCase;
 import domain.usecase.domainEvent.repository.IDomainEventRepository;
 import domain.usecase.flowEvent.repository.IFlowEventRepository;
 import domain.usecase.repository.IBoardRepository;
@@ -46,20 +42,20 @@ public class CalculateCycleTimeTest {
     private TestUtility testUtility;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private String workflowId;
-    private String readyLaneId;
-    private String analysisLaneId;
+    private String readyStageId;
+    private String analysisStageId;
+    private String developmentStageId;
+    private String testStageId;
+    private String deployStageId;
     private String cardName;
-    private String developmentLaneId;
-    private String testLaneId;
-    private String deployLaneId;
 
 
     @Before
     public void setup() throws Exception {
         boardRepository = new BoardInMemoryRepository();
         workflowRepository = new WorkflowInMemoryRepository();
-        domainEventRepository = new DomainEventInMemoryRepository();
         cardRepository = new CardInMemoryRepository();
+        domainEventRepository = new DomainEventInMemoryRepository();
         flowEventRepository = new FlowEventInMemoryRepository();
 
         eventBus = new DomainEventBus();
@@ -71,28 +67,27 @@ public class CalculateCycleTimeTest {
 
         DateProvider.setDate(dateFormat.parse("2020/5/26 19:54:00"));
 
-        String boardId = testUtility.createBoard("kanban777", "kanban");
+        String boardId = testUtility.createBoard("user777", "kanban");
         workflowId = testUtility.createWorkflow(boardId, "defaultWorkflow");
-        readyLaneId = testUtility.createTopStage(workflowId, "Ready");
-        analysisLaneId = testUtility.createTopStage(workflowId, "Analysis");
-        developmentLaneId = testUtility.createTopStage(workflowId, "Development");
-        testLaneId = testUtility.createTopStage(workflowId, "Test");
-        deployLaneId = testUtility.createTopStage(workflowId, "Deploy");
+        readyStageId = testUtility.createTopStage(workflowId, "Ready");
+        analysisStageId = testUtility.createTopStage(workflowId, "Analysis");
+        developmentStageId = testUtility.createTopStage(workflowId, "Development");
+        testStageId = testUtility.createTopStage(workflowId, "Test");
+        deployStageId = testUtility.createTopStage(workflowId, "Deploy");
         cardName = "implement MoveCardUseCase";
-        cardId = create_a_card_in_lane(cardName, readyLaneId);
+        cardId = testUtility.createCard(cardName, workflowId, readyStageId);
     }
 
     @Test
-    public void calculate_cycleTime_should_count_lead_time_without_moving_card() throws ParseException {
-
+    public void calculate_cycleTime_without_moving_card_should_count_detention_time() throws ParseException {
         DateProvider.setDate(dateFormat.parse("2020/5/27 20:54:00"));
 
         CalculateCycleTimeUseCase calculateCycleTimeUseCase = new CalculateCycleTimeUseCase(workflowRepository, flowEventRepository, eventBus);
         CalculateCycleTimeInput input = calculateCycleTimeUseCase;
         input.setWorkflowId(workflowId);
         input.setCardId(cardId);
-        input.setBeginningLaneId(readyLaneId);
-        input.setEndingLaneId(readyLaneId);
+        input.setBeginningStageId(readyStageId);
+        input.setEndingStageId(readyStageId);
 
         CalculateCycleTimeOutput output = new CalculateCycleTimePresenter();
 
@@ -105,10 +100,10 @@ public class CalculateCycleTimeTest {
     }
 
     @Test
-    public void calculate_cycleTime_should_count_lead_time_with_moving_card() throws ParseException {
+    public void calculate_cycleTime_with_moving_card_should_count_lead_time() throws ParseException {
         DateProvider.setDate(dateFormat.parse("2020/5/27 20:54:00"));
-        testUtility.moveCard(workflowId, cardId, readyLaneId, analysisLaneId);
-        CycleTimeModel cycleTimeModel = testUtility.calculateCycleTime(workflowId, cardId, readyLaneId, analysisLaneId);
+        testUtility.moveCard(workflowId, cardId, readyStageId, analysisStageId);
+        CycleTimeModel cycleTimeModel = testUtility.calculateCycleTime(workflowId, cardId, readyStageId, analysisStageId);
 
         assertEquals(1, cycleTimeModel.getDiffDays());
         assertEquals(1, cycleTimeModel.getDiffHours());
@@ -116,8 +111,8 @@ public class CalculateCycleTimeTest {
         assertEquals(0, cycleTimeModel.getDiffSeconds());
 
         DateProvider.setDate(dateFormat.parse("2020/5/29 23:57:10"));
-        testUtility.moveCard(workflowId, cardId, analysisLaneId, developmentLaneId);
-        cycleTimeModel = testUtility.calculateCycleTime(workflowId, cardId, readyLaneId, developmentLaneId);
+        testUtility.moveCard(workflowId, cardId, analysisStageId, developmentStageId);
+        cycleTimeModel = testUtility.calculateCycleTime(workflowId, cardId, readyStageId, developmentStageId);
 
         assertEquals(3, cycleTimeModel.getDiffDays());
         assertEquals(4, cycleTimeModel.getDiffHours());
@@ -125,8 +120,8 @@ public class CalculateCycleTimeTest {
         assertEquals(10, cycleTimeModel.getDiffSeconds());
 
         DateProvider.setDate(dateFormat.parse("2020/5/30 23:57:10"));
-        testUtility.moveCard(workflowId, cardId, developmentLaneId, testLaneId);
-        cycleTimeModel = testUtility.calculateCycleTime(workflowId, cardId, readyLaneId, testLaneId);
+        testUtility.moveCard(workflowId, cardId, developmentStageId, testStageId);
+        cycleTimeModel = testUtility.calculateCycleTime(workflowId, cardId, readyStageId, testStageId);
 
         assertEquals(4, cycleTimeModel.getDiffDays());
         assertEquals(4, cycleTimeModel.getDiffHours());
@@ -134,28 +129,12 @@ public class CalculateCycleTimeTest {
         assertEquals(10, cycleTimeModel.getDiffSeconds());
 
         DateProvider.setDate(dateFormat.parse("2020/5/31 23:57:10"));
-        testUtility.moveCard(workflowId, cardId, testLaneId, deployLaneId);
-        cycleTimeModel = testUtility.calculateCycleTime(workflowId, cardId, readyLaneId, deployLaneId);
+        testUtility.moveCard(workflowId, cardId, testStageId, deployStageId);
+        cycleTimeModel = testUtility.calculateCycleTime(workflowId, cardId, readyStageId, deployStageId);
 
         assertEquals(5, cycleTimeModel.getDiffDays());
         assertEquals(4, cycleTimeModel.getDiffHours());
         assertEquals(3, cycleTimeModel.getDiffMinutes());
         assertEquals(10, cycleTimeModel.getDiffSeconds());
     }
-
-    private String create_a_card_in_lane(String cardName, String laneId) {
-        CreateCardUseCase createCardUseCase = new CreateCardUseCase(cardRepository, eventBus);
-
-        CreateCardInput input = createCardUseCase;
-        CreateCardOutput output = new CreateCardPresenter();
-
-        input.setCardName(cardName);
-        input.setWorkflowId(workflowId);
-        input.setLaneId(laneId);
-
-        createCardUseCase.execute(input, output);
-
-        return output.getCardId();
-    }
-
 }

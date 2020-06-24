@@ -1,5 +1,6 @@
 package domain.usecase.card;
 
+import domain.adapter.repository.card.converter.CardRepositoryDTOConverter;
 import domain.adapter.repository.domainEvent.DomainEventInMemoryRepository;
 import domain.adapter.repository.flowEvent.FlowEventInMemoryRepository;
 import domain.adapter.repository.board.BoardInMemoryRepository;
@@ -21,7 +22,6 @@ import domain.usecase.flowEvent.repository.IFlowEventRepository;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.ICardRepository;
 import domain.usecase.repository.IWorkflowRepository;
-import domain.usecase.workflow.WorkflowDTOConverter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,13 +32,13 @@ public class CreateCardUseCaseTest {
     private IBoardRepository boardRepository;
     private IWorkflowRepository workflowRepository;
     private ICardRepository cardRepository;
+    private IFlowEventRepository flowEventRepository;
+    private IDomainEventRepository domainEventRepository;
     private String workflowId;
     private String laneId;
     private DomainEventBus eventBus;
     private TestUtility testUtility;
     private String cardName;
-    private IFlowEventRepository flowEventRepository;
-    private IDomainEventRepository domainEventRepository;
 
 
     @Before
@@ -55,14 +55,14 @@ public class CreateCardUseCaseTest {
 
         testUtility = new TestUtility(boardRepository, workflowRepository, cardRepository, flowEventRepository, eventBus);
 
-        String boardId = testUtility.createBoard("kanban777", "kanban");
+        String boardId = testUtility.createBoard("user777", "kanban");
         workflowId = testUtility.createWorkflow(boardId, "defaultWorkflow");
         laneId = testUtility.createTopStage(workflowId, "developing");
         cardName = "firstEvent";
     }
 
     @Test
-    public void create_a_Card_should_return_its_id() {
+    public void create_a_Card_should_succeed() {
         CreateCardUseCase createCardUseCase = new CreateCardUseCase(cardRepository, eventBus);
         CreateCardInput input = createCardUseCase;
         CreateCardOutput output = new CreateCardPresenter();
@@ -75,7 +75,7 @@ public class CreateCardUseCaseTest {
 
         assertNotNull(output.getCardId());
 
-        Card card = CardDTOConverter.toEntity(cardRepository
+        Card card = CardRepositoryDTOConverter.toEntity(cardRepository
                 .findById(output.getCardId()));
 
         assertEquals(workflowId, card.getWorkflowId());
@@ -92,7 +92,7 @@ public class CreateCardUseCaseTest {
 
         assertEquals(0, lane.getCardList().size());
 
-        create_a_Card_should_return_its_id();
+        testUtility.createCard(cardName, workflowId, laneId);
 
         lane = WorkflowRepositoryDTOConverter
                 .toEntity(workflowRepository.findById(workflowId))

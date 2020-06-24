@@ -1,22 +1,22 @@
 package domain.usecase.board;
 
 import domain.adapter.repository.board.BoardInMemoryRepository;
-import domain.adapter.presenter.board.create.CreateBoardPresenter;
 import domain.adapter.presenter.board.findById.FindBoardByIdPresenter;
+import domain.adapter.repository.card.CardInMemoryRepository;
 import domain.adapter.repository.domainEvent.DomainEventInMemoryRepository;
+import domain.adapter.repository.flowEvent.FlowEventInMemoryRepository;
 import domain.adapter.repository.workflow.WorkflowInMemoryRepository;
 import domain.model.DomainEventBus;
 import domain.usecase.DomainEventHandler;
 import domain.usecase.DomainEventSaveHandler;
-import domain.usecase.FlowEventHandler;
-import domain.usecase.board.createBoard.CreateBoardInput;
-import domain.usecase.board.createBoard.CreateBoardOutput;
-import domain.usecase.board.createBoard.CreateBoardUseCase;
+import domain.usecase.TestUtility;
 import domain.usecase.board.findBoardById.FindBoardByIdInput;
 import domain.usecase.board.findBoardById.FindBoardByIdOutput;
 import domain.usecase.board.findBoardById.FindBoardByIdUseCase;
 import domain.usecase.domainEvent.repository.IDomainEventRepository;
+import domain.usecase.flowEvent.repository.IFlowEventRepository;
 import domain.usecase.repository.IBoardRepository;
+import domain.usecase.repository.ICardRepository;
 import domain.usecase.repository.IWorkflowRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,41 +25,40 @@ import static org.testng.Assert.assertEquals;
 
 public class FindBoardByIdUseCaseTest {
     private IBoardRepository boardRepository;
-    private CreateBoardOutput createBoardOutput;
     private IWorkflowRepository workflowRepository;
+    private ICardRepository cardRepository;
     private IDomainEventRepository domainEventRepository;
+    private IFlowEventRepository flowEventRepository;
     private DomainEventBus eventBus;
+    private TestUtility testUtility;
+    private String boardId;
 
     @Before
     public void setUp() {
         boardRepository = new BoardInMemoryRepository();
         workflowRepository = new WorkflowInMemoryRepository();
-        domainEventRepository = new DomainEventInMemoryRepository()
-;
+        cardRepository = new CardInMemoryRepository();
+        domainEventRepository = new DomainEventInMemoryRepository();
+        flowEventRepository = new FlowEventInMemoryRepository();
+
         eventBus = new DomainEventBus();
         eventBus.register(new DomainEventHandler(boardRepository, workflowRepository, eventBus));
         eventBus.register(new DomainEventSaveHandler(domainEventRepository));
 
-        CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardRepository, eventBus);
-        CreateBoardInput createBoardInput = createBoardUseCase;
-        createBoardOutput = new CreateBoardPresenter();
-
-        createBoardInput.setUserId("kanban777");
-        createBoardInput.setBoardName("kanbanSystem");
-
-        createBoardUseCase.execute(createBoardInput, createBoardOutput);
+        testUtility = new TestUtility(boardRepository, workflowRepository, cardRepository, flowEventRepository, eventBus);
+        boardId = testUtility.createBoard("user777", "kanbanSystem");
     }
 
     @Test
     public void find_board_by_id() {
-        FindBoardByIdUseCase findBoardByIdUseCase = new FindBoardByIdUseCase(boardRepository, eventBus);
-        FindBoardByIdInput findBoardByIdInput = (FindBoardByIdInput) findBoardByIdUseCase;
+        FindBoardByIdUseCase findBoardByIdUseCase = new FindBoardByIdUseCase(boardRepository);
+        FindBoardByIdInput findBoardByIdInput = findBoardByIdUseCase;
         FindBoardByIdOutput findBoardByIdOutput = new FindBoardByIdPresenter();
-        findBoardByIdInput.setBoardId(createBoardOutput.getBoardId());
+        findBoardByIdInput.setBoardId(boardId);
 
         findBoardByIdUseCase.execute(findBoardByIdInput, findBoardByIdOutput);
 
+        assertEquals(boardId, findBoardByIdOutput.getBoardOutputDTO().getId());
         assertEquals("kanbanSystem", findBoardByIdOutput.getBoardOutputDTO().getName());
-
     }
 }

@@ -5,11 +5,13 @@ import domain.model.DomainEventBus;
 import domain.model.aggregate.workflow.Workflow;
 import domain.usecase.repository.IWorkflowRepository;
 
-public class CreateSwimLaneUseCase {
+public class CreateSwimLaneUseCase implements CreateSwimLaneInput{
     private DomainEventBus eventBus;
     private IWorkflowRepository workflowRepository;
     private Workflow workflow;
-
+    private String swimLaneName;
+    private String workflowId;
+    private String parentLaneId;
 
     public CreateSwimLaneUseCase(IWorkflowRepository workflowRepository, DomainEventBus eventBus) {
         this.workflowRepository = workflowRepository;
@@ -24,5 +26,29 @@ public class CreateSwimLaneUseCase {
         eventBus.postAll(workflow);
 
         output.setSwimLaneId(swimLaneId);
+    }
+
+    public String getSwimLaneName() {
+        return swimLaneName;
+    }
+
+    public void setSwimLaneName(String swimLaneName) {
+        this.swimLaneName = swimLaneName;
+    }
+
+    public String getWorkflowId() {
+        return workflowId;
+    }
+
+    public void setWorkflowId(String workflowId) {
+        this.workflowId = workflowId;
+    }
+
+    public String getParentLaneId() {
+        return parentLaneId;
+    }
+
+    public void setParentLaneId(String parentLaneId) {
+        this.parentLaneId = parentLaneId;
     }
 }

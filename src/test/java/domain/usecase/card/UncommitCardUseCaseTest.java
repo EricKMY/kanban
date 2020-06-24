@@ -23,7 +23,6 @@ import domain.usecase.flowEvent.repository.IFlowEventRepository;
 import domain.usecase.repository.IBoardRepository;
 import domain.usecase.repository.ICardRepository;
 import domain.usecase.repository.IWorkflowRepository;
-import domain.usecase.workflow.WorkflowDTOConverter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,14 +31,14 @@ import static org.junit.Assert.*;
 public class UncommitCardUseCaseTest {
     private IBoardRepository boardRepository;
     private IWorkflowRepository workflowRepository;
+    private ICardRepository cardRepository;
+    private IFlowEventRepository flowEventRepository;
+    private IDomainEventRepository domainEventRepository;
     private String workflowId;
     private String laneId;
     private String cardId;
     private DomainEventBus eventBus;
     private TestUtility testUtility;
-    private IFlowEventRepository flowEventRepository;
-    private ICardRepository cardRepository;
-    private IDomainEventRepository domainEventRepository;
 
 
     @Before
@@ -56,24 +55,11 @@ public class UncommitCardUseCaseTest {
 
         testUtility = new TestUtility(boardRepository, workflowRepository, cardRepository, flowEventRepository, eventBus);
 
-        String boardId = testUtility.createBoard("kanban777", "kanban");
+        String boardId = testUtility.createBoard("user777", "kanban");
         workflowId = testUtility.createWorkflow(boardId, "defaultWorkflow");
         laneId = testUtility.createTopStage(workflowId, "developing");
         cardId = "C012345678";
         commit_a_Card_to_Workflow_aggregate(cardId);
-    }
-
-    public void commit_a_Card_to_Workflow_aggregate(String cardId) {
-        CommitCardUseCase commitCardUseCase = new CommitCardUseCase(workflowRepository, eventBus);
-
-        CommitCardInput input = (CommitCardInput) commitCardUseCase;
-        CommitCardOutput output = new CommitCardPresenter();
-
-        input.setWorkflowId(workflowId);
-        input.setLaneId(laneId);
-        input.setCardId(cardId);
-
-        commitCardUseCase.execute(input, output);
     }
 
     @Test
@@ -99,5 +85,18 @@ public class UncommitCardUseCaseTest {
         assertNotNull(output.getCardId());
         assertEquals(0, lane.getCardList().size());
         assertFalse(lane.isCardContained(cardId));
+    }
+
+    private void commit_a_Card_to_Workflow_aggregate(String cardId) {
+        CommitCardUseCase commitCardUseCase = new CommitCardUseCase(workflowRepository, eventBus);
+
+        CommitCardInput input = commitCardUseCase;
+        CommitCardOutput output = new CommitCardPresenter();
+
+        input.setWorkflowId(workflowId);
+        input.setLaneId(laneId);
+        input.setCardId(cardId);
+
+        commitCardUseCase.execute(input, output);
     }
 }

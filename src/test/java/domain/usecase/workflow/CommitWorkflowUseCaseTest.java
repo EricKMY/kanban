@@ -27,12 +27,13 @@ import static org.junit.Assert.*;
 public class CommitWorkflowUseCaseTest {
 
     private IBoardRepository boardRepository;
+    private IWorkflowRepository workflowRepository;
+    private ICardRepository cardRepository;
+    private IFlowEventRepository flowEventRepository;
+    private IDomainEventRepository domainEventRepository;
     private DomainEventBus eventBus;
     private String boardId;
     private TestUtility testUtility;
-    private IFlowEventRepository flowEventRepository;
-    private ICardRepository cardRepository;
-    private IDomainEventRepository domainEventRepository;
 
     @Before
     public void setup() {
@@ -44,10 +45,10 @@ public class CommitWorkflowUseCaseTest {
         eventBus = new DomainEventBus();
         eventBus.register(new DomainEventSaveHandler(domainEventRepository));
 
-        IWorkflowRepository workflowRepository = new WorkflowInMemoryRepository();
+        workflowRepository = new WorkflowInMemoryRepository();
         testUtility = new TestUtility(boardRepository, workflowRepository, cardRepository, flowEventRepository, eventBus);
 
-        boardId = testUtility.createBoard("kanban777", "kanbanSystem");
+        boardId = testUtility.createBoard("user777", "kanbanSystem");
     }
 
     @Test

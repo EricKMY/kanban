@@ -28,12 +28,14 @@ public class LaneRepositoryDTOConverter {
                         laneRepositoryDTO.getName(),
                         laneRepositoryDTO.getId(),
                         laneRepositoryDTO.getCardList());
+                break;
             case HORIZONTAL:
                 lane = new SwimLane(
                         laneRepositoryDTO.getName(),
                         laneRepositoryDTO.getId(),
                         laneRepositoryDTO.getCardList()
                 );
+                break;
         }
         if (laneRepositoryDTO.getChildLanes().size() != 0){
             for (LaneRepositoryDTO childLaneDTO : laneRepositoryDTO.getChildLanes()) {

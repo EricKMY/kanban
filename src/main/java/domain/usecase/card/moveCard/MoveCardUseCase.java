@@ -1,5 +1,6 @@
 package domain.usecase.card.moveCard;
 
+import domain.adapter.repository.card.converter.CardRepositoryDTOConverter;
 import domain.model.DomainEventBus;
 import domain.model.aggregate.card.Card;
 import domain.usecase.card.CardDTOConverter;
@@ -11,7 +12,7 @@ public class MoveCardUseCase implements MoveCardInput {
     private ICardRepository cardRepository;
     private DomainEventBus eventBus;
     private String workflowId;
-    private String laneId;
+    private String originLaneId;
     private String targetLaneId;
     private String cardId;
 
@@ -22,11 +23,11 @@ public class MoveCardUseCase implements MoveCardInput {
     }
 
     public void execute(MoveCardInput input, MoveCardOutput output) {
-        Card card = CardDTOConverter.toEntity(cardRepository.findById(input.getCardId()));
+        Card card = CardRepositoryDTOConverter.toEntity(cardRepository.findById(input.getCardId()));
 
         card.moveCard(input.getWorkflowId(), input.getTargetLaneId());
 
-        cardRepository.save(CardDTOConverter.toDTO(card));
+        cardRepository.save(CardRepositoryDTOConverter.toDTO(card));
         eventBus.postAll(card);
 
         output.setCardId(card.getId());
@@ -53,13 +54,13 @@ public class MoveCardUseCase implements MoveCardInput {
     }
 
     @Override
-    public String getLaneId() {
-        return laneId;
+    public String getOriginLaneId() {
+        return originLaneId;
     }
 
     @Override
-    public void setLaneId(String laneId) {
-        this.laneId = laneId;
+    public void setOriginLaneId(String laneId) {
+        this.originLaneId = laneId;
     }
 
     @Override

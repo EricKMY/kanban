@@ -16,8 +16,8 @@ import java.util.Map;
 public class CalculateCycleTimeUseCase implements CalculateCycleTimeInput {
     private String workflowId;
     private String cardId;
-    private String beginningLaneId;
-    private String endingLaneId;
+    private String beginningStageId;
+    private String endingStageId;
 
     private IWorkflowRepository workflowRepository;
     private IFlowEventRepository flowEventRepository;
@@ -53,9 +53,9 @@ public class CalculateCycleTimeUseCase implements CalculateCycleTimeInput {
         boolean isInCycle = false;
 
         for(Map.Entry<String, Lane> entry: workflow.getLaneMap().entrySet()){
-            if(entry.getValue().getId().equals(getBeginningLaneId())){
+            if(entry.getValue().getId().equals(getBeginningStageId())){
                 isInCycle = true;
-            }else if(entry.getValue().getId().equals(getEndingLaneId())){
+            }else if(entry.getValue().getId().equals(getEndingStageId())){
                 laneIds.add(entry.getValue().getId());
                 break;
             }
@@ -87,22 +87,22 @@ public class CalculateCycleTimeUseCase implements CalculateCycleTimeInput {
     }
 
     @Override
-    public String getBeginningLaneId() {
-        return beginningLaneId;
+    public String getBeginningStageId() {
+        return beginningStageId;
     }
 
     @Override
-    public void setBeginningLaneId(String beginningLaneId) {
-        this.beginningLaneId = beginningLaneId;
+    public void setBeginningStageId(String beginningStageId) {
+        this.beginningStageId = beginningStageId;
     }
 
     @Override
-    public String getEndingLaneId() {
-        return endingLaneId;
+    public String getEndingStageId() {
+        return endingStageId;
     }
 
     @Override
-    public void setEndingLaneId(String endingLaneId) {
-        this.endingLaneId = endingLaneId;
+    public void setEndingStageId(String endingStageId) {
+        this.endingStageId = endingStageId;
     }
 }

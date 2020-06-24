@@ -28,12 +28,14 @@ public class LaneDTOConverter {
                         laneDTO.getName(),
                         laneDTO.getId(),
                         laneDTO.getCardList());
+                break;
             case HORIZONTAL:
                 lane = new SwimLane(
                         laneDTO.getName(),
                         laneDTO.getId(),
                         laneDTO.getCardList()
                 );
+                break;
         }
         if (laneDTO.getChildLanes().size() != 0){
             for (LaneDTO childLaneDTO : laneDTO.getChildLanes()) {

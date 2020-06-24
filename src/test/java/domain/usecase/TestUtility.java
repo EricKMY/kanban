@@ -5,6 +5,7 @@ import domain.adapter.presenter.card.create.CreateCardPresenter;
 import domain.adapter.presenter.card.cycleTime.CalculateCycleTimePresenter;
 import domain.adapter.presenter.card.move.MoveCardPresenter;
 import domain.adapter.presenter.lane.stage.create.CreateStagePresenter;
+import domain.adapter.presenter.lane.swimLane.create.CreateSwimLanePresenter;
 import domain.adapter.presenter.workflow.create.CreateWorkflowPresenter;
 import domain.model.DomainEventBus;
 import domain.usecase.board.createBoard.CreateBoardInput;
@@ -33,8 +34,6 @@ import domain.usecase.repository.IWorkflowRepository;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowInput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowOutput;
 import domain.usecase.workflow.createWorkflow.CreateWorkflowUseCase;
-
-import static org.junit.Assert.assertFalse;
 
 public class TestUtility {
     private IBoardRepository boardRepository;
@@ -106,8 +105,8 @@ public class TestUtility {
     public String createSwimLane(String workflowId, String parentId, String stageName) {
 
         CreateSwimLaneUseCase createSwimLaneUseCase = new CreateSwimLaneUseCase(workflowRepository, eventBus);
-        CreateSwimLaneInput input = new CreateSwimLaneInput();
-        CreateSwimLaneOutput output = new CreateSwimLaneOutput();
+        CreateSwimLaneInput input = createSwimLaneUseCase;
+        CreateSwimLaneOutput output = new CreateSwimLanePresenter();
 
         input.setSwimLaneName(stageName);
         input.setWorkflowId(workflowId);
@@ -125,7 +124,7 @@ public class TestUtility {
         MoveCardOutput output = new MoveCardPresenter();
 
         input.setWorkflowId(workflowId);
-        input.setLaneId(laneId);
+        input.setOriginLaneId(laneId);
         input.setTargetLaneId(targetLaneId);
         input.setCardId(cardId);
 
@@ -137,8 +136,8 @@ public class TestUtility {
         CalculateCycleTimeInput input = calculateCycleTimeUseCase;
         input.setWorkflowId(workflowId);
         input.setCardId(cardId);
-        input.setBeginningLaneId(beginningLaneId);
-        input.setEndingLaneId(endingLaneId);
+        input.setBeginningStageId(beginningLaneId);
+        input.setEndingStageId(endingLaneId);
         CalculateCycleTimeOutput output = new CalculateCycleTimePresenter();
 
         calculateCycleTimeUseCase.execute(input, output);
